@@ -56,9 +56,7 @@ def set_project_ttl(project_id: str) -> None:
         name=settings.name
     ).conversation_ttl
     print(
-        "Set TTL for all incoming conversations to {} day".format(
-            new_conversation_ttl.days
-        )
+        f"Set TTL for all incoming conversations to {new_conversation_ttl.days} day"
     )
 
 

@@ -130,18 +130,16 @@ class CustomMachineType:
                 f"Requested memory is too low. Minimal memory for {self.cpu_series.name} is {self.limits.min_mem_per_core} MB per core."
             )
 
-        # Check if the requested memory isn't too much
         if self.memory_mb > self.core_count * self.limits.max_mem_per_core:
-            if self.limits.allow_extra_memory:
-                if self.memory_mb > self.limits.extra_memory_limit:
-                    raise RuntimeError(
-                        f"Requested memory is too large.. Maximum memory allowed for {self.cpu_series.name} is {self.limits.extra_memory_limit} MB."
-                    )
-            else:
+            if not self.limits.allow_extra_memory:
                 raise RuntimeError(
                     f"Requested memory is too large.. Maximum memory allowed for {self.cpu_series.name} is {self.limits.max_mem_per_core} MB per core."
                 )
 
+            if self.memory_mb > self.limits.extra_memory_limit:
+                raise RuntimeError(
+                    f"Requested memory is too large.. Maximum memory allowed for {self.cpu_series.name} is {self.limits.extra_memory_limit} MB."
+                )
         self._checked = True
 
     def __str__(self) -> str:

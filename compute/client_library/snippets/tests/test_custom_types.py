@@ -36,23 +36,22 @@ INSTANCE_ZONE = "us-central1-b"
 
 @pytest.fixture
 def auto_delete_instance_name():
-    instance_name = "test-instance-" + uuid.uuid4().hex[:10]
+    instance_name = f"test-instance-{uuid.uuid4().hex[:10]}"
     yield instance_name
     delete_instance(PROJECT, INSTANCE_ZONE, instance_name)
 
 
 @pytest.fixture
 def instance():
-    instance_name = "test-instance-" + uuid.uuid4().hex[:10]
+    instance_name = f"test-instance-{uuid.uuid4().hex[:10]}"
 
     newest_debian = get_image_from_family(project="debian-cloud", family="debian-10")
     disk_type = f"zones/{INSTANCE_ZONE}/diskTypes/pd-standard"
     disks = [disk_from_image(disk_type, 10, True, newest_debian.self_link)]
 
-    instance = create_instance(
+    yield create_instance(
         PROJECT, INSTANCE_ZONE, instance_name, disks, "n2-custom-8-10240"
     )
-    yield instance
     delete_instance(PROJECT, INSTANCE_ZONE, instance_name)
 
 

@@ -33,8 +33,7 @@ context.set_project_id(PROJECT_ID)
 def ipython_interactive():
     config = tools.default_config()
     config.TerminalInteractiveShell.simple_prompt = True
-    shell = interactiveshell.TerminalInteractiveShell.instance(config=config)
-    return shell
+    return interactiveshell.TerminalInteractiveShell.instance(config=config)
 
 
 @pytest.fixture
@@ -214,7 +213,7 @@ def test_datalab_load_table_from_gcs_csv(to_delete):
     dataset_id = 'import_sample'
     # [END bigquery_migration_datalab_load_table_from_gcs_csv]
     # Use unique dataset ID to avoid collisions when running tests
-    dataset_id = 'test_dataset_{}'.format(int(time.time() * 1000))
+    dataset_id = f'test_dataset_{int(time.time() * 1000)}'
     to_delete.append(dataset_id)
     # [START bigquery_migration_datalab_load_table_from_gcs_csv]
     bq.Dataset(dataset_id).create()
@@ -224,8 +223,7 @@ def test_datalab_load_table_from_gcs_csv(to_delete):
         {'name': 'name', 'type': 'STRING'},
         {'name': 'post_abbr', 'type': 'STRING'},
     ]
-    table = bq.Table(
-        '{}.us_states'.format(dataset_id)).create(schema=schema)
+    table = bq.Table(f'{dataset_id}.us_states').create(schema=schema)
     table.load(
         'gs://cloud-samples-data/bigquery/us-states/us-states.csv',
         mode='append',
@@ -247,7 +245,7 @@ def test_client_library_load_table_from_gcs_csv(to_delete):
     dataset_id = 'import_sample'
     # [END bigquery_migration_client_library_load_table_from_gcs_csv]
     # Use unique dataset ID to avoid collisions when running tests
-    dataset_id = 'test_dataset_{}'.format(int(time.time() * 1000))
+    dataset_id = f'test_dataset_{int(time.time() * 1000)}'
     to_delete.append(dataset_id)
     # [START bigquery_migration_client_library_load_table_from_gcs_csv]
     dataset = client.create_dataset(dataset_id)
@@ -326,7 +324,7 @@ def test_client_library_load_table_from_dataframe(to_delete):
     dataset_id = 'import_sample'
     # [END bigquery_migration_client_library_load_table_from_dataframe]
     # Use unique dataset ID to avoid collisions when running tests
-    dataset_id = 'test_dataset_{}'.format(int(time.time() * 1000))
+    dataset_id = f'test_dataset_{int(time.time() * 1000)}'
     to_delete.append(dataset_id)
     # [START bigquery_migration_client_library_load_table_from_dataframe]
     dataset = client.create_dataset(dataset_id)

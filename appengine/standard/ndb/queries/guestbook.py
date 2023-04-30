@@ -42,7 +42,8 @@ class MainPage(webapp2.RequestHandler):
 
         for greeting in greetings:
             self.response.out.write(
-                '<blockquote>%s</blockquote>' % cgi.escape(greeting.content))
+                f'<blockquote>{cgi.escape(greeting.content)}</blockquote>'
+            )
 
         self.response.out.write('</body></html>')
 
@@ -60,11 +61,13 @@ class List(webapp2.RequestHandler):
 
         for greeting in greets:
             self.response.out.write(
-                '<blockquote>%s</blockquote>' % cgi.escape(greeting.content))
+                f'<blockquote>{cgi.escape(greeting.content)}</blockquote>'
+            )
 
         if more and next_cursor:
-            self.response.out.write('<a href="/list?cursor=%s">More...</a>' %
-                                    next_cursor.urlsafe())
+            self.response.out.write(
+                f'<a href="/list?cursor={next_cursor.urlsafe()}">More...</a>'
+            )
 
         self.response.out.write('</body></html>')
 

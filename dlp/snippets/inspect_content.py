@@ -68,9 +68,9 @@ def inspect_string_basic(
     # Print out the results.
     if response.result.findings:
         for finding in response.result.findings:
-            print("Quote: {}".format(finding.quote))
-            print("Info type: {}".format(finding.info_type.name))
-            print("Likelihood: {}".format(finding.likelihood))
+            print(f"Quote: {finding.quote}")
+            print(f"Info type: {finding.info_type.name}")
+            print(f"Likelihood: {finding.likelihood}")
     else:
         print("No findings.")
 
@@ -121,7 +121,7 @@ def inspect_string(
         custom_dictionaries = []
     dictionaries = [
         {
-            "info_type": {"name": "CUSTOM_DICTIONARY_{}".format(i)},
+            "info_type": {"name": f"CUSTOM_DICTIONARY_{i}"},
             "dictionary": {"word_list": {"words": custom_dict.split(",")}},
         }
         for i, custom_dict in enumerate(custom_dictionaries)
@@ -130,7 +130,7 @@ def inspect_string(
         custom_regexes = []
     regexes = [
         {
-            "info_type": {"name": "CUSTOM_REGEX_{}".format(i)},
+            "info_type": {"name": f"CUSTOM_REGEX_{i}"},
             "regex": {"pattern": custom_regex},
         }
         for i, custom_regex in enumerate(custom_regexes)
@@ -163,11 +163,11 @@ def inspect_string(
         for finding in response.result.findings:
             try:
                 if finding.quote:
-                    print("Quote: {}".format(finding.quote))
+                    print(f"Quote: {finding.quote}")
             except AttributeError:
                 pass
-            print("Info type: {}".format(finding.info_type.name))
-            print("Likelihood: {}".format(finding.likelihood))
+            print(f"Info type: {finding.info_type.name}")
+            print(f"Likelihood: {finding.likelihood}")
     else:
         print("No findings.")
 
@@ -247,7 +247,7 @@ def inspect_table(
         custom_dictionaries = []
     dictionaries = [
         {
-            "info_type": {"name": "CUSTOM_DICTIONARY_{}".format(i)},
+            "info_type": {"name": f"CUSTOM_DICTIONARY_{i}"},
             "dictionary": {"word_list": {"words": custom_dict.split(",")}},
         }
         for i, custom_dict in enumerate(custom_dictionaries)
@@ -256,7 +256,7 @@ def inspect_table(
         custom_regexes = []
     regexes = [
         {
-            "info_type": {"name": "CUSTOM_REGEX_{}".format(i)},
+            "info_type": {"name": f"CUSTOM_REGEX_{i}"},
             "regex": {"pattern": custom_regex},
         }
         for i, custom_regex in enumerate(custom_regexes)
@@ -276,13 +276,11 @@ def inspect_table(
     # Construct the `table`. For more details on the table schema, please see
     # https://cloud.google.com/dlp/docs/reference/rest/v2/ContentItem#Table
     headers = [{"name": val} for val in data["header"]]
-    rows = []
-    for row in data["rows"]:
-        rows.append({"values": [{"string_value": cell_val} for cell_val in row]})
-
-    table = {}
-    table["headers"] = headers
-    table["rows"] = rows
+    rows = [
+        {"values": [{"string_value": cell_val} for cell_val in row]}
+        for row in data["rows"]
+    ]
+    table = {"headers": headers, "rows": rows}
     item = {"table": table}
     # Convert the project id into a full resource id.
     parent = f"projects/{project}"
@@ -297,11 +295,11 @@ def inspect_table(
         for finding in response.result.findings:
             try:
                 if finding.quote:
-                    print("Quote: {}".format(finding.quote))
+                    print(f"Quote: {finding.quote}")
             except AttributeError:
                 pass
-            print("Info type: {}".format(finding.info_type.name))
-            print("Likelihood: {}".format(finding.likelihood))
+            print(f"Info type: {finding.info_type.name}")
+            print(f"Likelihood: {finding.likelihood}")
     else:
         print("No findings.")
 
@@ -360,7 +358,7 @@ def inspect_file(
         custom_dictionaries = []
     dictionaries = [
         {
-            "info_type": {"name": "CUSTOM_DICTIONARY_{}".format(i)},
+            "info_type": {"name": f"CUSTOM_DICTIONARY_{i}"},
             "dictionary": {"word_list": {"words": custom_dict.split(",")}},
         }
         for i, custom_dict in enumerate(custom_dictionaries)
@@ -369,7 +367,7 @@ def inspect_file(
         custom_regexes = []
     regexes = [
         {
-            "info_type": {"name": "CUSTOM_REGEX_{}".format(i)},
+            "info_type": {"name": f"CUSTOM_REGEX_{i}"},
             "regex": {"pattern": custom_regex},
         }
         for i, custom_regex in enumerate(custom_regexes)
@@ -418,11 +416,11 @@ def inspect_file(
     if response.result.findings:
         for finding in response.result.findings:
             try:
-                print("Quote: {}".format(finding.quote))
+                print(f"Quote: {finding.quote}")
             except AttributeError:
                 pass
-            print("Info type: {}".format(finding.info_type.name))
-            print("Likelihood: {}".format(finding.likelihood))
+            print(f"Info type: {finding.info_type.name}")
+            print(f"Likelihood: {finding.likelihood}")
     else:
         print("No findings.")
 

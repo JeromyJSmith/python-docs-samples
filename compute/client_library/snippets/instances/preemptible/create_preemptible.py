@@ -41,9 +41,7 @@ def get_image_from_family(project: str, family: str) -> compute_v1.Image:
         An Image object.
     """
     image_client = compute_v1.ImagesClient()
-    # List of public operating system (OS) images: https://cloud.google.com/compute/docs/images/os-details
-    newest_image = image_client.get_from_family(project=project, family=family)
-    return newest_image
+    return image_client.get_from_family(project=project, family=family)
 
 
 def disk_from_image(
@@ -281,8 +279,9 @@ def create_preemptible_instance(
     newest_debian = get_image_from_family(project="debian-cloud", family="debian-11")
     disk_type = f"zones/{zone}/diskTypes/pd-standard"
     disks = [disk_from_image(disk_type, 10, True, newest_debian.self_link)]
-    instance = create_instance(project_id, zone, instance_name, disks, preemptible=True)
-    return instance
+    return create_instance(
+        project_id, zone, instance_name, disks, preemptible=True
+    )
 
 
 # [END compute_preemptible_create]

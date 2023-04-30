@@ -26,25 +26,20 @@ import webapp2
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
-        # [START user_details]
-        user = users.get_current_user()
-        if user:
+        if user := users.get_current_user():
             nickname = user.nickname()
             logout_url = users.create_logout_url('/')
-            greeting = 'Welcome, {}! (<a href="{}">sign out</a>)'.format(
-                nickname, logout_url)
+            greeting = f'Welcome, {nickname}! (<a href="{logout_url}">sign out</a>)'
         else:
             login_url = users.create_login_url('/')
-            greeting = '<a href="{}">Sign in</a>'.format(login_url)
+            greeting = f'<a href="{login_url}">Sign in</a>'
         # [END user_details]
-        self.response.write(
-            '<html><body>{}</body></html>'.format(greeting))
+        self.response.write(f'<html><body>{greeting}</body></html>')
 
 
 class AdminPage(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
-        if user:
+        if user := users.get_current_user():
             if users.is_current_user_admin():
                 self.response.write('You are an administrator.')
             else:

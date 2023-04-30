@@ -47,9 +47,9 @@ def loop():
 @pytest.fixture(scope="module", autouse=True)
 def setup_teardown():
     loop = asyncio.new_event_loop()
-    agentName = "temp_agent_" + str(uuid.uuid4())
+    agentName = f"temp_agent_{str(uuid.uuid4())}"
 
-    parent = "projects/" + PROJECT_ID + "/locations/global"
+    parent = f"projects/{PROJECT_ID}/locations/global"
 
     agents_client = AgentsClient()
 

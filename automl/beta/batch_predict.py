@@ -52,8 +52,6 @@ def batch_predict(
 
     print("Waiting for operation to complete...")
     print(
-        "Batch Prediction results saved to Cloud Storage bucket. {}".format(
-            response.result()
-        )
+        f"Batch Prediction results saved to Cloud Storage bucket. {response.result()}"
     )
 # [END automl_batch_predict_beta]

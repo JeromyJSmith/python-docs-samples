@@ -28,17 +28,15 @@ db_connection_name = os.environ.get('CLOUD_SQL_CONNECTION_NAME')
 # set to `standard`
 if os.environ.get('GAE_ENV') == 'standard':
     # If deployed, use the local socket interface for accessing Cloud SQL
-    unix_socket = '/cloudsql/{}'.format(db_connection_name)
-    engine_url = 'mysql+pymysql://{}:{}@/{}?unix_socket={}'.format(
-        db_user, db_password, db_name, unix_socket)
+    unix_socket = f'/cloudsql/{db_connection_name}'
+    engine_url = f'mysql+pymysql://{db_user}:{db_password}@/{db_name}?unix_socket={unix_socket}'
 else:
     # If running locally, use the TCP connections instead
     # Set up Cloud SQL Proxy (cloud.google.com/sql/docs/mysql/sql-proxy)
     # so that your application can use 127.0.0.1:3306 to connect to your
     # Cloud SQL instance
     host = '127.0.0.1'
-    engine_url = 'mysql+pymysql://{}:{}@{}/{}'.format(
-        db_user, db_password, host, db_name)
+    engine_url = f'mysql+pymysql://{db_user}:{db_password}@{host}/{db_name}'
 
 # The Engine object returned by create_engine() has a QueuePool integrated
 # See https://docs.sqlalchemy.org/en/latest/core/pooling.html for more

@@ -33,10 +33,7 @@ def handleWebhook(request):
     else:
         responseText = f"There are no fulfillment responses defined for Intent {intent}"
 
-    # You can also use the google.cloud.dialogflowcx_v3.types.WebhookRequest protos instead of manually writing the json object
-    res = {"fulfillmentMessages": [{"text": {"text": [responseText]}}]}
-
-    return res
+    return {"fulfillmentMessages": [{"text": {"text": [responseText]}}]}
 
 
 # [END dialogflow_webhook]

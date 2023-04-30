@@ -68,7 +68,7 @@ def create_http_task(
     # Use the client to build and send the task.
     response = client.create_task(request={"parent": parent, "task": task})
 
-    print("Created task {}".format(response.name))
+    print(f"Created task {response.name}")
     return response
 
 

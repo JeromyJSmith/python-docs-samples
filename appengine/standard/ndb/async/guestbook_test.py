@@ -29,7 +29,7 @@ def test_get_guestbook_sync(app, testbed, login):
     login(id='123')
 
     for i in range(11):
-        guestbook.Guestbook(content='Content {}'.format(i)).put()
+        guestbook.Guestbook(content=f'Content {i}').put()
 
     response = app.get('/guestbook')
 
@@ -42,7 +42,7 @@ def test_get_guestbook_async(app, testbed, login):
     # Log the user in
     login(id='123')
     for i in range(11):
-        guestbook.Guestbook(content='Content {}'.format(i)).put()
+        guestbook.Guestbook(content=f'Content {i}').put()
 
     response = app.get('/guestbook?async=1')
 
@@ -52,8 +52,8 @@ def test_get_guestbook_async(app, testbed, login):
 
 def test_get_messages_sync(app, testbed):
     for i in range(21):
-        account_key = guestbook.Account(nickname='Nick {}'.format(i)).put()
-        guestbook.Message(author=account_key, text='Text {}'.format(i)).put()
+        account_key = guestbook.Account(nickname=f'Nick {i}').put()
+        guestbook.Message(author=account_key, text=f'Text {i}').put()
 
     response = app.get('/messages')
 
@@ -64,8 +64,8 @@ def test_get_messages_sync(app, testbed):
 
 def test_get_messages_async(app, testbed):
     for i in range(21):
-        account_key = guestbook.Account(nickname='Nick {}'.format(i)).put()
-        guestbook.Message(author=account_key, text='Text {}'.format(i)).put()
+        account_key = guestbook.Account(nickname=f'Nick {i}').put()
+        guestbook.Message(author=account_key, text=f'Text {i}').put()
 
     response = app.get('/messages?async=1')
 

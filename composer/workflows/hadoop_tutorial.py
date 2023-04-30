@@ -26,6 +26,7 @@ https://airflow.apache.org/docs/apache-airflow/stable/concepts/variables.html
   bucket.
 """
 
+
 import datetime
 import os
 
@@ -69,8 +70,9 @@ CLUSTER_CONFIG = {
 }
 
 yesterday = datetime.datetime.combine(
-    datetime.datetime.today() - datetime.timedelta(1),
-    datetime.datetime.min.time())
+    datetime.datetime.now() - datetime.timedelta(1),
+    datetime.datetime.min.time(),
+)
 
 default_dag_args = {
     # Setting start date as yesterday starts the DAG immediately when it is

@@ -27,7 +27,7 @@ class MainPage(webapp2.RequestHandler):
         # Perform some RPCs so that appstats can capture them.
         memcache.set('example_key', 50)
         value = memcache.get('example_key')
-        self.response.write('Value is: {}'.format(value))
+        self.response.write(f'Value is: {value}')
 
 
 app = webapp2.WSGIApplication([

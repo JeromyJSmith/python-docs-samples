@@ -36,11 +36,9 @@ def say_hello(service):
     if service == 'gateway':
         return 'Gateway says hello'
 
-    # Otherwise send request to service indicated by URL param
-    responses = []
     url = app.config['SERVICE_MAP'][service]
-    res = requests.get(url + '/hello')
-    responses.append(res.content)
+    res = requests.get(f'{url}/hello')
+    responses = [res.content]
     return '\n'.encode().join(responses)
 
 
@@ -48,7 +46,7 @@ def say_hello(service):
 def static_file(path):
     """Gets static files required by index.html to static file server"""
     url = app.config['SERVICE_MAP']['static']
-    res = requests.get(url + '/' + path)
+    res = requests.get(f'{url}/{path}')
     return res.content, 200, {'Content-Type': res.headers['Content-Type']}
 
 

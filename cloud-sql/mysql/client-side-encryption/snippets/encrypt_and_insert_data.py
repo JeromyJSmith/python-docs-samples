@@ -80,7 +80,7 @@ def encrypt_and_insert_data(
     # data, but not its secrecy. (see RFC 5116 for more info)
     encrypted_email = env_aead.encrypt(email.encode(), team.encode())
     # Verify that the team is one of the allowed options
-    if team != "TABS" and team != "SPACES":
+    if team not in ["TABS", "SPACES"]:
         logger.error(f"Invalid team specified: {team}")
         return
 

@@ -41,7 +41,7 @@ if __name__ == "__main__":
     else:
         import uuid
 
-        rule_name = "firewall-sample-" + uuid.uuid4().hex[:10]
+        rule_name = f"firewall-sample-{uuid.uuid4().hex[:10]}"
         print(f"Creating firewall rule {rule_name}...")
         # The rule will be created with default priority of 1000.
         create_firewall_rule(default_project_id, rule_name)

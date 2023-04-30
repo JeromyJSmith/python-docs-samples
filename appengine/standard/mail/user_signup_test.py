@@ -27,7 +27,7 @@ def test_user_signup(testbed):
     assert 'An email has been sent to alice@example.com.' in response.body
 
     records = user_signup.UserConfirmationRecord.query().fetch(1)
-    response = app.get('/user/confirm?code={}'.format(records[0].key.id()))
+    response = app.get(f'/user/confirm?code={records[0].key.id()}')
     assert response.status_int == 200
     assert 'Confirmed alice@example.com.' in response.body
 

@@ -44,8 +44,7 @@ class PrintEnvironmentHandler(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         for key, value in os.environ.iteritems():
-            self.response.out.write(
-                "{} = {}\n".format(key, value))
+            self.response.out.write(f"{key} = {value}\n")
 # [END gae_python_environment]
 
 
@@ -54,8 +53,7 @@ class RequestIdHandler(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         request_id = os.environ.get('REQUEST_LOG_ID')
-        self.response.write(
-            'REQUEST_LOG_ID={}'.format(request_id))
+        self.response.write(f'REQUEST_LOG_ID={request_id}')
 # [END gae_python_request_ids]
 
 

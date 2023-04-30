@@ -33,20 +33,19 @@ class PhotoUploadHandler(blobstore.BlobstoreUploadHandler):
         photo = PhotoUpload(blob_key=upload.key())
         photo.put()
 
-        return redirect("/view_photo/%s" % upload.key())
+        return redirect(f"/view_photo/{upload.key()}")
 
 
 class ViewPhotoHandler(blobstore.BlobstoreDownloadHandler):
     def get(self, photo_key):
         if not blobstore.get(photo_key):
             return "Photo key not found", 404
-        else:
-            headers = self.send_blob(request.environ, photo_key)
+        headers = self.send_blob(request.environ, photo_key)
 
-            # Prevent Flask from setting a default content-type.
-            # GAE sets it to a guessed type if the header is not set.
-            headers["Content-Type"] = None
-            return "", headers
+        # Prevent Flask from setting a default content-type.
+        # GAE sets it to a guessed type if the header is not set.
+        headers["Content-Type"] = None
+        return "", headers
 
 
 @app.route("/view_photo/<photo_key>")
@@ -69,7 +68,7 @@ def upload():
     """Create the HTML form to upload a file."""
     upload_url = blobstore.create_upload_url("/upload_photo")
 
-    response = """
+    return """
   <html><body>
   <form action="{0}" method="POST" enctype="multipart/form-data">
     Upload File: <input type="file" name="file"><br>
@@ -78,5 +77,3 @@ def upload():
   </body></html>""".format(
         upload_url
     )
-
-    return response

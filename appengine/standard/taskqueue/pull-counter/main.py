@@ -42,8 +42,7 @@ class CounterHandler(webapp2.RequestHandler):
 
     # [START adding_task]
     def post(self):
-        key = self.request.get('key')
-        if key:
+        if key := self.request.get('key'):
             queue = taskqueue.Queue('pullq')
             queue.add(taskqueue.Task(payload='', method='PULL', tag=key))
         self.redirect('/')

@@ -50,15 +50,9 @@ def generate_jwt():
         "aud": "https://www.googleapis.com/oauth2/v4/token"
     })
 
-    header_and_payload = '{}.{}'.format(
-        base64.urlsafe_b64encode(header_json),
-        base64.urlsafe_b64encode(payload_json))
+    header_and_payload = f'{base64.urlsafe_b64encode(header_json)}.{base64.urlsafe_b64encode(payload_json)}'
     (key_name, signature) = app_identity.sign_blob(header_and_payload)
-    signed_jwt = '{}.{}'.format(
-        header_and_payload,
-        base64.urlsafe_b64encode(signature))
-
-    return signed_jwt
+    return f'{header_and_payload}.{base64.urlsafe_b64encode(signature)}'
 
 
 def get_id_token():
@@ -76,7 +70,7 @@ def get_id_token():
 
 def make_request(token):
     """Makes a request to the auth info endpoint for Google ID token."""
-    headers = {'Authorization': 'Bearer {}'.format(token)}
+    headers = {'Authorization': f'Bearer {token}'}
     conn = httplib.HTTPSConnection(HOST)
     conn.request("GET", '/auth/info/googleidtoken', None, headers)
     res = conn.getresponse()

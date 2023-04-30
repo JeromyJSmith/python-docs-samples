@@ -28,7 +28,7 @@ def path_to_key(datastore, path):
     """
     key_parts = []
     path_parts = path.strip(u'/').split(u'/')
-    for n, x in enumerate(path_parts):
+    for x in path_parts:
         name, ext = x.rsplit('.', 1)
         key_parts.extend([ext, name])
 

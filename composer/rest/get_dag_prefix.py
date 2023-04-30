@@ -37,9 +37,7 @@ def get_dag_prefix(project_id, location, composer_environment):
     # location = 'us-central1'
     # composer_environment = 'YOUR_COMPOSER_ENVIRONMENT_NAME'
 
-    environment_url = (
-        'https://composer.googleapis.com/v1beta1/projects/{}/locations/{}'
-        '/environments/{}').format(project_id, location, composer_environment)
+    environment_url = f'https://composer.googleapis.com/v1beta1/projects/{project_id}/locations/{location}/environments/{composer_environment}'
     response = authed_session.request('GET', environment_url)
     environment_data = response.json()
 

@@ -23,8 +23,8 @@ import pytest
 import document_management
 
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
-KNOWLEDGE_BASE_NAME = "knowledge_{}".format(uuid.uuid4())
-DOCUMENT_DISPLAY_NAME = "test_document_{}".format(uuid.uuid4())
+KNOWLEDGE_BASE_NAME = f"knowledge_{uuid.uuid4()}"
+DOCUMENT_DISPLAY_NAME = f"test_document_{uuid.uuid4()}"
 pytest.KNOWLEDGE_BASE_ID = None
 
 

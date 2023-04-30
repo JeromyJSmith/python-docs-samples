@@ -41,9 +41,7 @@ def get_image_from_family(project: str, family: str) -> compute_v1.Image:
         An Image object.
     """
     image_client = compute_v1.ImagesClient()
-    # List of public operating system (OS) images: https://cloud.google.com/compute/docs/images/os-details
-    newest_image = image_client.get_from_family(project=project, family=family)
-    return newest_image
+    return image_client.get_from_family(project=project, family=family)
 
 
 def disk_from_image(
@@ -313,11 +311,10 @@ def create_custom_instances_no_helper(
             f"zones/{zone}/machineTypes/e2-custom-medium-{memory}",
         ),
     ]
-    # The core_count and memory values are not validated anywhere and can be rejected by the API.
-    instances = [
-        create_instance(project_id, zone, name, disks, type) for name, type in params
+    return [
+        create_instance(project_id, zone, name, disks, type)
+        for name, type in params
     ]
-    return instances
 
 
 # [END compute_custom_machine_type_create_without_helper]

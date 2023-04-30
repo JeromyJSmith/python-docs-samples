@@ -40,11 +40,15 @@ def test_disk():
     Get the newest version of debian 11 and make a disk from it.
     """
     new_debian = get_image_from_family('debian-cloud', 'debian-11')
-    test_disk_name = "test-disk-" + uuid.uuid4().hex[:10]
-    disk = create_disk_from_image(PROJECT, ZONE, test_disk_name,
-                                  f"zones/{ZONE}/diskTypes/pd-standard",
-                                  20, new_debian.self_link)
-    yield disk
+    test_disk_name = f"test-disk-{uuid.uuid4().hex[:10]}"
+    yield create_disk_from_image(
+        PROJECT,
+        ZONE,
+        test_disk_name,
+        f"zones/{ZONE}/diskTypes/pd-standard",
+        20,
+        new_debian.self_link,
+    )
     delete_disk(PROJECT, ZONE, test_disk_name)
 
 
@@ -53,7 +57,7 @@ def test_snapshot(test_disk):
     """
     Make a snapshot that will be deleted when tests are done.
     """
-    test_snap_name = "test-snap-" + uuid.uuid4().hex[:10]
+    test_snap_name = f"test-snap-{uuid.uuid4().hex[:10]}"
     snap = create_snapshot(PROJECT, test_disk.name, test_snap_name, zone=test_disk.zone.rsplit('/')[-1])
     yield snap
     delete_snapshot(PROJECT, snap.name)
@@ -64,7 +68,7 @@ def autodelete_image_name():
     """
     Provide a name for an image that will be deleted after the test is done.
     """
-    test_img_name = "test-img-" + uuid.uuid4().hex[:10]
+    test_img_name = f"test-img-{uuid.uuid4().hex[:10]}"
     yield test_img_name
 
     delete_image(PROJECT, test_img_name)
@@ -76,9 +80,13 @@ def autodelete_image(autodelete_image_name):
     An image that will be deleted after the test is done.
     """
     src_img = get_image_from_family('debian-cloud', 'debian-11')
-    new_image = create_image_from_image(PROJECT, src_img.name, autodelete_image_name, 'debian-cloud',
-                                        storage_location='eu')
-    yield new_image
+    yield create_image_from_image(
+        PROJECT,
+        src_img.name,
+        autodelete_image_name,
+        'debian-cloud',
+        storage_location='eu',
+    )
 
 
 def test_list_images():
@@ -100,7 +108,7 @@ def test_get_image():
 
 
 def test_create_delete_image(test_disk):
-    test_image_name = "test-image-" + uuid.uuid4().hex[:10]
+    test_image_name = f"test-image-{uuid.uuid4().hex[:10]}"
     new_image = create_image_from_disk(PROJECT, ZONE, test_disk.name, test_image_name)
     try:
         assert new_image.name == test_image_name

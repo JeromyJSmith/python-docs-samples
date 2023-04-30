@@ -46,13 +46,12 @@ class DAG:
     command_output = DAG._run_shell_command_locally_once(command=command)[1]
     if airflow_version < (2, 0, 0):
       command_output_parsed = command_output.split()
-      return command_output_parsed[command_output_parsed.index("DAGS") +
-                                   2:len(command_output_parsed) - 1]
+      return command_output_parsed[command_output_parsed.index("DAGS") + 2:-1]
     else:
-      list_of_dags = []
-      for line in command_output.split("\n"):
-        if re.compile("[a-z_]+|[a-z]+|[a-z]+|[a-z_]+").findall(line):
-          list_of_dags.append(line.split()[0])
+      list_of_dags = [
+          line.split()[0] for line in command_output.split("\n")
+          if re.compile("[a-z_]+|[a-z]+|[a-z]+|[a-z_]+").findall(line)
+      ]
       return list_of_dags[1:-1]
 
   @staticmethod
@@ -90,8 +89,8 @@ class DAG:
       logger.info(command_output[1])
       logger.info("Error pausing DAG %s, Retrying...", dag_id)
       command_output = DAG._run_shell_command_locally_once(command=command)
-      if command_output[0] == 1:
-        logger.info("Unable to pause DAG %s", dag_id)
+    if command_output[0] == 1:
+      logger.info("Unable to pause DAG %s", dag_id)
     logger.info(command_output[1])
 
   @staticmethod
@@ -109,8 +108,8 @@ class DAG:
       logger.info(command_output[1])
       logger.info("Error Unpausing DAG %s, Retrying...", dag_id)
       command_output = DAG._run_shell_command_locally_once(command=command)
-      if command_output[0] == 1:
-        logger.info("Unable to Unpause DAG %s", dag_id)
+    if command_output[0] == 1:
+      logger.info("Unable to Unpause DAG %s", dag_id)
     logger.info(command_output[1])
 
   @staticmethod
@@ -152,8 +151,8 @@ def main(project_name: str,
       airflow_version=airflow_version)
   logger.info("List of dags : %s", list_of_dags)
 
-  if operation == "pause":
-    for dag in list_of_dags:
+  for dag in list_of_dags:
+    if operation == "pause":
       if dag == "airflow_monitoring":
         continue
       DAG.pause_dag(
@@ -163,8 +162,7 @@ def main(project_name: str,
           sdk_endpoint=sdk_endpoint,
           dag_id=dag,
           airflow_version=airflow_version)
-  else:
-    for dag in list_of_dags:
+    else:
       DAG.unpause_dag(
           project_name=project_name,
           environment=environment,

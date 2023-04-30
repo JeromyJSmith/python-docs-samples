@@ -45,13 +45,13 @@ class MainPage(webapp2.RequestHandler):
 
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write(
-            'Demo GCS Application running from Version: {}\n'.format(
-                os.environ['CURRENT_VERSION_ID']))
-        self.response.write('Using bucket name: {}\n\n'.format(bucket_name))
+            f"Demo GCS Application running from Version: {os.environ['CURRENT_VERSION_ID']}\n"
+        )
+        self.response.write(f'Using bucket name: {bucket_name}\n\n')
 # [END get_default_bucket]
 
-        bucket = '/' + bucket_name
-        filename = bucket + '/demo-testfile'
+        bucket = f'/{bucket_name}'
+        filename = f'{bucket}/demo-testfile'
         self.tmp_filenames_to_clean_up = []
 
         self.create_file(filename)
@@ -79,7 +79,7 @@ class MainPage(webapp2.RequestHandler):
     def create_file(self, filename):
         """Create a file."""
 
-        self.response.write('Creating file {}\n'.format(filename))
+        self.response.write(f'Creating file {filename}\n')
 
         # The retry_params specified in the open call will override the default
         # retry params for this particular file handle.
@@ -125,7 +125,7 @@ class MainPage(webapp2.RequestHandler):
 
         # Production apps should set page_size to a practical value.
         page_size = 1
-        stats = cloudstorage.listbucket(bucket + '/foo', max_keys=page_size)
+        stats = cloudstorage.listbucket(f'{bucket}/foo', max_keys=page_size)
         while True:
             count = 0
             for stat in stats:
@@ -136,25 +136,26 @@ class MainPage(webapp2.RequestHandler):
             if count != page_size or count == 0:
                 break
             stats = cloudstorage.listbucket(
-                bucket + '/foo', max_keys=page_size, marker=stat.filename)
+                f'{bucket}/foo', max_keys=page_size, marker=stat.filename
+            )
 # [END list_bucket]
 
     def list_bucket_directory_mode(self, bucket):
         self.response.write('Listbucket directory mode result:\n')
-        for stat in cloudstorage.listbucket(bucket + '/b', delimiter='/'):
+        for stat in cloudstorage.listbucket(f'{bucket}/b', delimiter='/'):
             self.response.write(stat)
             self.response.write('\n')
             if stat.is_dir:
                 for subdir_file in cloudstorage.listbucket(
                         stat.filename, delimiter='/'):
-                    self.response.write('  {}'.format(subdir_file))
+                    self.response.write(f'  {subdir_file}')
                     self.response.write('\n')
 
 # [START delete_files]
     def delete_files(self):
         self.response.write('Deleting files...\n')
         for filename in self.tmp_filenames_to_clean_up:
-            self.response.write('Deleting file {}\n'.format(filename))
+            self.response.write(f'Deleting file {filename}\n')
             try:
                 cloudstorage.delete(filename)
             except cloudstorage.NotFoundError:

@@ -25,7 +25,7 @@ from ..usage_report.usage_reports import get_usage_export_bucket
 from ..usage_report.usage_reports import set_usage_export_bucket
 
 PROJECT = google.auth.default()[1]
-BUCKET_NAME = "test" + uuid.uuid4().hex[:10]
+BUCKET_NAME = f"test{uuid.uuid4().hex[:10]}"
 TEST_PREFIX = "some-prefix"
 
 

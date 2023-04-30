@@ -38,6 +38,5 @@ def create_from_snapshot(
     """
     disk_type = f"zones/{zone}/diskTypes/pd-standard"
     disks = [disk_from_snapshot(disk_type, 20, True, snapshot_link)]
-    instance = create_instance(project_id, zone, instance_name, disks)
-    return instance
+    return create_instance(project_id, zone, instance_name, disks)
 # </INGREDIENT>

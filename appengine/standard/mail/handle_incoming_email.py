@@ -21,7 +21,7 @@ import webapp2
 
 class LogSenderHandler(InboundMailHandler):
     def receive(self, mail_message):
-        logging.info("Received a message from: " + mail_message.sender)
+        logging.info(f"Received a message from: {mail_message.sender}")
 # [END log_sender_handler]
 # [START bodies]
         plaintext_bodies = mail_message.bodies('text/plain')

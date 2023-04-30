@@ -14,6 +14,7 @@
 
 """A DAG consisting of a BashOperator that prints the result of a coin flip."""
 
+
 import datetime
 
 import airflow
@@ -24,10 +25,10 @@ from dependencies import coin_module
 # [END composer_dag_local_deps]
 
 default_args = {
-    'start_date':
-        datetime.datetime.combine(
-            datetime.datetime.today() - datetime.timedelta(days=1),
-            datetime.datetime.min.time()),
+    'start_date': datetime.datetime.combine(
+        datetime.datetime.now() - datetime.timedelta(days=1),
+        datetime.datetime.min.time(),
+    )
 }
 
 with airflow.DAG(

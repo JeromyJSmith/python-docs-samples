@@ -59,8 +59,9 @@ class DatastoreCounterHandler(webapp2.RequestHandler):
             # Restore the saved namespace.
             namespace_manager.set_namespace(previous_namespace)
 
-        self.response.write('Global: {}, Namespace {}: {}'.format(
-            global_count, namespace, namespace_count))
+        self.response.write(
+            f'Global: {global_count}, Namespace {namespace}: {namespace_count}'
+        )
 
 
 app = webapp2.WSGIApplication([

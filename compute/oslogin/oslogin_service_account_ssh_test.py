@@ -94,12 +94,10 @@ def oslogin_service_account():
 
     # Cleanup
     # Delete the temporary service account and its associated keys.
-    try:
+    with contextlib.suppress(googleapiclient.errors.Error):
         iam.projects().serviceAccounts().delete(
             name=f'projects/{PROJECT}/serviceAccounts/{account_email}'
         ).execute()
-    except googleapiclient.errors.Error:
-        pass
 
 
 @contextlib.contextmanager
@@ -193,7 +191,7 @@ def oslogin_instance(oslogin_service_account):
     policy.bindings = [binding]
     client.set_iam_policy(project=PROJECT, zone=ZONE, resource=TEST_ID, zone_set_policy_request_resource=policy)
 
-    for attempt in range(5):
+    for _ in range(5):
         time.sleep(5)
         instance = client.get(project=PROJECT, zone=ZONE, instance=instance.name)
         if instance.status == "RUNNING":

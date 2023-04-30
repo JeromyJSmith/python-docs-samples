@@ -37,7 +37,7 @@ SUBSCRIPTION = "trigger_dag_subscription"
 
 
 def handle_messages(pulled_messages, context):
-    dag_ids = list()
+    dag_ids = []
     for idx, m in enumerate(pulled_messages):
         data = m.message.data.decode('utf-8')
         print(f'message {idx} data is {data}')

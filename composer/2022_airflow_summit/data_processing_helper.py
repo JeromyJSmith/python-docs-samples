@@ -45,7 +45,7 @@ def preprocess_station_data(input_filename: str, output_filename: str) -> None:
         """
         for row in data:
             row = [
-                row[0:12].strip(),
+                row[:12].strip(),
                 row[12:21].strip(),
                 row[21:31].strip(),
                 row[31:38].strip(),

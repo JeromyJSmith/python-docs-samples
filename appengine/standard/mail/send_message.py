@@ -40,8 +40,9 @@ The example.com Team
 
 class SendMessageHandler(webapp2.RequestHandler):
     def get(self):
-        send_approved_mail('example@{}.appspotmail.com'.format(
-            app_identity.get_application_id()))
+        send_approved_mail(
+            f'example@{app_identity.get_application_id()}.appspotmail.com'
+        )
         self.response.content_type = 'text/plain'
         self.response.write('Sent an email message to Albert.')
 

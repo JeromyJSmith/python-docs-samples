@@ -55,8 +55,7 @@ def acquire_token(audience: str = AUDIENCE_URL) -> str:
 def verify_token(token: str, audience: str) -> dict:
     """Verify token signature and return the token payload"""
     request = google.auth.transport.requests.Request()
-    payload = id_token.verify_token(token, request=request, audience=audience)
-    return payload
+    return id_token.verify_token(token, request=request, audience=audience)
 # [END compute_vm_identity_verify_token]
 
 

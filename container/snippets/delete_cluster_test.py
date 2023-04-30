@@ -87,8 +87,5 @@ def test_delete_clusters(capsys: object) -> None:
     cluster_location = client.common_location_path(PROJECT_ID, ZONE)
     list_response = client.list_clusters({"parent": cluster_location})
 
-    list_of_clusters = []
-    for cluster in list_response.clusters:
-        list_of_clusters.append(cluster.name)
-
+    list_of_clusters = [cluster.name for cluster in list_response.clusters]
     assert CLUSTER_NAME not in list_of_clusters

@@ -59,9 +59,7 @@ def setup_key() -> tink.aead.KmsEnvelopeAead:
     credentials = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
     key_uri = "gcp-kms://" + os.environ["CLOUD_KMS_KEY"]
 
-    env_aead = init_tink_env_aead(key_uri, credentials)
-
-    yield env_aead
+    yield init_tink_env_aead(key_uri, credentials)
 
 
 def test_encrypt_and_insert_data(

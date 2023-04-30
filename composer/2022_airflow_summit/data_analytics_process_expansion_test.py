@@ -111,27 +111,25 @@ def test_dataproc_batch(test_bucket, bq_dataset):
 
         response = operation.result()
     except Aborted as e:
-        # retry once if we see a flaky 409 "subnet not ready error"
-        if "/subnetworks/default" in str(e):
-            # delete the errored out batch so we don't see an "AlreadyExists"
-            delete_request = dataproc.DeleteBatchRequest(
-                name=f"projects/{PROJECT_ID}/locations/{DATAPROC_REGION}/batches/{BATCH_ID}"
-            )
-            dataproc_client.delete_batch(request=delete_request)
-            # retry the creation operation once
-            create_request = dataproc.CreateBatchRequest(
-                parent=f"projects/{PROJECT_ID}/regions/{DATAPROC_REGION}",
-                batch=BATCH_CONFIG,
-                batch_id=BATCH_ID,
-            )
-            operation = dataproc_client.create_batch(request=create_request)
-
-            print("Waiting for operation to complete...")
-
-            response = operation.result()
-        else:
+        if "/subnetworks/default" not in str(e):
             raise (e)
 
+        # delete the errored out batch so we don't see an "AlreadyExists"
+        delete_request = dataproc.DeleteBatchRequest(
+            name=f"projects/{PROJECT_ID}/locations/{DATAPROC_REGION}/batches/{BATCH_ID}"
+        )
+        dataproc_client.delete_batch(request=delete_request)
+        # retry the creation operation once
+        create_request = dataproc.CreateBatchRequest(
+            parent=f"projects/{PROJECT_ID}/regions/{DATAPROC_REGION}",
+            batch=BATCH_CONFIG,
+            batch_id=BATCH_ID,
+        )
+        operation = dataproc_client.create_batch(request=create_request)
+
+        print("Waiting for operation to complete...")
+
+        response = operation.result()
     yield response
     dataproc_client = dataproc.BatchControllerClient(
         client_options={
@@ -205,7 +203,7 @@ def bq_dataset(test_bucket):
     destination_table = BQ_CLIENT.get_table(
         BQ_DESTINATION_TABLE_ID
     )  # Make an API request.
-    print("Loaded {} rows.".format(destination_table.num_rows))
+    print(f"Loaded {destination_table.num_rows} rows.")
 
     yield
 

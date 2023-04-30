@@ -35,6 +35,5 @@ def create_five_instances(project_id: str, zone: str, template_name: str,
         name_pattern: The string pattern used for the names of the VMs.
     """
     template = get_instance_template(project_id, template_name)
-    instances = bulk_insert_instance(project_id, zone, template, 5, name_pattern)
-    return instances
+    return bulk_insert_instance(project_id, zone, template, 5, name_pattern)
 # </REGION compute_instances_bulk_insert>

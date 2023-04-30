@@ -75,11 +75,15 @@ def test_disk():
     Get the newest version of debian 11 and make a disk from it.
     """
     new_debian = get_image_from_family('debian-cloud', 'debian-11')
-    test_disk_name = "test-disk-" + uuid.uuid4().hex[:10]
-    disk = create_disk_from_image(PROJECT, ZONE, test_disk_name,
-                                  f"zones/{ZONE}/diskTypes/pd-standard",
-                                  20, new_debian.self_link)
-    yield disk
+    test_disk_name = f"test-disk-{uuid.uuid4().hex[:10]}"
+    yield create_disk_from_image(
+        PROJECT,
+        ZONE,
+        test_disk_name,
+        f"zones/{ZONE}/diskTypes/pd-standard",
+        20,
+        new_debian.self_link,
+    )
     delete_disk(PROJECT, ZONE, test_disk_name)
 
 
@@ -88,7 +92,7 @@ def test_snapshot(test_disk):
     """
     Make a snapshot that will be deleted when tests are done.
     """
-    test_snap_name = "test-snap-" + uuid.uuid4().hex[:10]
+    test_snap_name = f"test-snap-{uuid.uuid4().hex[:10]}"
     snap = create_snapshot(PROJECT, test_disk.name, test_snap_name, zone=test_disk.zone.rsplit('/')[-1])
     yield snap
     delete_snapshot(PROJECT, snap.name)
@@ -96,7 +100,7 @@ def test_snapshot(test_disk):
 
 @pytest.fixture()
 def autodelete_disk_name():
-    disk_name = "test-disk-" + uuid.uuid4().hex[:10]
+    disk_name = f"test-disk-{uuid.uuid4().hex[:10]}"
     yield disk_name
     try:
         delete_disk(PROJECT, ZONE, disk_name)
@@ -114,13 +118,19 @@ autodelete_disk_name2 = autodelete_disk_name
 def autodelete_src_disk(autodelete_disk_name):
     disk_type = f"zones/{ZONE}/diskTypes/pd-standard"
     debian_image = get_image_from_family('debian-cloud', 'debian-11')
-    disk = create_disk_from_image(PROJECT, ZONE, autodelete_disk_name, disk_type, 24, debian_image.self_link)
-    yield disk
+    yield create_disk_from_image(
+        PROJECT,
+        ZONE,
+        autodelete_disk_name,
+        disk_type,
+        24,
+        debian_image.self_link,
+    )
 
 
 @pytest.fixture
 def autodelete_instance_name():
-    instance_name = "test-instance-" + uuid.uuid4().hex[:10]
+    instance_name = f"test-instance-{uuid.uuid4().hex[:10]}"
 
     yield instance_name
 
@@ -129,17 +139,16 @@ def autodelete_instance_name():
 
 @pytest.fixture
 def autodelete_regional_blank_disk():
-    disk_name = 'regional-disk-' + uuid.uuid4().hex[:10]
+    disk_name = f'regional-disk-{uuid.uuid4().hex[:10]}'
     replica_zones = [
         f"projects/{PROJECT}/zones/{REGION}-c",
         f"projects/{PROJECT}/zones/{REGION}-b",
     ]
     disk_type = f"regions/{REGION}/diskTypes/pd-balanced"
 
-    disk = create_regional_disk(PROJECT, REGION, replica_zones, disk_name, disk_type, 11)
-
-    yield disk
-
+    yield create_regional_disk(
+        PROJECT, REGION, replica_zones, disk_name, disk_type, 11
+    )
     try:
         # We wait for a while to let instances using this disk to be removed.
         time.sleep(60)
@@ -151,13 +160,10 @@ def autodelete_regional_blank_disk():
 
 @pytest.fixture
 def autodelete_blank_disk():
-    disk_name = 'regional-disk-' + uuid.uuid4().hex[:10]
+    disk_name = f'regional-disk-{uuid.uuid4().hex[:10]}'
     disk_type = f"zones/{ZONE}/diskTypes/pd-standard"
 
-    disk = create_empty_disk(PROJECT, ZONE, disk_name, disk_type, 12)
-
-    yield disk
-
+    yield create_empty_disk(PROJECT, ZONE, disk_name, disk_type, 12)
     try:
         # We wait for a while to let instances using this disk to be removed.
         print('Waiting')
@@ -171,15 +177,11 @@ def autodelete_blank_disk():
 
 @pytest.fixture
 def autodelete_compute_instance():
-    instance_name = "test-instance-" + uuid.uuid4().hex[:10]
+    instance_name = f"test-instance-{uuid.uuid4().hex[:10]}"
     newest_debian = get_image_from_family(project="ubuntu-os-cloud", family="ubuntu-2204-lts")
     disk_type = f"zones/{ZONE}/diskTypes/pd-standard"
     disks = [disk_from_image(disk_type, 100, True, newest_debian.self_link)]
-    instance = create_instance(
-        PROJECT, ZONE, instance_name, disks
-    )
-    yield instance
-
+    yield create_instance(PROJECT, ZONE, instance_name, disks)
     delete_instance(PROJECT, ZONE, instance_name)
 
 
@@ -232,7 +234,7 @@ def test_create_disk_from_disk(autodelete_src_disk, autodelete_disk_name2):
 
 
 def test_create_and_delete_regional_disk(test_snapshot):
-    disk_name = "test-rdisk-" + uuid.uuid4().hex[:10]
+    disk_name = f"test-rdisk-{uuid.uuid4().hex[:10]}"
     disk_type = f"regions/{REGION}/diskTypes/pd-balanced"
     replica_zones = [
         f"projects/{PROJECT}/zones/{REGION}-a",

@@ -57,10 +57,8 @@ def predict(
 
     print("Prediction results:")
     for result in response.payload:
-        print(
-            "Predicted class name: {}".format(result.tables.value)
-        )
-        print("Predicted class score: {}".format(result.tables.score))
+        print(f"Predicted class name: {result.tables.value}")
+        print(f"Predicted class score: {result.tables.score}")
 
         if feature_importance:
             # get features of top importance
@@ -69,11 +67,7 @@ def predict(
                 for column in result.tables.tables_model_column_info
             ]
             feat_list.sort(reverse=True)
-            if len(feat_list) < 10:
-                feat_to_show = len(feat_list)
-            else:
-                feat_to_show = 10
-
+            feat_to_show = min(len(feat_list), 10)
             print("Features of top importance:")
             for feat in feat_list[:feat_to_show]:
                 print(feat)
@@ -121,8 +115,9 @@ def batch_predict_bq(
     # here's how to get the dataset name:
     dataset_name = response.metadata.batch_predict_details.output_info.bigquery_output_dataset
 
-    print("Batch prediction complete.\nResults are in '{}' dataset.\n{}".format(
-        dataset_name, response.metadata))
+    print(
+        f"Batch prediction complete.\nResults are in '{dataset_name}' dataset.\n{response.metadata}"
+    )
 
     # [END automl_tables_batch_predict_bq]
 
@@ -166,7 +161,7 @@ def batch_predict(
     # or block the thread polling for the operation's results:
     response.result()
 
-    print("Batch prediction complete.\n{}".format(response.metadata))
+    print(f"Batch prediction complete.\n{response.metadata}")
 
     # [END automl_tables_batch_predict]
 

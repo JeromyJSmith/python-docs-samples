@@ -232,5 +232,4 @@ def fetch_good_articles_using_gql_with_explicit_bind():
 
 
 def fetch_good_articles_using_gql_with_inlined_bind():
-    query = ndb.gql("SELECT * FROM Article WHERE stars > :1", 3)
-    return query
+    return ndb.gql("SELECT * FROM Article WHERE stars > :1", 3)

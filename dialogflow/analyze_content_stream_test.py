@@ -69,8 +69,7 @@ def participant_id(conversation_id):
     response = participant_management.create_participant(
         project_id=PROJECT_ID, conversation_id=conversation_id, role="END_USER"
     )
-    participant_id = response.name.split("participants/")[1].rstrip()
-    yield participant_id
+    yield response.name.split("participants/")[1].rstrip()
 
 
 # Test live transcription with streaming_analyze_content.

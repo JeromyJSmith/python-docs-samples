@@ -60,8 +60,7 @@ def wrap_rsa_key(public_key, private_key_bytes):
             mgf=padding.MGF1(algorithm=hashes.SHA1()),
             algorithm=hashes.SHA1(),
             label=None))
-    encoded_wrapped_key = base64.b64encode(wrapped_key)
-    return encoded_wrapped_key
+    return base64.b64encode(wrapped_key)
 
 
 def main(key_file):
@@ -75,9 +74,10 @@ def main(key_file):
     google_public_key = get_google_public_cert_key()
     wrapped_rsa_key = wrap_rsa_key(google_public_key, customer_key_bytes)
 
-    print('Base-64 encoded private key: {}'.format(
-        base64.b64encode(customer_key_bytes).decode('utf-8')))
-    print('Wrapped RSA key: {}'.format(wrapped_rsa_key.decode('utf-8')))
+    print(
+        f"Base-64 encoded private key: {base64.b64encode(customer_key_bytes).decode('utf-8')}"
+    )
+    print(f"Wrapped RSA key: {wrapped_rsa_key.decode('utf-8')}")
 
 
 if __name__ == '__main__':

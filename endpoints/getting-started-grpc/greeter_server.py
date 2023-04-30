@@ -43,11 +43,10 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 class Greeter(helloworld_pb2_grpc.GreeterServicer):
 
     def SayHello(self, request, context):
-        return helloworld_pb2.HelloReply(message='Hello, %s!' % request.name)
+        return helloworld_pb2.HelloReply(message=f'Hello, {request.name}!')
 
     def SayHelloAgain(self, request, context):
-        return helloworld_pb2.HelloReply(
-            message='Hello again, %s!' % request.name)
+        return helloworld_pb2.HelloReply(message=f'Hello again, {request.name}!')
 
 
 def serve():

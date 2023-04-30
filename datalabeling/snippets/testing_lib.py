@@ -29,14 +29,10 @@ RETRY_DEADLINE = 60
 
 
 def create_client():
-    # If provided, use a provided test endpoint - this will prevent tests on
-    # this snippet from triggering any action by a real human
-    if "DATALABELING_ENDPOINT" in os.environ:
-        opts = ClientOptions(api_endpoint=os.getenv("DATALABELING_ENDPOINT"))
-        client = datalabeling.DataLabelingServiceClient(client_options=opts)
-    else:
-        client = datalabeling.DataLabelingServiceClient()
-    return client
+    if "DATALABELING_ENDPOINT" not in os.environ:
+        return datalabeling.DataLabelingServiceClient()
+    opts = ClientOptions(api_endpoint=os.getenv("DATALABELING_ENDPOINT"))
+    return datalabeling.DataLabelingServiceClient(client_options=opts)
 
 
 @backoff.on_exception(backoff.expo, DeadlineExceeded, max_time=RETRY_DEADLINE)
@@ -58,14 +54,14 @@ def delete_old_datasets(project_id):
     cutoff_time = time.time() - 7200
     for element in response:
         if element.create_time.timestamp_pb().seconds < cutoff_time:
-            print("Deleting {}".format(element.name))
+            print(f"Deleting {element.name}")
             try:
                 dataset_sample.delete_dataset(element.name)
             except FailedPrecondition as e:
                 # We're always getting FailedPrecondition with 400
                 # resource conflict. I don't know why.
-                print("Deleting {} failed.".format(element.name))
-                print("Detail: {}".format(e))
+                print(f"Deleting {element.name} failed.")
+                print(f"Detail: {e}")
             # To avoid quota error
             time.sleep(1)
 

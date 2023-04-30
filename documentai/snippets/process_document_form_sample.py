@@ -115,14 +115,10 @@ def layout_to_text(layout: documentai.Document.Page.Layout, text: str) -> str:
     offsets in the entirety of the document's text. This function converts
     offsets to a string.
     """
-    response = ""
-    # If a text segment spans several lines, it will
-    # be stored in different text segments.
-    for segment in layout.text_anchor.text_segments:
-        start_index = int(segment.start_index)
-        end_index = int(segment.end_index)
-        response += text[start_index:end_index]
-    return response
+    return "".join(
+        text[int(segment.start_index) : int(segment.end_index)]
+        for segment in layout.text_anchor.text_segments
+    )
 
 
 # [END documentai_process_form_document]

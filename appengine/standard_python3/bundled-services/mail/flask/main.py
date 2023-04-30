@@ -26,7 +26,7 @@ app.wsgi_app = wrap_wsgi_app(app.wsgi_app)
 
 @app.route("/", methods=["GET"])
 def home_page():
-    html = """
+    return """
 <!DOCTYPE html5>
 <html>
 <head><title>App Engine Legacy Mail</title></head>
@@ -44,7 +44,6 @@ def home_page():
     </form>
 </body>
 """
-    return html
 
 
 @app.route("/", methods=["POST"])

@@ -54,7 +54,8 @@ def create_custom_instances_no_helper(
         (f"{instance_name}_e2_small", f"zones/{zone}/machineTypes/e2-custom-small-{memory}"),
         (f"{instance_name}_e2_medium", f"zones/{zone}/machineTypes/e2-custom-medium-{memory}"),
     ]
-    # The core_count and memory values are not validated anywhere and can be rejected by the API.
-    instances = [create_instance(project_id, zone, name, disks, type) for name, type in params]
-    return instances
+    return [
+        create_instance(project_id, zone, name, disks, type)
+        for name, type in params
+    ]
 # </INGREDIENT>

@@ -21,7 +21,7 @@ import pytest
 import delete_dataset
 
 PROJECT_ID = os.environ["AUTOML_PROJECT_ID"]
-BUCKET_ID = "{}-lcm".format(PROJECT_ID)
+BUCKET_ID = f"{PROJECT_ID}-lcm"
 
 
 @pytest.fixture(scope="function")
@@ -34,9 +34,7 @@ def dataset_id():
         display_name=display_name, text_extraction_dataset_metadata=metadata
     )
     response = client.create_dataset(parent=project_location, dataset=dataset)
-    dataset_id = response.result().name.split("/")[-1]
-
-    yield dataset_id
+    yield response.result().name.split("/")[-1]
 
 
 def test_delete_dataset(capsys, dataset_id):

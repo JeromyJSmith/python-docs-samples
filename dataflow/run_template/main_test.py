@@ -59,7 +59,7 @@ def app():
 def dataflow_job_name(request):
     label = request.param
     job_name = datetime.now().strftime(
-        "{}-%Y%m%d-%H%M%S-{}".format(label, uuid.uuid4().hex[:5])
+        f"{label}-%Y%m%d-%H%M%S-{uuid.uuid4().hex[:5]}"
     )
 
     yield job_name
@@ -100,10 +100,7 @@ def get_job_id_from_name(job_name):
 # We retry the cancel operation a few times until the job is in a state where it can be cancelled
 @backoff.on_exception(backoff.expo, HttpError, max_time=RETRY_MAX_TIME)
 def dataflow_jobs_cancel(job_name):
-    # to cancel a dataflow job, we need its ID, not its name
-    job_id = get_job_id_from_name(job_name)
-
-    if job_id:
+    if job_id := get_job_id_from_name(job_name):
         # Cancel the Dataflow job if it exists. If it doesn't, job_id will be equal to None. For more info, see: https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs/update
         request = (
             dataflow.projects()
@@ -135,7 +132,7 @@ def test_run_template_python(app, dataflow_job_name):
     template = "gs://dataflow-templates/latest/Word_Count"
     parameters = {
         "inputFile": "gs://apache-beam-samples/shakespeare/kinglear.txt",
-        "output": "gs://{}/dataflow/wordcount/outputs".format(BUCKET),
+        "output": f"gs://{BUCKET}/dataflow/wordcount/outputs",
     }
     res = main.run(project, dataflow_job_name, template, parameters)
     assert dataflow_job_name in res["job"]["name"]
@@ -156,9 +153,9 @@ def test_run_template_http_url(app, dataflow_job_name):
         "job": dataflow_job_name,
         "template": "gs://dataflow-templates/latest/Word_Count",
         "inputFile": "gs://apache-beam-samples/shakespeare/kinglear.txt",
-        "output": "gs://{}/dataflow/wordcount/outputs".format(BUCKET),
+        "output": f"gs://{BUCKET}/dataflow/wordcount/outputs",
     }
-    with app.test_request_context("/?" + url_encode(args)):
+    with app.test_request_context(f"/?{url_encode(args)}"):
         res = main.run_template(flask.request)
         data = json.loads(res)
         assert dataflow_job_name in data["job"]["name"]
@@ -173,7 +170,7 @@ def test_run_template_http_data(app, dataflow_job_name):
         "job": dataflow_job_name,
         "template": "gs://dataflow-templates/latest/Word_Count",
         "inputFile": "gs://apache-beam-samples/shakespeare/kinglear.txt",
-        "output": "gs://{}/dataflow/wordcount/outputs".format(BUCKET),
+        "output": f"gs://{BUCKET}/dataflow/wordcount/outputs",
     }
     with app.test_request_context(data=args):
         res = main.run_template(flask.request)
@@ -190,7 +187,7 @@ def test_run_template_http_json(app, dataflow_job_name):
         "job": dataflow_job_name,
         "template": "gs://dataflow-templates/latest/Word_Count",
         "inputFile": "gs://apache-beam-samples/shakespeare/kinglear.txt",
-        "output": "gs://{}/dataflow/wordcount/outputs".format(BUCKET),
+        "output": f"gs://{BUCKET}/dataflow/wordcount/outputs",
     }
     with app.test_request_context(json=args):
         res = main.run_template(flask.request)

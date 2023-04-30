@@ -36,13 +36,9 @@ def create_certificate(
     service = discovery.build("compute", "v1")
 
     # Read the cert into memory
-    with open(certificate_file) as f:
-        _temp_cert = f.read()
-
+    _temp_cert = Path(certificate_file).read_text()
     # Read the private_key into memory
-    with open(private_key_file) as f:
-        _temp_key = f.read()
-
+    _temp_key = Path(private_key_file).read_text()
     # Now that the certificate and private key are in memory, you can create the
     # certificate resource
     ssl_certificate_body = {

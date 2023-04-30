@@ -54,21 +54,22 @@ class MainPage(webapp2.RequestHandler):
 
         greetings = Greeting.query(
             ancestor=guestbook_key(guestbook_name)) \
-            .order(-Greeting.date) \
-            .fetch(10)
+                .order(-Greeting.date) \
+                .fetch(10)
 
         for greeting in greetings:
             if greeting.author:
-                self.response.out.write(
-                    '<b>%s</b> wrote:' % greeting.author)
+                self.response.out.write(f'<b>{greeting.author}</b> wrote:')
             else:
                 self.response.out.write('An anonymous person wrote:')
             # [START display_image]
-            self.response.out.write('<div><img src="/img?img_id=%s"></img>' %
-                                    greeting.key.urlsafe())
-            self.response.out.write('<blockquote>%s</blockquote></div>' %
-                                    cgi.escape(greeting.content))
-            # [END display_image]
+            self.response.out.write(
+                f'<div><img src="/img?img_id={greeting.key.urlsafe()}"></img>'
+            )
+            self.response.out.write(
+                f'<blockquote>{cgi.escape(greeting.content)}</blockquote></div>'
+            )
+                # [END display_image]
 
         # [START form]
         self.response.out.write("""

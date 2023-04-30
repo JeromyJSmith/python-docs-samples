@@ -52,23 +52,20 @@ class UploadPhotoHandler(blobstore.BlobstoreUploadHandler):
         user_photo.put()
 
         # Redirect to the '/view_photo/<Photo Key>' URL
-        return (
-            "",
-            http.HTTPStatus.FOUND,
-            [("Location", "/view_photo/%s" % upload.key())],
-        )
+        return "", http.HTTPStatus.FOUND, [("Location", f"/view_photo/{upload.key()}")]
 
 
 class ViewPhotoHandler(blobstore.BlobstoreDownloadHandler):
     def get_photo(self, environ, photo_key):
-        if not blobstore.get(photo_key):
-            return "Photo key not found", http.HTTPStatus.NOT_FOUND, []
-        else:
-            return (
+        return (
+            (
                 "",
                 http.HTTPStatus.OK,
                 list(self.send_blob(environ, photo_key).items()),
             )
+            if blobstore.get(photo_key)
+            else ("Photo key not found", http.HTTPStatus.NOT_FOUND, [])
+        )
 
     def get(self, environ):
         photo_key = (environ["app.url_args"])[0]

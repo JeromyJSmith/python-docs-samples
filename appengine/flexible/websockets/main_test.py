@@ -63,12 +63,12 @@ def server():
 
 
 def test_http(server):
-    result = requests.get('http://{}/'.format(server))
+    result = requests.get(f'http://{server}/')
     assert 'Python Websockets Chat' in result.text
 
 
 def test_websocket(server):
-    url = 'ws://{}/chat'.format(server)
+    url = f'ws://{server}/chat'
     ws_one = websocket.WebSocket()
     ws_one.connect(url)
 

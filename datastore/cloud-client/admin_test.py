@@ -45,7 +45,7 @@ class TestDatastoreAdminSnippets:
     @pytest.mark.flaky
     @backoff.on_exception(backoff.expo, (RetryError, TimeoutError), max_tries=3)
     def test_export_import_entities(self):
-        response = admin.export_entities(PROJECT, "gs://" + BUCKET)
+        response = admin.export_entities(PROJECT, f"gs://{BUCKET}")
         assert response
 
         assert admin.import_entities(PROJECT, response.output_url)

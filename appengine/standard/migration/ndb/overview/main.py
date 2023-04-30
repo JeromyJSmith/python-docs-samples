@@ -42,7 +42,7 @@ class Greeting(ndb.Model):
 @app.route('/', methods=['GET'])
 def display_guestbook():
     guestbook_name = request.args.get('guestbook_name', '')
-    print('GET guestbook name is {}'.format(guestbook_name))
+    print(f'GET guestbook name is {guestbook_name}')
     with client.context():
         ancestor_key = ndb.Key("Book", guestbook_name or "*notitle*")
         greetings = Greeting.query_book(ancestor_key).fetch(20)
@@ -62,10 +62,10 @@ def update_guestbook():
     # We set the parent key on each 'Greeting' to ensure each guestbook's
     # greetings are in the same entity group.
     guestbook_name = request.form.get('guestbook_name', '')
-    print('Guestbook name from the form: {}'.format(guestbook_name))
+    print(f'Guestbook name from the form: {guestbook_name}')
 
     with client.context():
-        print('Guestbook name from the URL: {}'.format(guestbook_name))
+        print(f'Guestbook name from the URL: {guestbook_name}')
         greeting = Greeting(
                 parent=ndb.Key("Book", guestbook_name or "*notitle*"),
                 content=request.form.get('content', None)

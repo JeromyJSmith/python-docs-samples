@@ -50,9 +50,7 @@ def echo():
 # [START endpoints_auth_info_backend]
 def auth_info():
     """Retrieves the authenication information from Google Cloud Endpoints."""
-    encoded_info = request.headers.get('X-Endpoint-API-UserInfo', None)
-
-    if encoded_info:
+    if encoded_info := request.headers.get('X-Endpoint-API-UserInfo', None):
         info_json = _base64_decode(encoded_info)
         user_info = json.loads(info_json)
     else:
@@ -85,9 +83,12 @@ def auth_info_firebase():
 def unexpected_error(e):
     """Handle exceptions by returning swagger-compliant json."""
     logging.exception('An error occured while processing the request.')
-    response = jsonify({
-        'code': http_client.INTERNAL_SERVER_ERROR,
-        'message': 'Exception: {}'.format(e)})
+    response = jsonify(
+        {
+            'code': http_client.INTERNAL_SERVER_ERROR,
+            'message': f'Exception: {e}',
+        }
+    )
     response.status_code = http_client.INTERNAL_SERVER_ERROR
     return response
 

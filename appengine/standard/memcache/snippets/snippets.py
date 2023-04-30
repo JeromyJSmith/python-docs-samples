@@ -29,9 +29,8 @@ def get_data():
     data = memcache.get('key')
     if data is not None:
         return data
-    else:
-        data = query_for_data()
-        memcache.add('key', data, 60)
+    data = query_for_data()
+    memcache.add('key', data, 60)
     return data
 # [END get_data]
 

@@ -50,20 +50,14 @@ def generate_jwt():
         "email": DEFAULT_SERVICE_ACCOUNT
     })
 
-    header_and_payload = '{}.{}'.format(
-        base64.urlsafe_b64encode(header_json),
-        base64.urlsafe_b64encode(payload_json))
+    header_and_payload = f'{base64.urlsafe_b64encode(header_json)}.{base64.urlsafe_b64encode(payload_json)}'
     (key_name, signature) = app_identity.sign_blob(header_and_payload)
-    signed_jwt = '{}.{}'.format(
-        header_and_payload,
-        base64.urlsafe_b64encode(signature))
-
-    return signed_jwt
+    return f'{header_and_payload}.{base64.urlsafe_b64encode(signature)}'
 
 
 def make_request(signed_jwt):
     """Makes a request to the auth info endpoint for Google JWTs."""
-    headers = {'Authorization': 'Bearer {}'.format(signed_jwt)}
+    headers = {'Authorization': f'Bearer {signed_jwt}'}
     conn = httplib.HTTPSConnection(HOST)
     conn.request("GET", '/auth/info/googlejwt', None, headers)
     res = conn.getresponse()

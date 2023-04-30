@@ -100,7 +100,7 @@ def test_deidentify_with_mask_masking_number_specified(capsys):
 
 def test_deidentify_with_redact(capsys):
     deid.deidentify_with_redact(
-        GCLOUD_PROJECT, HARMFUL_STRING + "!", ["US_SOCIAL_SECURITY_NUMBER"]
+        GCLOUD_PROJECT, f"{HARMFUL_STRING}!", ["US_SOCIAL_SECURITY_NUMBER"]
     )
     out, _ = capsys.readouterr()
     assert "My SSN is !" in out
@@ -288,9 +288,7 @@ def test_reidentify_free_text_with_fpe_using_surrogate(capsys):
 def test_deidentify_with_replace_infotype(capsys):
     url_to_redact = "https://cloud.google.com"
     deid.deidentify_with_replace_infotype(
-        GCLOUD_PROJECT,
-        "My favorite site is " + url_to_redact,
-        ["URL"],
+        GCLOUD_PROJECT, f"My favorite site is {url_to_redact}", ["URL"]
     )
 
     out, _ = capsys.readouterr()

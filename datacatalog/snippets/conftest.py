@@ -25,7 +25,7 @@ LOCATION = "us-central1"
 
 def temp_suffix():
     now = datetime.datetime.now()
-    return "{}_{}".format(now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8])
+    return f'{now.strftime("%Y%m%d%H%M%S")}_{uuid.uuid4().hex[:8]}'
 
 
 @pytest.fixture(scope="session")
@@ -89,20 +89,17 @@ def resources_to_delete(client, project_id):
 
 @pytest.fixture
 def random_entry_id():
-    random_entry_id = f"python_sample_entry_{temp_suffix()}"
-    yield random_entry_id
+    yield f"python_sample_entry_{temp_suffix()}"
 
 
 @pytest.fixture
 def random_entry_group_id():
-    random_entry_group_id = f"python_sample_group_{temp_suffix()}"
-    yield random_entry_group_id
+    yield f"python_sample_group_{temp_suffix()}"
 
 
 @pytest.fixture
 def random_tag_template_id():
-    random_tag_template_id = f"python_sample_{temp_suffix()}"
-    yield random_tag_template_id
+    yield f"python_sample_{temp_suffix()}"
 
 
 @pytest.fixture
@@ -142,8 +139,7 @@ def random_taxonomy_display_name(policy_tag_manager_client, project_id):
         project_id, "us"
     )
     taxonomies = policy_tag_manager_client.list_taxonomies(parent=parent)
-    taxonomy = next(
+    if taxonomy := next(
         (t for t in taxonomies if t.display_name == random_display_name), None
-    )
-    if taxonomy:
+    ):
         policy_tag_manager_client.delete_taxonomy(name=taxonomy.name)

@@ -46,7 +46,7 @@ def instance_template():
     network_interface.name = "global/networks/default"
 
     template = compute_v1.InstanceTemplate()
-    template.name = "test-template-" + uuid.uuid4().hex[:10]
+    template.name = f"test-template-{uuid.uuid4().hex[:10]}"
     template.properties.disks = [disk]
     template.properties.machine_type = "n1-standard-4"
     template.properties.network_interfaces = [network_interface]
@@ -68,7 +68,7 @@ def instance_template():
 
 @pytest.fixture()
 def autodelete_instance_name():
-    instance_name = "test-instance-" + uuid.uuid4().hex[:10]
+    instance_name = f"test-instance-{uuid.uuid4().hex[:10]}"
     yield instance_name
     delete_instance(PROJECT, INSTANCE_ZONE, instance_name)
 

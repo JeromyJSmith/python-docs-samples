@@ -27,13 +27,14 @@ from snippets.cloud_sql_connection_pool import (
 @pytest.fixture(name="conn_vars")
 def setup() -> Dict[str, str]:
     try:
-        conn_vars = {}
-        conn_vars["db_user"] = os.environ["SQLSERVER_USER"]
-        conn_vars["db_pass"] = os.environ["SQLSERVER_PASSWORD"]
-        conn_vars["db_name"] = os.environ["SQLSERVER_DATABASE"]
-        conn_vars["db_host"] = os.environ["SQLSERVER_HOST"]
-        conn_vars["instance_conn_name"] = os.environ["SQLSERVER_INSTANCE"]
-        conn_vars["db_socket_dir"] = os.getenv("DB_SOCKET_DIR", "/cloudsql")
+        conn_vars = {
+            "db_user": os.environ["SQLSERVER_USER"],
+            "db_pass": os.environ["SQLSERVER_PASSWORD"],
+            "db_name": os.environ["SQLSERVER_DATABASE"],
+            "db_host": os.environ["SQLSERVER_HOST"],
+            "instance_conn_name": os.environ["SQLSERVER_INSTANCE"],
+            "db_socket_dir": os.getenv("DB_SOCKET_DIR", "/cloudsql"),
+        }
     except KeyError:
         raise Exception(
             "The following env variables must be set to run these tests:"

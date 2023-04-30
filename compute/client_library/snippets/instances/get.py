@@ -35,11 +35,9 @@ def get_instance(project_id: str, zone: str, instance_name: str) -> compute_v1.I
         An Instance object.
     """
     instance_client = compute_v1.InstancesClient()
-    instance = instance_client.get(
+    return instance_client.get(
         project=project_id, zone=zone, instance=instance_name
     )
-
-    return instance
 
 
 # [END compute_instances_get]

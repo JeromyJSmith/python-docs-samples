@@ -23,9 +23,7 @@ def get_authorized(request):
     # Makes an authenticated request to URL set in environment variables
     try:
         url = os.environ.get("URL")
-        response = auth.make_authorized_get_request(url, url)
-        return response
-
+        return auth.make_authorized_get_request(url, url)
     except Exception as e:
         print(e)
         return str(e)

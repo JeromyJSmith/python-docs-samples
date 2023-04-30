@@ -40,7 +40,7 @@ def instance_template():
     network_interface.name = "global/networks/default"
 
     template = compute_v1.InstanceTemplate()
-    template.name = "test-template-" + uuid.uuid4().hex[:10]
+    template.name = f"test-template-{uuid.uuid4().hex[:10]}"
     template.properties.disks = [disk]
     template.properties.machine_type = "n1-standard-4"
     template.properties.network_interfaces = [network_interface]
@@ -61,7 +61,7 @@ def instance_template():
 
 
 def test_bulk_create(instance_template):
-    name_pattern = "i-##-" + uuid.uuid4().hex[:5]
+    name_pattern = f"i-##-{uuid.uuid4().hex[:5]}"
 
     instances = create_five_instances(PROJECT, INSTANCE_ZONE, instance_template.name,
                                       name_pattern)

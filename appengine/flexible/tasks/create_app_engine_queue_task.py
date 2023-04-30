@@ -72,7 +72,7 @@ def create_task(project, queue, location, payload=None, in_seconds=None):
     # Use the client to build and send the task.
     response = client.create_task(parent=parent, task=task)
 
-    print('Created task {}'.format(response.name))
+    print(f'Created task {response.name}')
     return response
 # [END cloud_tasks_appengine_create_task]
 

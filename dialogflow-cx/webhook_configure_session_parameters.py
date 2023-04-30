@@ -25,15 +25,13 @@ def configure_session_params(request):
 
     order_number = 123
 
-    json_response = {
+    return {
         "sessionInfo": {
             "parameters": {
                 "orderNumber": order_number,
             },
         },
     }
-
-    return json_response
 
 
 # [END dialogflow_cx_v3_webhook_configure_session_parameters]

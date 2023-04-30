@@ -42,7 +42,11 @@ def add_extended_memory_to_instance(
         project=project_id, zone=zone, instance=instance_name
     )
 
-    if not ("n1-" in instance.machine_type or "n2-" in instance.machine_type or "n2d-" in instance.machine_type):
+    if (
+        "n1-" not in instance.machine_type
+        and "n2-" not in instance.machine_type
+        and "n2d-" not in instance.machine_type
+    ):
         raise RuntimeError("Extra memory is available only for N1, N2 and N2D CPUs.")
 
     # Make sure that the machine is turned off
@@ -69,7 +73,7 @@ def add_extended_memory_to_instance(
 
     # Modify the machine definition, remember that extended memory is available only for N1, N2 and N2D CPUs
     start, end = instance.machine_type.rsplit("-", maxsplit=1)
-    instance.machine_type = start + f"-{new_memory}-ext"
+    instance.machine_type = f"{start}-{new_memory}-ext"
     # TODO: If you prefer to use the CustomMachineType helper class, uncomment this code and comment the 2 lines above
     # Using CustomMachineType helper
     # cmt = CustomMachineType.from_str(instance.machine_type)

@@ -92,9 +92,7 @@ def page_refs_to_string(
         num = str(int(page_refs[0].page) + 1)
         return f"page {num} is"
 
-    nums = ""
-    for page_ref in page_refs:
-        nums += f"{int(page_ref.page) + 1}, "
+    nums = "".join(f"{int(page_ref.page) + 1}, " for page_ref in page_refs)
     return f"pages {nums[:-2]} are"
 
 

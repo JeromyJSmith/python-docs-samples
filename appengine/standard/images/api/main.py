@@ -34,9 +34,7 @@ class Photo(ndb.Model):
 class Thumbnailer(webapp2.RequestHandler):
     def get(self):
         if self.request.get("id"):
-            photo = Photo.get_by_id(int(self.request.get("id")))
-
-            if photo:
+            if photo := Photo.get_by_id(int(self.request.get("id"))):
                 img = images.Image(photo.full_size_image)
                 img.resize(width=80, height=100)
                 img.im_feeling_lucky()

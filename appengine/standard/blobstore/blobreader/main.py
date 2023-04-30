@@ -27,7 +27,7 @@ class BlobreaderHandler(webapp2.RequestHandler):
         bucket = app_identity.get_default_gcs_bucket_name()
 
         # Cloud Storage file names are in the format /bucket/object.
-        filename = '/{}/blobreader_demo'.format(bucket)
+        filename = f'/{bucket}/blobreader_demo'
 
         # Create a file in Google Cloud Storage and write something to it.
         with cloudstorage.open(filename, 'w') as filehandle:
@@ -37,7 +37,7 @@ class BlobreaderHandler(webapp2.RequestHandler):
         # you must create a blob_key from the Cloud Storage file name.
         # Blobstore expects the filename to be in the format of:
         # /gs/bucket/object
-        blobstore_filename = '/gs{}'.format(filename)
+        blobstore_filename = f'/gs{filename}'
         blob_key = blobstore.create_gs_key(blobstore_filename)
 
         # [START gae_blobstore_reader]

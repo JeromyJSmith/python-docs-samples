@@ -33,7 +33,7 @@ def get_or_add_person(name, userid):
         person = Person(name=name, userid=userid)
         memcache.add(name, person)
     else:
-        logging.info('Found in cache: ' + name + ', userid: ' + person.userid)
+        logging.info(f'Found in cache: {name}, userid: {person.userid}')
     return person
 # [END best-practice-2]
 

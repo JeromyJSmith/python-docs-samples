@@ -31,22 +31,25 @@ def search_terms(index):
 
 
 def create_document():
-    document = search.Document(
+    return search.Document(
         # Setting the doc_id is optional. If omitted, the search service will
         # create an identifier.
         doc_id='PA6-5000',
         fields=[
             search.TextField(name='customer', value='Joe Jackson'),
             search.HtmlField(
-                name='comment', value='this is <em>marked up</em> text'),
+                name='comment', value='this is <em>marked up</em> text'
+            ),
             search.NumberField(name='number_of_visits', value=7),
             search.DateField(name='last_visit', value=datetime.now()),
             search.DateField(
-                name='birthday', value=datetime(year=1960, month=6, day=19)),
+                name='birthday', value=datetime(year=1960, month=6, day=19)
+            ),
             search.GeoField(
-                name='home_location', value=search.GeoPoint(37.619, -122.37))
-        ])
-    return document
+                name='home_location', value=search.GeoPoint(37.619, -122.37)
+            ),
+        ],
+    )
 
 
 def add_document_to_index(document):
@@ -57,8 +60,7 @@ def add_document_to_index(document):
 def add_document_and_get_doc_id(documents):
     index = search.Index('products')
     results = index.put(documents)
-    document_ids = [document.id for document in results]
-    return document_ids
+    return [document.id for document in results]
 
 
 def get_document_by_id():
@@ -87,25 +89,18 @@ def delete_all_in_index(index):
     # index.get_range by returns up to 100 documents at a time, so we must
     # loop until we've deleted all items.
     while True:
-        # Use ids_only to get the list of document IDs in the index without
-        # the overhead of getting the entire document.
-        document_ids = [
-            document.doc_id
-            for document
-            in index.get_range(ids_only=True)]
-
-        # If no IDs were returned, we've deleted everything.
-        if not document_ids:
+        if document_ids := [
+            document.doc_id for document in index.get_range(ids_only=True)
+        ]:
+            # Delete the documents for the given IDs
+            index.delete(document_ids)
+        else:
             break
-
-        # Delete the documents for the given IDs
-        index.delete(document_ids)
 
 
 def async_query(index):
     futures = [index.search_async('foo'), index.search_async('bar')]
-    results = [future.get_result() for future in futures]
-    return results
+    return [future.get_result() for future in futures]
 
 
 def query_options():
@@ -246,10 +241,11 @@ def facet_discovery(index):
     results = index.search(query)
 
     for facet in results.facets:
-        print('facet {}.'.format(facet.name))
+        print(f'facet {facet.name}.')
         for value in facet.values:
-            print('{}: count={}, refinement_token={}'.format(
-                value.label, value.count, value.refinement_token))
+            print(
+                f'{value.label}: count={value.count}, refinement_token={value.refinement_token}'
+            )
 
 
 def facet_by_name(index):
@@ -259,10 +255,11 @@ def facet_by_name(index):
     results = index.search(query)
 
     for facet in results.facets:
-        print('facet {}'.format(facet.name))
+        print(f'facet {facet.name}')
         for value in facet.values:
-            print('{}: count={}, refinement_token={}'.format(
-                value.label, value.count, value.refinement_token))
+            print(
+                f'{value.label}: count={value.count}, refinement_token={value.refinement_token}'
+            )
 
 
 def facet_by_name_and_value(index):
@@ -281,7 +278,8 @@ def facet_by_name_and_value(index):
 
     results = index.search(query)
     for facet in results.facets:
-        print('facet {}'.format(facet.name))
+        print(f'facet {facet.name}')
         for value in facet.values:
-            print('{}: count={}, refinement_token={}'.format(
-                value.label, value.count, value.refinement_token))
+            print(
+                f'{value.label}: count={value.count}, refinement_token={value.refinement_token}'
+            )

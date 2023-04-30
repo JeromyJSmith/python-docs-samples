@@ -93,10 +93,7 @@ def query_commit_history(spark, name, uri):
 
 def read_hudi_table(spark, table_name, table_uri, commit_ts=''):
     """Reads Hudi table at the given commit timestamp."""
-    if commit_ts:
-        options = {'as.of.instant': commit_ts}
-    else:
-        options = {}
+    options = {'as.of.instant': commit_ts} if commit_ts else {}
     tmp_table = f'{table_name}_snapshot'
     spark.read.format('hudi').options(**options).load(
             table_uri

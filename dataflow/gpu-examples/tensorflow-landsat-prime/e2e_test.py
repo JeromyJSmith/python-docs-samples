@@ -68,6 +68,6 @@ def test_tensorflow_landsat(
     storage_client = storage.Client()
     print(f">> Checking for output files in: gs://{bucket_name}/outputs/")
     output_files = list(storage_client.list_blobs(bucket_name, prefix="outputs/"))
-    assert len(output_files) > 0, f"No files found in gs://{bucket_name}/outputs/"
+    assert output_files, f"No files found in gs://{bucket_name}/outputs/"
     for output_file in output_files:
         assert output_file.size > 0, f"Output file is empty: {output_file.name}"

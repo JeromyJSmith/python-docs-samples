@@ -25,16 +25,16 @@ import risk
 UNIQUE_STRING = str(uuid.uuid4()).split("-")[0]
 GCLOUD_PROJECT = os.environ.get("GOOGLE_CLOUD_PROJECT")
 TABLE_PROJECT = os.environ.get("GOOGLE_CLOUD_PROJECT")
-TOPIC_ID = "dlp-test" + UNIQUE_STRING
-SUBSCRIPTION_ID = "dlp-test-subscription" + UNIQUE_STRING
+TOPIC_ID = f"dlp-test{UNIQUE_STRING}"
+SUBSCRIPTION_ID = f"dlp-test-subscription{UNIQUE_STRING}"
 UNIQUE_FIELD = "Name"
 REPEATED_FIELD = "Mystery"
 NUMERIC_FIELD = "Age"
 STRING_BOOLEAN_FIELD = "Gender"
 
-BIGQUERY_DATASET_ID = "dlp_test_dataset" + UNIQUE_STRING
-BIGQUERY_TABLE_ID = "dlp_test_table" + UNIQUE_STRING
-BIGQUERY_HARMFUL_TABLE_ID = "harmful" + UNIQUE_STRING
+BIGQUERY_DATASET_ID = f"dlp_test_dataset{UNIQUE_STRING}"
+BIGQUERY_TABLE_ID = f"dlp_test_table{UNIQUE_STRING}"
+BIGQUERY_HARMFUL_TABLE_ID = f"harmful{UNIQUE_STRING}"
 DLP_CLIENT = google.cloud.dlp_v2.DlpServiceClient()
 
 

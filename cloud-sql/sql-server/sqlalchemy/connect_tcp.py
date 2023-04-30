@@ -51,8 +51,7 @@ def connect_tcp_socket() -> sqlalchemy.engine.base.Engine:
             "validate_host": False,
         }
 
-    # [START cloud_sql_sqlserver_sqlalchemy_connect_tcp]
-    pool = sqlalchemy.create_engine(
+    return sqlalchemy.create_engine(
         # Equivalent URL:
         # mssql+pytds://<db_user>:<db_pass>@<db_host>:<db_port>/<db_name>
         sqlalchemy.engine.url.URL.create(
@@ -75,19 +74,16 @@ def connect_tcp_socket() -> sqlalchemy.engine.base.Engine:
         # The total number of concurrent connections for your application will be
         # a total of pool_size and max_overflow.
         # [END cloud_sql_sqlserver_sqlalchemy_limit]
-
         # [START cloud_sql_sqlserver_sqlalchemy_backoff]
         # SQLAlchemy automatically uses delays between failed connection attempts,
         # but provides no arguments for configuration.
         # [END cloud_sql_sqlserver_sqlalchemy_backoff]
-
         # [START cloud_sql_sqlserver_sqlalchemy_timeout]
         # 'pool_timeout' is the maximum number of seconds to wait when retrieving a
         # new connection from the pool. After the specified amount of time, an
         # exception will be thrown.
         pool_timeout=30,  # 30 seconds
         # [END cloud_sql_sqlserver_sqlalchemy_timeout]
-
         # [START cloud_sql_sqlserver_sqlalchemy_lifetime]
         # 'pool_recycle' is the maximum number of seconds a connection can persist.
         # Connections that live longer than the specified amount of time will be
@@ -96,8 +92,6 @@ def connect_tcp_socket() -> sqlalchemy.engine.base.Engine:
         # [END cloud_sql_sqlserver_sqlalchemy_lifetime]
         # [END_EXCLUDE]
     )
-
-    return pool
 
 # [END cloud_sql_sqlserver_sqlalchemy_connect_tcp_sslcerts]
 # [END cloud_sql_sqlserver_sqlalchemy_sslcerts]

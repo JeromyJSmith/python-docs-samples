@@ -46,8 +46,7 @@ class CpuBurner(object):
         return os.times()[0]
 
     def busy_wait(self):
-        for _ in range(100000):
-            pass
+        pass
 
     def burn_cpu(self):
         """Consume REQUEST_CPUTIME_SEC core seconds.
@@ -75,11 +74,10 @@ class CpuBurner(object):
             p.terminate()
         if p.exitcode != 0:
             return (500, "Request failed\n")
-        else:
-            end_time = self.get_walltime()
-            response = "Request took %.2f walltime seconds\n" % (
-                end_time - start_time)
-            return (200, response)
+        end_time = self.get_walltime()
+        response = "Request took %.2f walltime seconds\n" % (
+            end_time - start_time)
+        return (200, response)
 
 
 class DemoRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):

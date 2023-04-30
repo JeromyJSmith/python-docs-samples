@@ -31,14 +31,13 @@ def send_simple_message(recipient):
     # [START sendgrid-send]
     message = Mail(
         from_email=SENDGRID_SENDER,
-        to_emails='{},'.format(recipient),
+        to_emails=f'{recipient},',
         subject='This is a test email',
-        html_content='<strong>Example</strong> message.')
+        html_content='<strong>Example</strong> message.',
+    )
 
     sg = sendgrid.SendGridAPIClient(SENDGRID_API_KEY)
-    response = sg.send(message)
-
-    return response
+    return sg.send(message)
     # [END sendgrid-send]
 
 

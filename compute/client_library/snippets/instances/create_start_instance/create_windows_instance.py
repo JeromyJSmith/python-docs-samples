@@ -42,9 +42,7 @@ def get_image_from_family(project: str, family: str) -> compute_v1.Image:
         An Image object.
     """
     image_client = compute_v1.ImagesClient()
-    # List of public operating system (OS) images: https://cloud.google.com/compute/docs/images/os-details
-    newest_image = image_client.get_from_family(project=project, family=family)
-    return newest_image
+    return image_client.get_from_family(project=project, family=family)
 
 
 def disk_from_image(
@@ -307,15 +305,7 @@ def create_windows_instance(
     disk_type = f"zones/{zone}/diskTypes/pd-standard"
     disks = [disk_from_image(disk_type, 100, True, base_image.self_link, True)]
 
-    # You must verify or configure routes and firewall rules in your VPC network
-    # to allow access to kms.windows.googlecloud.com.
-    # More information about access to kms.windows.googlecloud.com: https://cloud.google.com/compute/docs/instances/windows/creating-managing-windows-instances#kms-server
-
-    # Additionally, you must enable Private Google Access for subnets in your VPC network
-    # that contain Windows instances with only internal IP addresses.
-    # More information about Private Google Access: https://cloud.google.com/vpc/docs/configure-private-google-access#enabling
-
-    instance = create_instance(
+    return create_instance(
         project_id,
         zone,
         instance_name,
@@ -325,7 +315,6 @@ def create_windows_instance(
         subnetwork_link=subnetwork_link,
         external_access=True,  # Set this to False to disable external IP for your instance
     )
-    return instance
 
 
 # [END compute_create_windows_instance_internal_ip]

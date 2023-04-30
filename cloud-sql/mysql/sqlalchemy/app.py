@@ -101,9 +101,9 @@ def get_index_context(db: sqlalchemy.engine.base.Engine) -> Dict:
             "SELECT candidate, time_cast FROM votes ORDER BY time_cast DESC LIMIT 5"
         )).fetchall()
         # Convert the results into a list of dicts representing votes
-        for row in recent_votes:
-            votes.append({"candidate": row[0], "time_cast": row[1]})
-
+        votes.extend(
+            {"candidate": row[0], "time_cast": row[1]} for row in recent_votes
+        )
         stmt = sqlalchemy.text(
             "SELECT COUNT(vote_id) FROM votes WHERE candidate=:candidate"
         )
@@ -123,7 +123,7 @@ def get_index_context(db: sqlalchemy.engine.base.Engine) -> Dict:
 def save_vote(db: sqlalchemy.engine.base.Engine, team: str) -> Response:
     time_cast = datetime.datetime.now(tz=datetime.timezone.utc)
     # Verify that the team is one of the allowed options
-    if team != "TABS" and team != "SPACES":
+    if team not in ["TABS", "SPACES"]:
         logger.warning(f"Received invalid 'team' property: '{team}'")
         return Response(
             response="Invalid team specified. Should be one of 'TABS' or 'SPACES'",

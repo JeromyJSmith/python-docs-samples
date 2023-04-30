@@ -23,7 +23,7 @@ import pytest
 
 def temp_suffix():
     now = datetime.datetime.now()
-    return "{}_{}".format(now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8])
+    return f'{now.strftime("%Y%m%d%H%M%S")}_{uuid.uuid4().hex[:8]}'
 
 
 @pytest.fixture(scope="session")
@@ -64,7 +64,7 @@ def dataset_id(bigquery_client):
 @pytest.fixture
 def table_id(bigquery_client, project_id, dataset_id):
     table_id = f"python_data_catalog_sample_{temp_suffix()}"
-    table = bigquery.Table("{}.{}.{}".format(project_id, dataset_id, table_id))
+    table = bigquery.Table(f"{project_id}.{dataset_id}.{table_id}")
     table = bigquery_client.create_table(table)
     yield table.table_id
     bigquery_client.delete_table(table, not_found_ok=True)
@@ -72,5 +72,4 @@ def table_id(bigquery_client, project_id, dataset_id):
 
 @pytest.fixture
 def random_tag_template_id():
-    random_tag_template_id = f"python_sample_{temp_suffix()}"
-    yield random_tag_template_id
+    yield f"python_sample_{temp_suffix()}"

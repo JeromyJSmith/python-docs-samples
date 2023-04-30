@@ -80,7 +80,7 @@ def list_dlp_jobs(project, filter_string=None, job_type=None):
 
     # Iterate over results.
     for job in response:
-        print("Job: %s; status: %s" % (job.name, job.state.name))
+        print(f"Job: {job.name}; status: {job.state.name}")
 
 
 # [END dlp_list_jobs]
@@ -109,7 +109,7 @@ def delete_dlp_job(project, job_name):
     # Call the API to delete job.
     dlp.delete_dlp_job(request={"name": name})
 
-    print("Successfully deleted %s" % job_name)
+    print(f"Successfully deleted {job_name}")
 
 
 # [END dlp_delete_job]

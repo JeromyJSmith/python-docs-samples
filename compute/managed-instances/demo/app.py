@@ -145,10 +145,7 @@ def _get_zone():
     r = get('http://metadata.google.internal/'
             'computeMetadata/v1/instance/zone',
             headers={'Metadata-Flavor': 'Google'})
-    if r.status_code == 200:
-        return sub(r'.+zones/(.+)', r'\1', r.text)
-    else:
-        return ''
+    return sub(r'.+zones/(.+)', r'\1', r.text) if r.status_code == 200 else ''
 
 
 def _get_template():

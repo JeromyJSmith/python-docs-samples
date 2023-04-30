@@ -30,12 +30,9 @@ def get():
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(blob_name)
 
-    response_text = ''
-
     text_to_store = b'abcde\n' + b'f'*1024*4 + b'\n'
     blob.upload_from_string(text_to_store)
-    response_text += 'Stored text in a blob.\n\n'
-
+    response_text = '' + 'Stored text in a blob.\n\n'
     stored_contents = blob.download_as_bytes()
     if stored_contents == text_to_store:
         response_text += 'Downloaded text matches uploaded text.\n\n'
@@ -43,7 +40,7 @@ def get():
         response_text += 'Downloaded text DOES NOT MATCH uploaded text!\n\n'
 
     bucket.delete_blob(blob_name)
-    response_text += 'Blob ' + blob_name + ' deleted.\n'
+    response_text += f'Blob {blob_name}' + ' deleted.\n'
 
     response = make_response(response_text, 200)
     response.mimetype = 'text/plain'

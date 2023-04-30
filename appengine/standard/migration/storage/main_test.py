@@ -23,7 +23,7 @@ def test_index():
 
     if os.environ.get('CLOUD_STORAGE_BUCKET') is None:
         os.environ['CLOUD_STORAGE_BUCKET'] = "python-docs-samples-tests-public"
-    os.environ['BLOB_NAME'] = 'storage-migration-test-blob-{}'.format(uuid.uuid4().hex)
+    os.environ['BLOB_NAME'] = f'storage-migration-test-blob-{uuid.uuid4().hex}'
 
     r = client.get('/')
     assert r.status_code == 200
@@ -31,4 +31,4 @@ def test_index():
 
     blob_name = os.environ['BLOB_NAME']
 
-    assert 'Blob {} deleted.'.format(blob_name) in r.data.decode('utf-8')
+    assert f'Blob {blob_name} deleted.' in r.data.decode('utf-8')

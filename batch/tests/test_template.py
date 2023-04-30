@@ -69,7 +69,7 @@ def instance_template():
     network_interface.access_configs = [access]
 
     template = compute_v1.InstanceTemplate()
-    template.name = "test-template-" + uuid.uuid4().hex[:10]
+    template.name = f"test-template-{uuid.uuid4().hex[:10]}"
     template.properties = compute_v1.InstanceProperties()
     template.properties.disks = [disk]
     template.properties.machine_type = "e2-standard-16"

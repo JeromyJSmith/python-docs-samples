@@ -21,9 +21,7 @@ from snippets.cloud_kms_env_aead import init_tink_env_aead
 
 @pytest.fixture(name="kms_uri")
 def setup() -> str:
-    kms_uri = "gcp-kms://" + os.environ["CLOUD_KMS_KEY"]
-
-    yield kms_uri
+    yield "gcp-kms://" + os.environ["CLOUD_KMS_KEY"]
 
 
 def test_cloud_kms_env_aead(

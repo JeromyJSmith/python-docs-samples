@@ -33,9 +33,7 @@ def stop_billing(data: dict, context):
         return
 
     project_name = cloud_billing_client.common_project_path(PROJECT_ID)
-    billing_enabled = _is_billing_enabled(project_name)
-
-    if billing_enabled:
+    if billing_enabled := _is_billing_enabled(project_name):
         _disable_billing_for_project(project_name)
     else:
         print("Billing already disabled")

@@ -122,8 +122,8 @@ def test_extensible_template(
 
     query = f"SELECT * FROM `{PROJECT}.{bq_dataset}.{bq_table}`"
     good_records = utils.bigquery_query(query)
-    assert len(list(good_records)) > 0
+    assert list(good_records)
 
     query = f"SELECT * FROM `{PROJECT}.{bq_dataset}.{bq_table}_error_records`"
     bad_records = utils.bigquery_query(query)
-    assert len(list(bad_records)) > 0
+    assert list(bad_records)

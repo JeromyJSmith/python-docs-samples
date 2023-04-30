@@ -21,7 +21,7 @@ from detect_intent_audio import detect_intent_audio
 
 DIRNAME = os.path.realpath(os.path.dirname(__file__))
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
-SESSION_ID = "test_{}".format(uuid.uuid4())
+SESSION_ID = f"test_{uuid.uuid4()}"
 AUDIOS = [
     "{0}/resources/book_a_room.wav".format(DIRNAME),
     "{0}/resources/mountain_view.wav".format(DIRNAME),

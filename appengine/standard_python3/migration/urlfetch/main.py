@@ -30,12 +30,7 @@ def make_request():
     url = request.form['url']
     token = id_token.fetch_id_token(reqs.Request(), url)
 
-    resp = requests.get(
-        url,
-        headers={'Authorization': 'Bearer {}'.format(token)}
-    )
+    resp = requests.get(url, headers={'Authorization': f'Bearer {token}'})
 
-    message = 'Response when calling {}:\n\n'.format(url)
-    message += resp.text
-
+    message = f'Response when calling {url}:\n\n{resp.text}'
     return message, 200, {'Content-type': 'text/plain'}

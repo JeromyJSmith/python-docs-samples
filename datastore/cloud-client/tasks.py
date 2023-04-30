@@ -112,11 +112,7 @@ def delete_task(client: datastore.Client, task_id: Union[str, int]):
 def format_tasks(tasks):
     lines = []
     for task in tasks:
-        if task["done"]:
-            status = "done"
-        else:
-            status = f"created {task['created']}"
-
+        status = "done" if task["done"] else f"created {task['created']}"
         lines.append(f"{task.key.id}: {task['description']} ({status})")
 
     return "\n".join(lines)

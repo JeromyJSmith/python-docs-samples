@@ -95,12 +95,10 @@ class EchoApi(remote.Service):
         audiences=['your-oauth-client-id.com'],
         allowed_client_ids=['your-oauth-client-id.com'])
     def get_user_email(self, request):
-        user = endpoints.get_current_user()
-        # If there's no user defined, the request was unauthenticated, so we
-        # raise 401 Unauthorized.
-        if not user:
+        if user := endpoints.get_current_user():
+            return EchoResponse(message=user.email())
+        else:
             raise endpoints.UnauthorizedException
-        return EchoResponse(message=user.email())
 # [END endpoints_echo_api_class]
 
 

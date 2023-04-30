@@ -21,22 +21,20 @@ import pytest
 import delete_dataset
 
 PROJECT_ID = os.environ["AUTOML_PROJECT_ID"]
-BUCKET_ID = "{}-lcm".format(PROJECT_ID)
+BUCKET_ID = f"{PROJECT_ID}-lcm"
 
 
 @pytest.fixture(scope="function")
 def dataset_id():
     client = automl.AutoMlClient()
     project_location = f"projects/{PROJECT_ID}/locations/us-central1"
-    display_name = "test_{}".format(uuid.uuid4()).replace("-", "")[:32]
+    display_name = f"test_{uuid.uuid4()}".replace("-", "")[:32]
     metadata = automl.VideoClassificationDatasetMetadata()
     dataset = automl.Dataset(
         display_name=display_name, video_classification_dataset_metadata=metadata
     )
     response = client.create_dataset(parent=project_location, dataset=dataset)
-    dataset_id = response.name.split("/")[-1]
-
-    yield dataset_id
+    yield response.name.split("/")[-1]
 
 
 def test_delete_dataset(capsys, dataset_id):

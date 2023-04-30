@@ -85,7 +85,7 @@ def test_main(capsys):
 
     oslogin = googleapiclient.discovery.build(
         'oslogin', 'v1', cache_discovery=False, credentials=credentials)
-    account = 'users/' + account_email
+    account = f'users/{account_email}'
 
     # More exceptions could be raised, keeping track of ones I could
     # find for now.
@@ -110,10 +110,8 @@ def setup_resources(
 
     # Create a temporary service account.
     iam.projects().serviceAccounts().create(
-        name='projects/' + project,
-        body={
-            'accountId': test_id
-        }).execute()
+        name=f'projects/{project}', body={'accountId': test_id}
+    ).execute()
 
     # Wait for the creation to propagate through the system, so the
     # following calls don't fail sometimes.
@@ -121,25 +119,29 @@ def setup_resources(
 
     # Grant the service account access to itself.
     iam.projects().serviceAccounts().setIamPolicy(
-        resource='projects/' + project + '/serviceAccounts/' + account_email,
+        resource=f'projects/{project}/serviceAccounts/{account_email}',
         body={
-         'policy': {
-          'bindings': [
-           {
-            'members': [
-             'serviceAccount:' + account_email
-            ],
-            'role': 'roles/iam.serviceAccountUser'
-           }
-          ]
-         }
-        }).execute()
+            'policy': {
+                'bindings': [
+                    {
+                        'members': [f'serviceAccount:{account_email}'],
+                        'role': 'roles/iam.serviceAccountUser',
+                    }
+                ]
+            }
+        },
+    ).execute()
 
     # Create a service account key.
-    service_account_key = iam.projects().serviceAccounts().keys().create(
-        name='projects/' + project + '/serviceAccounts/' + account_email,
-        body={}
-        ).execute()
+    service_account_key = (
+        iam.projects()
+        .serviceAccounts()
+        .keys()
+        .create(
+            name=f'projects/{project}/serviceAccounts/{account_email}', body={}
+        )
+        .execute()
+    )
 
     # Create a temporary firewall on the default network to allow SSH tests
     # only for instances with the temporary service account.
@@ -218,15 +220,14 @@ def setup_resources(
         zone=zone,
         resource=test_id,
         body={
-         'bindings': [
-          {
-           'members': [
-            'serviceAccount:' + account_email
-           ],
-           'role': 'roles/compute.osLogin'
-          }
-         ]
-        }).execute()
+            'bindings': [
+                {
+                    'members': [f'serviceAccount:{account_email}'],
+                    'role': 'roles/compute.osLogin',
+                }
+            ]
+        },
+    ).execute()
 
     # Wait for the IAM policy to take effect.
     while compute.instances().getIamPolicy(
@@ -265,7 +266,7 @@ def cleanup_resources(compute, iam, project, test_id, zone, account_email):
     # Delete the temporary service account and its associated keys.
     try:
         iam.projects().serviceAccounts().delete(
-            name='projects/' + project + '/serviceAccounts/' + account_email
-            ).execute()
+            name=f'projects/{project}/serviceAccounts/{account_email}'
+        ).execute()
     except Exception:
         pass

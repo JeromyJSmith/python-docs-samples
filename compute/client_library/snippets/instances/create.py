@@ -41,9 +41,7 @@ def get_image_from_family(project: str, family: str) -> compute_v1.Image:
         An Image object.
     """
     image_client = compute_v1.ImagesClient()
-    # List of public operating system (OS) images: https://cloud.google.com/compute/docs/images/os-details
-    newest_image = image_client.get_from_family(project=project, family=family)
-    return newest_image
+    return image_client.get_from_family(project=project, family=family)
 
 
 def disk_from_image(
@@ -279,7 +277,7 @@ if __name__ == "__main__":
             "or set GOOGLE_APPLICATION_CREDENTIALS to use this script."
         )
     else:
-        instance_name = "quickstart-" + uuid.uuid4().hex[:10]
+        instance_name = f"quickstart-{uuid.uuid4().hex[:10]}"
         instance_zone = "europe-central2-b"
 
         newest_debian = get_image_from_family(

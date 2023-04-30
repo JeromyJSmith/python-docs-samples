@@ -32,17 +32,13 @@ SERVICE_ACCOUNT = 'default'
 
 
 def get_access_token():
-    url = '{}instance/service-accounts/{}/token'.format(
-        METADATA_URL, SERVICE_ACCOUNT)
+    url = f'{METADATA_URL}instance/service-accounts/{SERVICE_ACCOUNT}/token'
 
     # Request an access token from the metadata server.
     r = requests.get(url, headers=METADATA_HEADERS)
     r.raise_for_status()
 
-    # Extract the access token from the response.
-    access_token = r.json()['access_token']
-
-    return access_token
+    return r.json()['access_token']
 
 
 def list_buckets(project_id, access_token):
@@ -50,9 +46,7 @@ def list_buckets(project_id, access_token):
     params = {
         'project': project_id
     }
-    headers = {
-        'Authorization': 'Bearer {}'.format(access_token)
-    }
+    headers = {'Authorization': f'Bearer {access_token}'}
 
     r = requests.get(url, params=params, headers=headers)
     r.raise_for_status()

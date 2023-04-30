@@ -32,15 +32,15 @@ import inspect_content
 UNIQUE_STRING = str(uuid.uuid4()).split("-")[0]
 
 GCLOUD_PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT")
-TEST_BUCKET_NAME = GCLOUD_PROJECT + "-dlp-python-client-test" + UNIQUE_STRING
+TEST_BUCKET_NAME = f"{GCLOUD_PROJECT}-dlp-python-client-test{UNIQUE_STRING}"
 RESOURCE_DIRECTORY = os.path.join(os.path.dirname(__file__), "resources")
 RESOURCE_FILE_NAMES = ["test.txt", "test.png", "harmless.txt", "accounts.txt"]
-TOPIC_ID = "dlp-test" + UNIQUE_STRING
-SUBSCRIPTION_ID = "dlp-test-subscription" + UNIQUE_STRING
+TOPIC_ID = f"dlp-test{UNIQUE_STRING}"
+SUBSCRIPTION_ID = f"dlp-test-subscription{UNIQUE_STRING}"
 DATASTORE_KIND = "DLP test kind"
-DATASTORE_NAME = "DLP test object" + UNIQUE_STRING
-BIGQUERY_DATASET_ID = "dlp_test_dataset" + UNIQUE_STRING
-BIGQUERY_TABLE_ID = "dlp_test_table" + UNIQUE_STRING
+DATASTORE_NAME = f"DLP test object{UNIQUE_STRING}"
+BIGQUERY_DATASET_ID = f"dlp_test_dataset{UNIQUE_STRING}"
+BIGQUERY_TABLE_ID = f"dlp_test_table{UNIQUE_STRING}"
 
 TIMEOUT = 900  # 15 minutes
 

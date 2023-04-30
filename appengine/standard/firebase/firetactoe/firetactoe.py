@@ -68,8 +68,8 @@ def _get_firebase_db_url():
             url = next(regex.search(line) for line in f if regex.search(line))
     except StopIteration:
         raise ValueError(
-            'Error parsing databaseURL. Please copy Firebase web snippet '
-            'into templates/{}'.format(_FIREBASE_CONFIG))
+            f'Error parsing databaseURL. Please copy Firebase web snippet into templates/{_FIREBASE_CONFIG}'
+        )
     return url.group(1)
 
 
@@ -78,8 +78,7 @@ def _get_firebase_db_url():
 def _get_session():
     """Provides an authed requests session object."""
     creds, _ = google.auth.default(scopes=[_FIREBASE_SCOPES])
-    authed_session = AuthorizedSession(creds)
-    return authed_session
+    return AuthorizedSession(creds)
 
 
 def _send_firebase_message(u_id, message=None):
@@ -88,7 +87,7 @@ def _send_firebase_message(u_id, message=None):
      http method. If no message is provided, then the data at this location
      is deleted using the DELETE http method
      """
-    url = '{}/channels/{}.json'.format(_get_firebase_db_url(), u_id)
+    url = f'{_get_firebase_db_url()}/channels/{u_id}.json'
 
     if message:
         return _get_session().patch(url, body=message)
@@ -122,7 +121,7 @@ def create_custom_token(uid, valid_minutes=60):
     }))
     # add standard header to identify this as a JWT
     header = base64.b64encode(json.dumps({'typ': 'JWT', 'alg': 'RS256'}))
-    to_sign = '{}.{}'.format(header, payload)
+    to_sign = f'{header}.{payload}'
     # Sign the jwt using the built in app_identity service
     return '{}.{}'.format(to_sign, base64.b64encode(
         app_identity.sign_blob(to_sign)[1]))
@@ -253,7 +252,7 @@ def main_page():
 
     # game_link is a url that you can open in another browser to play
     # against this player
-    game_link = '{}?g={}'.format(request.base_url, game_key)
+    game_link = f'{request.base_url}?g={game_key}'
 
     # push all the data to the html template so the client will
     # have access

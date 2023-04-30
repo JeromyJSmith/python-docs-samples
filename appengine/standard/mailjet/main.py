@@ -70,7 +70,7 @@ def send_email():
 
     result = send_message(to)
 
-    return 'Email sent, response: <pre>{}</pre>'.format(result)
+    return f'Email sent, response: <pre>{result}</pre>'
 
 
 @app.errorhandler(500)

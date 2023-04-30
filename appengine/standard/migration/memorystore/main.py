@@ -47,10 +47,9 @@ def get_data(cache_key):
 
     if data is not None:
         return data.decode()
-    else:
-        data = query_for_data()
+    data = query_for_data()
     ##      memcache.add('key', data, 60)
-        client.set(cache_key, data, ex=60)
+    client.set(cache_key, data, ex=60)
 
     return data
 

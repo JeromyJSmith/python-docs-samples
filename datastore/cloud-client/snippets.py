@@ -307,10 +307,7 @@ def lookup(client):
 
     # [START datastore_lookup]
     key = client.key("Task", "sampleTask")
-    task = client.get(key)
-    # [END datastore_lookup]
-
-    return task
+    return client.get(key)
 
 
 def delete(client):
@@ -361,10 +358,7 @@ def batch_lookup(client):
 
     # [START datastore_batch_lookup]
     keys = [client.key("Task", 1), client.key("Task", 2)]
-    tasks = client.get_multi(keys)
-    # [END datastore_batch_lookup]
-
-    return tasks
+    return client.get_multi(keys)
 
 
 def batch_delete(client):
@@ -461,19 +455,13 @@ def ancestor_query(client):
 def run_query(client):
     # [START datastore_run_query]
     query = client.query()
-    results = list(query.fetch())
-    # [END datastore_run_query]
-
-    return results
+    return list(query.fetch())
 
 
 def limit(client):
     # [START datastore_limit]
     query = client.query()
-    tasks = list(query.fetch(limit=5))
-    # [END datastore_limit]
-
-    return tasks
+    return list(query.fetch(limit=5))
 
 
 def cursor_paging(client):
@@ -584,11 +572,7 @@ def keys_only_query(client):
     # [START datastore_keys_only_query]
     query = client.query()
     query.keys_only()
-    # [END datastore_keys_only_query]
-
-    keys = list([entity.key for entity in query.fetch(limit=10)])
-
-    return keys
+    return [entity.key for entity in query.fetch(limit=10)]
 
 
 def distinct_on_query(client):
@@ -838,10 +822,7 @@ def kind_run_query(client):
     query = client.query(kind="__kind__")
     query.keys_only()
 
-    kinds = [entity.key.id_or_name for entity in query.fetch()]
-    # [END datastore_kind_run_query]
-
-    return kinds
+    return [entity.key.id_or_name for entity in query.fetch()]
 
 
 def property_run_query(client):
@@ -903,8 +884,6 @@ def eventual_consistent_query(client):
     # [START datastore_eventual_consistent_query]
     query = client.query(kind="Task")
     query.fetch(eventual=True)
-    # [END datastore_eventual_consistent_query]
-    pass
 
 
 def index_merge_queries(client):
@@ -922,21 +901,13 @@ def index_merge_queries(client):
 
     client.put(photo)
 
-    # Sample queries using built-in indexes
-    queries = []
-
     # [START datastore_built_in_index_queries]
     query_owner_id = client.query(kind="Photo", filters=[("owner_id", "=", "user1234")])
 
     query_size = client.query(kind="Photo", filters=[("size", "=", 2)])
 
     query_coloration = client.query(kind="Photo", filters=[("coloration", "=", 2)])
-    # [END datastore_built_in_index_queries]
-
-    queries.append(query_owner_id)
-    queries.append(query_size)
-    queries.append(query_coloration)
-
+    queries = [query_owner_id, query_size, query_coloration]
     # [START datastore_merged_index_query]
     query_all_properties = client.query(
         kind="Photo",
@@ -972,11 +943,7 @@ def index_merge_queries(client):
             ("tag", "=", "camping"),
         ],
     )
-    # [END datastore_merged_index_tag_queries]
-
-    queries.append(query_tag)
-    queries.append(query_owner_size_color_tags)
-
+    queries.extend((query_tag, query_owner_size_color_tags))
     # [START datastore_owner_size_tag_query]
     query_owner_size_tag = client.query(
         kind="Photo",
@@ -998,11 +965,7 @@ def index_merge_queries(client):
 
     queries.append(query_size_coloration)
 
-    results = []
-    for query in queries:
-        results.append(query.fetch())
-
-    return results
+    return [query.fetch() for query in queries]
 
 
 def main(project_id):

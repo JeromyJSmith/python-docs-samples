@@ -309,7 +309,7 @@ def test_order_query_results_by_property(testbed):
 
 def test_print_query_keys(testbed, capsys):
     for i in range(3):
-        Article(title='title {}'.format(i)).put()
+        Article(title=f'title {i}').put()
 
     snippets.print_query_keys(Article.query())
 
@@ -318,7 +318,7 @@ def test_print_query_keys(testbed, capsys):
 
 
 def test_reverse_queries(testbed):
-    for i in range(11):
+    for _ in range(11):
         Bar().put()
 
     (bars, cursor, more), (r_bars, r_cursor, r_more) = (
@@ -336,8 +336,8 @@ def test_reverse_queries(testbed):
 
 def test_fetch_message_accounts_inefficient(testbed):
     for i in range(1, 6):
-        Account(username='Account %s' % i, id=i).put()
-        Message(content='Message %s' % i, userid=i).put()
+        Account(username=f'Account {i}', id=i).put()
+        Message(content=f'Message {i}', userid=i).put()
 
     message_account_pairs = snippets.fetch_message_accounts_inefficient(
         Message.query().order(Message.userid))
@@ -347,14 +347,14 @@ def test_fetch_message_accounts_inefficient(testbed):
     print(repr(message_account_pairs))
     for i in range(1, 6):
         message, account = message_account_pairs[i - 1]
-        assert message.content == 'Message %s' % i
-        assert account.username == 'Account %s' % i
+        assert message.content == f'Message {i}'
+        assert account.username == f'Account {i}'
 
 
 def test_fetch_message_accounts_efficient(testbed):
     for i in range(1, 6):
-        Account(username='Account %s' % i, id=i).put()
-        Message(content='Message %s' % i, userid=i).put()
+        Account(username=f'Account {i}', id=i).put()
+        Message(content=f'Message {i}', userid=i).put()
 
     message_account_pairs = snippets.fetch_message_accounts_efficient(
         Message.query().order(Message.userid))
@@ -363,8 +363,8 @@ def test_fetch_message_accounts_efficient(testbed):
 
     for i in range(1, 6):
         message, account = message_account_pairs[i - 1]
-        assert message.content == 'Message %s' % i
-        assert account.username == 'Account %s' % i
+        assert message.content == f'Message {i}'
+        assert account.username == f'Account {i}'
 
 
 def test_fetch_good_articles_using_gql_with_explicit_bind(testbed):

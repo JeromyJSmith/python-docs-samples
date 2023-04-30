@@ -46,8 +46,8 @@ def main_page():
     parent = parent_key(page_name)
     notes = Note.query(ancestor=parent).fetch(20)
     for note in notes:
-        response += '<h3>%s</h3>' % cgi.escape(note.key.id())
-        response += '<blockquote>%s</blockquote>' % cgi.escape(note.content)
+        response += f'<h3>{cgi.escape(note.key.id())}</h3>'
+        response += f'<blockquote>{cgi.escape(note.content)}</blockquote>'
 
     response += (
         """<hr>
@@ -180,14 +180,26 @@ def add_note():
         note_key = ndb.Key(Note, note_title, parent=parent)
         note = Note(key=note_key, content=note_text)
         # [END calling]
-        if pick_random_insert(note_key, note) is False:
-            return ('Already there<br><a href="%s">Return</a>'
-                    % flask.url_for('main_page', page_name=page_name))
-        return flask.redirect(flask.url_for('main_page', page_name=page_name))
+        return (
+            (
+                'Already there<br><a href="%s">Return</a>'
+                % flask.url_for('main_page', page_name=page_name)
+            )
+            if pick_random_insert(note_key, note) is False
+            else flask.redirect(
+                flask.url_for('main_page', page_name=page_name)
+            )
+        )
     elif choice == 1:
         # Use get_or_insert, which is transactional
         note = Note.get_or_insert(note_title, parent=parent, content=note_text)
-        if note.content != note_text:
-            return ('Already there<br><a href="%s">Return</a>'
-                    % flask.url_for('main_page', page_name=page_name))
-        return flask.redirect(flask.url_for('main_page', page_name=page_name))
+        return (
+            (
+                'Already there<br><a href="%s">Return</a>'
+                % flask.url_for('main_page', page_name=page_name)
+            )
+            if note.content != note_text
+            else flask.redirect(
+                flask.url_for('main_page', page_name=page_name)
+            )
+        )

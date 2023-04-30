@@ -18,7 +18,7 @@ import uuid
 import main
 
 
-TEST_NAME = 'taskqueue-migration-' + str(uuid.uuid4())
+TEST_NAME = f'taskqueue-migration-{str(uuid.uuid4())}'
 TEST_TASKS = {
     'alpha': 2,
     'beta': 1,
@@ -30,8 +30,8 @@ TEST_TASKS = {
 def subscription():
     # Setup - create unique topic and subscription
     project = main.project
-    topic_name = 'projects/{}/topics/{}'.format(project, TEST_NAME)
-    subscription_name = 'projects/{}/subscriptions/{}'.format(project, TEST_NAME)
+    topic_name = f'projects/{project}/topics/{TEST_NAME}'
+    subscription_name = f'projects/{project}/subscriptions/{TEST_NAME}'
 
     publisher = main.publisher
     publisher.create_topic(name=topic_name)
@@ -109,7 +109,7 @@ def test_tasks(subscription, entity_kind):
 
     # Post tasks stage, queueing them up
     for task in TEST_TASKS:
-        for i in range(TEST_TASKS[task]):
+        for _ in range(TEST_TASKS[task]):
             r = client.post('/', data={'key': task})
             assert r.status_code == 302
             assert r.headers.get('location').count('/') == 3

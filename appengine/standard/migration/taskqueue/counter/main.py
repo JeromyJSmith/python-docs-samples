@@ -18,6 +18,7 @@
    runtimes.
 """
 
+
 import logging
 import os
 
@@ -34,9 +35,7 @@ client = tasks.CloudTasksClient()
 queue_name = os.environ.get('QUEUE', 'queue')
 location = os.environ.get('LOCATION', 'us-central1')
 project = os.environ['GOOGLE_CLOUD_PROJECT']
-queue = 'projects/{}/locations/{}/queues/{}'.format(
-    project, location, queue_name
-)
+queue = f'projects/{project}/locations/{location}/queues/{queue_name}'
 entity_kind = os.environ.get('ENTITY_KIND', 'Task')
 
 
@@ -93,7 +92,7 @@ def handle_task():
     # requests, and strip such headers from any other source.
     queue_header = request.headers.get('X-AppEngine-QueueName')
     if queue_header != queue_name:
-        logging.error('Missing or wrong queue name: {}'.format(queue_header))
+        logging.error(f'Missing or wrong queue name: {queue_header}')
         # Return a 200 status response, so sender doesn't keep retrying, but
         # include the fact that it was rejected in the response for debugging.
         return 'REJECTED'

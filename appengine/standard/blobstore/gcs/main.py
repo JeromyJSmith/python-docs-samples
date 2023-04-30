@@ -30,7 +30,7 @@ class CreateAndReadFileHandler(webapp2.RequestHandler):
         bucket = app_identity.get_default_gcs_bucket_name()
 
         # Cloud Storage file names are in the format /bucket/object.
-        filename = '/{}/blobstore_demo'.format(bucket)
+        filename = f'/{bucket}/blobstore_demo'
 
         # Create a file in Google Cloud Storage and write something to it.
         with cloudstorage.open(filename, 'w') as filehandle:
@@ -40,7 +40,7 @@ class CreateAndReadFileHandler(webapp2.RequestHandler):
         # you must create a blob_key from the Cloud Storage file name.
         # Blobstore expects the filename to be in the format of:
         # /gs/bucket/object
-        blobstore_filename = '/gs{}'.format(filename)
+        blobstore_filename = f'/gs{filename}'
         blob_key = blobstore.create_gs_key(blobstore_filename)
 
         # Read the file's contents using the Blobstore API.
@@ -66,7 +66,7 @@ class CreateAndServeFileHandler(blobstore_handlers.BlobstoreDownloadHandler):
         bucket = app_identity.get_default_gcs_bucket_name()
 
         # Cloud Storage file names are in the format /bucket/object.
-        filename = '/{}/blobstore_serving_demo'.format(bucket)
+        filename = f'/{bucket}/blobstore_serving_demo'
 
         # Create a file in Google Cloud Storage and write something to it.
         with cloudstorage.open(filename, 'w') as filehandle:
@@ -76,7 +76,7 @@ class CreateAndServeFileHandler(blobstore_handlers.BlobstoreDownloadHandler):
         # you must create a blob_key from the Cloud Storage file name.
         # Blobstore expects the filename to be in the format of:
         # /gs/bucket/object
-        blobstore_filename = '/gs{}'.format(filename)
+        blobstore_filename = f'/gs{filename}'
         blob_key = blobstore.create_gs_key(blobstore_filename)
 
         # BlobstoreDownloadHandler serves the file from Google Cloud Storage to

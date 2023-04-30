@@ -41,7 +41,7 @@ class PhotoUploadHandler(blobstore.BlobstoreUploadHandler):
         photo_key = upload.key()
         user_photo = UserPhoto(blob_key=photo_key)
         user_photo.put()
-        logger.log_text("Photo key: %s" % photo_key)
+        logger.log_text(f"Photo key: {photo_key}")
         return redirect("view_photo", key=photo_key)
 
 
@@ -49,13 +49,12 @@ class ViewPhotoHandler(blobstore.BlobstoreDownloadHandler):
     def get(self, environ, photo_key):
         if not blobstore.get(photo_key):
             return HttpResponse("Photo key not found", status=404)
-        else:
-            response = HttpResponse(headers=self.send_blob(environ, photo_key))
+        response = HttpResponse(headers=self.send_blob(environ, photo_key))
 
-            # Prevent Django from setting a default content-type.
-            # GAE sets it to a guessed type if the header is not set.
-            response["Content-Type"] = None
-            return response
+        # Prevent Django from setting a default content-type.
+        # GAE sets it to a guessed type if the header is not set.
+        response["Content-Type"] = None
+        return response
 
 
 # [END gae_blobstore_handler_django]

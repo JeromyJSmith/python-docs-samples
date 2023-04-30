@@ -47,7 +47,7 @@ def test_main(app):
 def test_list(app):
     # Add greetings to find
     for i in range(11):
-        guestbook.Greeting(content='Greeting {}'.format(i)).put()
+        guestbook.Greeting(content=f'Greeting {i}').put()
 
     response = app.get('/list')
     assert response.status_int == 200
@@ -56,7 +56,7 @@ def test_list(app):
     assert 'Greeting 9' in response.body
     assert 'Greeting 10' not in response.body
 
-    next_page = re.search(r'href="([^"]+)"', response.body).group(1)
+    next_page = re.search(r'href="([^"]+)"', response.body)[1]
     assert next_page is not None
 
     response = app.get(next_page)

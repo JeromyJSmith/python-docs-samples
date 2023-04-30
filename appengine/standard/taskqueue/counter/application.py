@@ -48,8 +48,7 @@ class EnqueueTaskHandler(webapp2.RequestHandler):
             target='worker',
             params={'amount': amount})
 
-        self.response.write(
-            'Task {} enqueued, ETA {}.'.format(task.name, task.eta))
+        self.response.write(f'Task {task.name} enqueued, ETA {task.eta}.')
 
 
 # AsyncEnqueueTaskHandler behaves the same as EnqueueTaskHandler, but shows
@@ -71,8 +70,7 @@ class AsyncEnqueueTaskHandler(webapp2.RequestHandler):
         # Wait for the rpc to complete and return the queued task.
         task = rpc.get_result()
 
-        self.response.write(
-            'Task {} enqueued, ETA {}.'.format(task.name, task.eta))
+        self.response.write(f'Task {task.name} enqueued, ETA {task.eta}.')
 
 
 app = webapp2.WSGIApplication([

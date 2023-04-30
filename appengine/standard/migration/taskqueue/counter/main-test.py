@@ -37,18 +37,14 @@ def queue():
     # Setup - create unique Cloud Tasks queue
     project = main.project
     location = main.location
-    parent = 'projects/{}/locations/{}'.format(project, location)
+    parent = f'projects/{project}/locations/{location}'
 
-    queue = main.client.create_queue(
-        parent=parent,
-        queue={'name': parent + '/queues/' + TEST_NAME}
+    yield main.client.create_queue(
+        parent=parent, queue={'name': f'{parent}/queues/{TEST_NAME}'}
     )
-
-    yield queue
-
     # Teardown - delete test queue, which also deletes tasks
 
-    main.client.delete_queue(name='{}/queues/{}'.format(parent, TEST_NAME))
+    main.client.delete_queue(name=f'{parent}/queues/{TEST_NAME}')
 
 
 @pytest.fixture(scope='module')
@@ -93,7 +89,7 @@ def test_enqueuetasks(queue):
 
     # Post tasks stage, queueing them up
     for task in TEST_TASKS:
-        for i in range(TEST_TASKS[task]):
+        for _ in range(TEST_TASKS[task]):
             r = client.post('/', data={'key': task})
             assert r.status_code == 302
             assert r.headers.get('location').count('/') == 3
@@ -138,7 +134,7 @@ def test_processtasks(entity_kind):
 
     # Push tasks as if from Cloud Tasks
     for key in TEST_TASKS:
-        for i in range(TEST_TASKS[key]):
+        for _ in range(TEST_TASKS[key]):
             r = client.post(
                 '/push-task',
                 data=key,
@@ -172,7 +168,7 @@ def test_processtasks(entity_kind):
     assert r.status_code == 200
     assert 'Counters' in r.data.decode('utf-8')
     for key in TEST_TASKS:
-        assert '{}: {}'.format(key, TEST_TASKS[key]) in r.data.decode('utf-8')
+        assert f'{key}: {TEST_TASKS[key]}' in r.data.decode('utf-8')
 
     # Restore main globals
     main.entity_kind = save_entity_kind

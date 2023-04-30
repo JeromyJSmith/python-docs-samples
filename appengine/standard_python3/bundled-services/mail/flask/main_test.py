@@ -46,8 +46,7 @@ def gcloud_cli(command):
         check=True,
     )
     try:
-        entries = json.loads(output.stdout)
-        return entries
+        return json.loads(output.stdout)
     except Exception:
         print("Failed to read log")
         print(f"gcloud stderr was {output.stderr}")

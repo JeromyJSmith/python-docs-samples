@@ -70,13 +70,13 @@ def quickstart(project_id):
     if response.result.findings:
         for finding in response.result.findings:
             try:
-                print("Quote: {}".format(finding.quote))
+                print(f"Quote: {finding.quote}")
             except AttributeError:
                 pass
-            print("Info type: {}".format(finding.info_type.name))
+            print(f"Info type: {finding.info_type.name}")
             # Convert likelihood value to string respresentation.
             likelihood = finding.likelihood.name
-            print("Likelihood: {}".format(likelihood))
+            print(f"Likelihood: {likelihood}")
     else:
         print("No findings.")
     # [END dlp_quickstart]

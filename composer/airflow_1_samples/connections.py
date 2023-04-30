@@ -14,6 +14,7 @@
 
 """Demonstrates how to use connections in an Airflow DAG."""
 
+
 import datetime
 
 from airflow import models
@@ -21,8 +22,9 @@ from airflow.contrib.operators import bigquery_operator
 
 
 yesterday = datetime.datetime.combine(
-    datetime.datetime.today() - datetime.timedelta(1),
-    datetime.datetime.min.time())
+    datetime.datetime.now() - datetime.timedelta(1),
+    datetime.datetime.min.time(),
+)
 
 default_dag_args = {
     # Setting start date as yesterday starts the DAG immediately when it is

@@ -42,7 +42,7 @@ class StringProcessor():
         if self._string == '':
             return ''
 
-        chars = [c for c in self._string]
+        chars = list(self._string)
         left = 0
         right = len(chars) - 1
         while True:

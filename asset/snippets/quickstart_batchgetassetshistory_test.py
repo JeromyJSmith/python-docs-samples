@@ -25,7 +25,7 @@ import pytest
 import quickstart_batchgetassetshistory
 
 PROJECT = os.environ["GOOGLE_CLOUD_PROJECT"]
-BUCKET = "assets-{}".format(uuid.uuid4().hex)
+BUCKET = f"assets-{uuid.uuid4().hex}"
 
 
 @pytest.fixture(scope="module")
@@ -42,7 +42,7 @@ def asset_bucket(storage_client):
     try:
         bucket.delete(force=True)
     except Exception as e:
-        print("Failed to delete bucket{}".format(BUCKET))
+        print(f"Failed to delete bucket{BUCKET}")
         raise e
 
 

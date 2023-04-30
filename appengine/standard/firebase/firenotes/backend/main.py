@@ -52,16 +52,14 @@ def query_database(user_id):
     query = Note.query(ancestor=ancestor_key).order(-Note.created)
     notes = query.fetch()
 
-    note_messages = []
-
-    for note in notes:
-        note_messages.append({
+    return [
+        {
             'friendly_id': note.friendly_id,
             'message': note.message,
-            'created': note.created
-        })
-
-    return note_messages
+            'created': note.created,
+        }
+        for note in notes
+    ]
 # [END gae_python_query_database]
 
 

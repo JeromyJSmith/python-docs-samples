@@ -35,16 +35,15 @@ INSTANCE_ZONE = "europe-west2-b"
 
 @pytest.fixture
 def deletable_template_name():
-    template_name = "i" + uuid.uuid4().hex[:10]
+    template_name = f"i{uuid.uuid4().hex[:10]}"
     yield template_name
     delete_instance_template(PROJECT, template_name)
 
 
 @pytest.fixture
 def template_to_be_deleted():
-    template_name = "i" + uuid.uuid4().hex[:10]
-    template = create_template(PROJECT, template_name)
-    yield template
+    template_name = f"i{uuid.uuid4().hex[:10]}"
+    yield create_template(PROJECT, template_name)
 
 
 def test_create_template_and_list(deletable_template_name):

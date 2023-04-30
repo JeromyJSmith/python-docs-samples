@@ -29,20 +29,10 @@ async def create_page(project_id, agent_id, flow_id, location, displayName):
     page.display_name = displayName
 
     request = CreatePageRequest()
-    request.parent = (
-        "projects/"
-        + project_id
-        + "/locations/"
-        + location
-        + "/agents/"
-        + agent_id
-        + "/flows/"
-        + flow_id
-    )
+    request.parent = f"projects/{project_id}/locations/{location}/agents/{agent_id}/flows/{flow_id}"
     request.page = page
 
-    response = await pages_client.create_page(request=request)
-    return response
+    return await pages_client.create_page(request=request)
 
 
 # [END dialogflow_cx_create_page]
@@ -59,8 +49,7 @@ async def list_page(project_id, agent_id, flow_id, location):
 
     request.language_code = "en"
 
-    response = await pages_client.list_pages(request=request)
-    return response
+    return await pages_client.list_pages(request=request)
 
 
 # [END dialogflow_cx_list_page]
@@ -73,8 +62,7 @@ async def delete_page(project_id, agent_id, flow_id, page_id, location):
     request = DeletePageRequest()
     request.name = f"projects/{project_id}/locations/{location}/agents/{agent_id}/flows/{flow_id}/pages/{page_id}"
 
-    response = await pages_client.delete_page(request=request)
-    return response
+    return await pages_client.delete_page(request=request)
 
 
 # [END dialogflow_cx_delete_page]

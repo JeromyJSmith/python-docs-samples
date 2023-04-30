@@ -32,26 +32,20 @@ def get_model_evaluation(project_id, model_id, model_evaluation_id):
     # Get complete detail of the model evaluation.
     response = client.get_model_evaluation(name=model_evaluation_full_id)
 
-    print("Model evaluation name: {}".format(response.name))
-    print("Model annotation spec id: {}".format(response.annotation_spec_id))
-    print("Create Time: {}".format(response.create_time))
-    print(
-        "Evaluation example count: {}".format(response.evaluated_example_count)
-    )
+    print(f"Model evaluation name: {response.name}")
+    print(f"Model annotation spec id: {response.annotation_spec_id}")
+    print(f"Create Time: {response.create_time}")
+    print(f"Evaluation example count: {response.evaluated_example_count}")
 
     # [END automl_video_object_tracking_get_model_evaluation_beta]
 
     print(
-        "Classification model evaluation metrics: {}".format(
-            response.classification_evaluation_metrics
-        )
+        f"Classification model evaluation metrics: {response.classification_evaluation_metrics}"
     )
     # [END automl_video_classification_get_model_evaluation_beta]
 
     # [START automl_video_object_tracking_get_model_evaluation_beta]
     print(
-        "Video object tracking model evaluation metrics: {}".format(
-            response.video_object_tracking_evaluation_metrics
-        )
+        f"Video object tracking model evaluation metrics: {response.video_object_tracking_evaluation_metrics}"
     )
     # [END automl_video_object_tracking_get_model_evaluation_beta]

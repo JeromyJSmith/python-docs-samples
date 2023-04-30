@@ -32,14 +32,14 @@ GCS_DATASET = ("gs://python-docs-samples-tests-automl-tables-test"
 
 ID = "{rand}_{time}".format(
     rand="".join(
-        [random.choice(string.ascii_letters + string.digits) for n in range(4)]
+        [random.choice(string.ascii_letters + string.digits) for _ in range(4)]
     ),
     time=int(time.time()),
 )
 
 
 def _id(name):
-    return "{}_{}".format(name, ID)
+    return f"{name}_{ID}"
 
 
 def ensure_dataset_ready():

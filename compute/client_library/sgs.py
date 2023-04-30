@@ -105,11 +105,10 @@ def parse_imports(script: str) -> Tuple[List[ImportItem], List[Tuple[str, Import
     simple_imports = []
     imports_from = []
     for node in parsed_script.body:
-        if isinstance(node, ast.Import):
-            for alias in node.names:
+        for alias in node.names:
+            if isinstance(node, ast.Import):
                 simple_imports.append(ImportItem(name=alias.name, asname=alias.asname))
-        elif isinstance(node, ast.ImportFrom):
-            for alias in node.names:
+            elif isinstance(node, ast.ImportFrom):
                 imports_from.append(
                     (node.module, ImportItem(name=alias.name, asname=alias.asname))
                 )
@@ -150,7 +149,7 @@ def load_ingredients(path: Path) -> dict:
     ingredients = {}
     for ipath in path.iterdir():
         if ipath.is_dir():
-            ingredients.update(load_ingredients(ipath))
+            ingredients |= load_ingredients(ipath)
         elif ipath.is_file():
             if "__pycache__" in str(ipath.absolute()):
                 continue
@@ -168,7 +167,7 @@ def load_recipes(path: Path) -> dict:
     recipes = {}
     for ipath in path.iterdir():
         if ipath.is_dir():
-            recipes.update(load_recipes(ipath))
+            recipes |= load_recipes(ipath)
         elif ipath.is_file():
             recipes[ipath.absolute()] = load_recipe(ipath)
     return recipes
@@ -184,8 +183,7 @@ def render_recipe(recipe: str, ingredients: dict) -> str:
 
     # Scan the file to used ingredients
     for line in file_lines:
-        match = INGREDIENT_FILL.match(line)
-        if match:
+        if match := INGREDIENT_FILL.match(line):
             ingredients_used.append(ingredients[match.group(1)])
 
     simple_imports_used = set()
@@ -243,9 +241,7 @@ def render_recipe(recipe: str, ingredients: dict) -> str:
         if not header_added:
             end = output_file[-1]
             output_file[-1] = ""
-            output_file.append(HEADER)
-            output_file.append("")
-            output_file.append(end)
+            output_file.extend((HEADER, "", end))
             header_added = True
 
     if output_file and not output_file[-1].endswith("\n"):

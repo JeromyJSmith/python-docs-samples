@@ -57,11 +57,10 @@ def verify_signed_by_app(data, signature):
     for the application."""
     public_certificates = app_identity.get_public_certificates()
 
-    for cert in public_certificates:
-        if verify_signature(data, signature, cert.x509_certificate_pem):
-            return True
-
-    return False
+    return any(
+        verify_signature(data, signature, cert.x509_certificate_pem)
+        for cert in public_certificates
+    )
 
 
 class MainPage(webapp2.RequestHandler):
@@ -71,10 +70,9 @@ class MainPage(webapp2.RequestHandler):
         verified = verify_signed_by_app(message, signature)
 
         self.response.content_type = 'text/plain'
-        self.response.write('Message: {}\n'.format(message))
-        self.response.write(
-            'Signature: {}\n'.format(base64.b64encode(signature)))
-        self.response.write('Verified: {}\n'.format(verified))
+        self.response.write(f'Message: {message}\n')
+        self.response.write(f'Signature: {base64.b64encode(signature)}\n')
+        self.response.write(f'Verified: {verified}\n')
 
 
 app = webapp2.WSGIApplication([

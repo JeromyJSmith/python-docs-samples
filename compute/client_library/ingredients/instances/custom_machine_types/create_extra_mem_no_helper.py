@@ -43,8 +43,7 @@ def create_custom_instances_extra_mem(
     )
     disk_type = f"zones/{zone}/diskTypes/pd-standard"
     disks = [disk_from_image(disk_type, 10, True, newest_debian.self_link)]
-    # The core_count and memory values are not validated anywhere and can be rejected by the API.
-    instances = [
+    return [
         create_instance(
             project_id,
             zone,
@@ -67,5 +66,4 @@ def create_custom_instances_extra_mem(
             f"zones/{zone}/machineTypes/n2d-custom-{core_count}-{memory}-ext",
         ),
     ]
-    return instances
 # </INGREDIENT>

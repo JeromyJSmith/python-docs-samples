@@ -69,12 +69,11 @@ def update_cluster(project_id, region, cluster_name, new_num_instances):
 # [END dataproc_update_cluster]
 
 
-if __name__ == "__main__":
-    if len(sys.argv) < 5:
-        sys.exit("python update_cluster.py project_id region cluster_name")
+if __name__ == "__main__" and len(sys.argv) < 5:
+    sys.exit("python update_cluster.py project_id region cluster_name")
 
-        project_id = sys.argv[1]
-        region = sys.argv[2]
-        cluster_name = sys.argv[3]
-        new_num_instances = sys.argv[4]
-        update_cluster(project_id, region, cluster_name)
+    project_id = sys.argv[1]
+    region = sys.argv[2]
+    cluster_name = sys.argv[3]
+    new_num_instances = sys.argv[4]
+    update_cluster(project_id, region, cluster_name)

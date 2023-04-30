@@ -127,7 +127,7 @@ def add_extended_memory_to_instance(
 
     # Modify the machine definition, remember that extended memory is available only for N1, N2 and N2D CPUs
     start, end = instance.machine_type.rsplit("-", maxsplit=1)
-    instance.machine_type = start + f"-{new_memory}-ext"
+    instance.machine_type = f"{start}-{new_memory}-ext"
     # TODO: If you prefer to use the CustomMachineType helper class, uncomment this code and comment the 2 lines above
     # Using CustomMachineType helper
     # cmt = CustomMachineType.from_str(instance.machine_type)

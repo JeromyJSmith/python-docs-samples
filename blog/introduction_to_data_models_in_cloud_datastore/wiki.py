@@ -28,7 +28,7 @@ def path_to_key(datastore, path):
     """
     key_parts = []
     path_parts = path.strip(u'/').split(u'/')
-    for n, x in enumerate(path_parts):
+    for x in path_parts:
         name, ext = x.rsplit('.', 1)
         key_parts.extend([ext, name])
 
@@ -38,11 +38,11 @@ def path_to_key(datastore, path):
 def save_page(ds, page, content):
     with ds.transaction():
         now = datetime.datetime.now(tz=datetime.timezone.utc)
-        current_key = path_to_key(ds, '{}.page/current.revision'.format(page))
-        revision_key = path_to_key(ds, '{}.page/{}.revision'.format(page, now))
+        current_key = path_to_key(ds, f'{page}.page/current.revision')
+        revision_key = path_to_key(ds, f'{page}.page/{now}.revision')
 
         if ds.get(revision_key):
-            raise AssertionError("Revision %s already exists" % revision_key)
+            raise AssertionError(f"Revision {revision_key} already exists")
 
         current = ds.get(current_key)
 
@@ -67,7 +67,7 @@ def list_pages(ds):
 
 
 def list_revisions(ds, page):
-    page_key = path_to_key(ds, '{}.page'.format(page))
+    page_key = path_to_key(ds, f'{page}.page')
     return ds.query(kind='revision', ancestor=page_key).fetch()
 
 
@@ -83,14 +83,14 @@ def main(project_id):
     for revision in list_revisions(ds, 'page1'):
         if not first_revision:
             first_revision = revision
-        print("{}: {}".format(revision.key.name, revision['content']))
+        print(f"{revision.key.name}: {revision['content']}")
 
-    print('restoring revision {}:'.format(first_revision.key.name))
+    print(f'restoring revision {first_revision.key.name}:')
     restore_revision(ds, 'page1', first_revision)
 
     print('Revisions for page1:')
     for revision in list_revisions(ds, 'page1'):
-        print("{}: {}".format(revision.key.name, revision['content']))
+        print(f"{revision.key.name}: {revision['content']}")
 
     print('Cleaning up')
     ds.delete_multi([path_to_key(ds, 'page1.page')])

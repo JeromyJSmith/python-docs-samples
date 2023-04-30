@@ -80,12 +80,10 @@ def angle_udf(angle):
     if not angle:
         return None
 
-    dms = re.match(r'(-?\d*).(-?\d*)\'(-?\d*)"', angle)
-    if dms:
+    if dms := re.match(r'(-?\d*).(-?\d*)\'(-?\d*)"', angle):
         return int(dms[1]) + int(dms[2]) / 60 + int(dms[3]) / (60 * 60)
 
-    degrees = re.match(r"\d*.\d*", angle)
-    if degrees:
+    if degrees := re.match(r"\d*.\d*", angle):
         return float(degrees[0])
 
 
@@ -222,7 +220,7 @@ if __name__ == "__main__":
     else:
         # Set GCS temp location
         path = str(time.time())
-        temp_path = "gs://" + BUCKET_NAME + "/" + path
+        temp_path = f"gs://{BUCKET_NAME}/{path}"
 
         # Write dataframe to temp location to preserve the data in final location
         # This takes time, so final location should not be overwritten with partial data
@@ -246,8 +244,9 @@ if __name__ == "__main__":
         # This is much quicker than the original write to the temp location
         final_path = "clean_data/"
         for blob in blobs:
-            file_match = re.match(path + r"/(part-\d*)[0-9a-zA-Z\-]*.csv.gz", blob.name)
-            if file_match:
+            if file_match := re.match(
+                path + r"/(part-\d*)[0-9a-zA-Z\-]*.csv.gz", blob.name
+            ):
                 new_blob = final_path + file_match[1] + ".csv.gz"
                 source_bucket.copy_blob(blob, source_bucket, new_blob)
 

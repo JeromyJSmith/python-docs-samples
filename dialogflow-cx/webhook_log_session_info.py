@@ -27,20 +27,18 @@ def log_session_id_for_troubleshooting(request):
     session_id_regex = r".+\/sessions\/(.+)"
     session = req["sessionInfo"]["session"]
     regex_match = re.search(session_id_regex, session)
-    session_id = regex_match.group(1)
+    session_id = regex_match[1]
 
     # Instead of printing, use the logging tools available to you
     print(f"Debug Node: session ID = {session_id}")
 
-    # Return a generic response
-    res = {
+    return {
         "fulfillment_response": {
-            "messages": [{"text": {"text": [f"Request Session ID: {session_id}"]}}]
+            "messages": [
+                {"text": {"text": [f"Request Session ID: {session_id}"]}}
+            ]
         }
     }
-
-    # Returns json
-    return res
 
 
 # [END dialogflow_cx_v3_webhook_log_session_id]

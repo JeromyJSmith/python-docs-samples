@@ -59,7 +59,7 @@ class PhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
             blob_key=upload.key())
         user_photo.put()
 
-        self.redirect('/view_photo/%s' % upload.key())
+        self.redirect(f'/view_photo/{upload.key()}')
 # [END gae_blobstore_upload_handler]
 
 

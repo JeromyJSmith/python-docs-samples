@@ -44,9 +44,7 @@ def count_conversations(project_id, insights_client):
         )
     )
     conversations = insights_client.list_conversations(request=list_request)
-    conversation_count = len(list(conversations))
-
-    yield conversation_count
+    yield len(list(conversations))
 
 
 @pytest.fixture
@@ -64,7 +62,6 @@ def issue_model_resource(project_id, insights_client, count_conversations):
 
 
 def test_create_issue_model(capsys, issue_model_resource):
-    issue_model = issue_model_resource
-    if issue_model:
+    if issue_model := issue_model_resource:
         out, err = capsys.readouterr()
-        assert "Created {}".format(issue_model.name) in out
+        assert f"Created {issue_model.name}" in out

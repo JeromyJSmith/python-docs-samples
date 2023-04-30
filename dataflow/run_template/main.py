@@ -53,9 +53,7 @@ def run(project, job, template, parameters=None):
         }
     )
 
-    response = request.execute()
-    # [END dataflow_run_template]
-    return response
+    return request.execute()
 
 
 def run_template(request):

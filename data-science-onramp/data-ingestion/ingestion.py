@@ -78,37 +78,39 @@ def trip_duration(duration):
 
 def station_name(name):
     """Replaces '&' with '/' with a 50% chance"""
-    if not name:
-        return None
-    return random.choice([name, name.replace("&", "/")])
+    return random.choice([name, name.replace("&", "/")]) if name else None
 
 
 def user_type(user):
     """Manipulates the user type string"""
-    if not user:
-        return None
-    return random.choice(
-        [
-            user,
-            user.upper(),
-            user.lower(),
-            "sub" if user == "Subscriber" else user,
-            "cust" if user == "Customer" else user,
-        ]
+    return (
+        random.choice(
+            [
+                user,
+                user.upper(),
+                user.lower(),
+                "sub" if user == "Subscriber" else user,
+                "cust" if user == "Customer" else user,
+            ]
+        )
+        if user
+        else None
     )
 
 
 def gender(s):
     """Manipulates the gender string"""
-    if not s:
-        return None
-    return random.choice(
-        [
-            s.upper(),
-            s.lower(),
-            s[0].upper() if len(s) > 0 else "",
-            s[0].lower() if len(s) > 0 else "",
-        ]
+    return (
+        random.choice(
+            [
+                s.upper(),
+                s.lower(),
+                s[0].upper() if len(s) > 0 else "",
+                s[0].lower() if len(s) > 0 else "",
+            ]
+        )
+        if s
+        else None
     )
 
 

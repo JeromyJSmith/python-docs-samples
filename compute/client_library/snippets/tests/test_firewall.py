@@ -30,7 +30,7 @@ PROJECT = google.auth.default()[1]
 @pytest.fixture
 def firewall_rule():
     firewall_rule = compute_v1.Firewall()
-    firewall_rule.name = "firewall-sample-test" + uuid.uuid4().hex[:10]
+    firewall_rule.name = f"firewall-sample-test{uuid.uuid4().hex[:10]}"
     firewall_rule.direction = "INGRESS"
     allowed_ports = compute_v1.Allowed()
     allowed_ports.I_p_protocol = "tcp"
@@ -53,10 +53,7 @@ def firewall_rule():
         op = firewall_client.delete_unary(project=PROJECT, firewall=firewall_rule.name)
         op_client.wait(project=PROJECT, operation=op.name)
     except google.api_core.exceptions.BadRequest as err:
-        if err.code == 400 and "is not ready" in err.message:
-            # This means GCE enforcer has already deleted that rule.
-            pass
-        else:
+        if err.code != 400 or "is not ready" not in err.message:
             raise err
 
 
@@ -65,15 +62,12 @@ def autodelete_firewall_name():
     """
     Provide a name for a firewall rule and then delete the rule.
     """
-    rule_name = "firewall-sample-test-" + uuid.uuid4().hex[:10]
+    rule_name = f"firewall-sample-test-{uuid.uuid4().hex[:10]}"
     yield rule_name
     try:
         delete_firewall_rule(PROJECT, rule_name)
     except google.api_core.exceptions.BadRequest as err:
-        if err.code == 400 and "is not ready" in err.message:
-            # We can ignore this, this is most likely GCE Enforcer removing the rule before us.
-            pass
-        else:
+        if err.code != 400 or "is not ready" not in err.message:
             # Something else went wrong, let's escalate it.
             raise err
 

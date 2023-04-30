@@ -31,19 +31,18 @@ ZONE = 'europe-west1-c'
 @pytest.fixture
 def test_disk():
     debian_image = get_image_from_family('debian-cloud', 'debian-11')
-    test_disk_name = "test-disk-" + uuid.uuid4().hex[:10]
+    test_disk_name = f"test-disk-{uuid.uuid4().hex[:10]}"
 
     disk_type = f"zones/{ZONE}/diskTypes/pd-standard"
 
-    disk = create_disk_from_image(PROJECT, ZONE, test_disk_name, disk_type, 20, debian_image.self_link)
-
-    yield disk
-
+    yield create_disk_from_image(
+        PROJECT, ZONE, test_disk_name, disk_type, 20, debian_image.self_link
+    )
     delete_disk(PROJECT, ZONE, test_disk_name)
 
 
 def test_snapshot_create_delete(test_disk):
-    snapshot_name = "test-snapshot-" + uuid.uuid4().hex[:10]
+    snapshot_name = f"test-snapshot-{uuid.uuid4().hex[:10]}"
     snapshot = create_snapshot(PROJECT, test_disk.name, snapshot_name, zone=ZONE)
     assert snapshot.name == snapshot_name
     assert snapshot.source_disk == test_disk.self_link

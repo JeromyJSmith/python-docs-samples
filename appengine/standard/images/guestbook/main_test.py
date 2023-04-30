@@ -58,7 +58,7 @@ def test_img(app):
     greeting.avatar = b'123'
     greeting.put()
 
-    response = app.get('/img?img_id=%s' % greeting.key.urlsafe())
+    response = app.get(f'/img?img_id={greeting.key.urlsafe()}')
 
     assert response.status_int == 200
 

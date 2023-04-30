@@ -776,11 +776,7 @@ def deidentify_with_date_shift(
     def map_fields(field):
         return {"name": field}
 
-    if date_fields:
-        date_fields = map(map_fields, date_fields)
-    else:
-        date_fields = []
-
+    date_fields = map(map_fields, date_fields) if date_fields else []
     # Read and parse the CSV file
     import csv
     from datetime import datetime
@@ -859,10 +855,9 @@ def deidentify_with_date_shift(
         return header.name
 
     def write_data(data):
-        return data.string_value or "%s/%s/%s" % (
-            data.date_value.month,
-            data.date_value.day,
-            data.date_value.year,
+        return (
+            data.string_value
+            or f"{data.date_value.month}/{data.date_value.day}/{data.date_value.year}"
         )
 
     # Call the API
@@ -1164,10 +1159,10 @@ def deidentify_table_bucketing(
     # Construct the `table`. For more details on the table schema, please see
     # https://cloud.google.com/dlp/docs/reference/rest/v2/ContentItem#Table
     headers = [{"name": val} for val in table_data["header"]]
-    rows = []
-    for row in table_data["rows"]:
-        rows.append({"values": [{"string_value": cell_val} for cell_val in row]})
-
+    rows = [
+        {"values": [{"string_value": cell_val} for cell_val in row]}
+        for row in table_data["rows"]
+    ]
     table = {"headers": headers, "rows": rows}
 
     # Construct the `item`.
@@ -1205,7 +1200,7 @@ def deidentify_table_bucketing(
     })
 
     # Print the results.
-    print("Table after de-identification: {}".format(response.item.table))
+    print(f"Table after de-identification: {response.item.table}")
 
     # Return the response.
     return response.item.table
@@ -1282,10 +1277,10 @@ def deidentify_table_condition_replace_with_info_types(
     # Construct the `table`. For more details on the table schema, please see
     # https://cloud.google.com/dlp/docs/reference/rest/v2/ContentItem#Table
     headers = [{"name": val} for val in table_data["header"]]
-    rows = []
-    for row in table_data["rows"]:
-        rows.append({"values": [{"string_value": cell_val} for cell_val in row]})
-
+    rows = [
+        {"values": [{"string_value": cell_val} for cell_val in row]}
+        for row in table_data["rows"]
+    ]
     table = {"headers": headers, "rows": rows}
 
     # Construct the item
@@ -1341,7 +1336,7 @@ def deidentify_table_condition_replace_with_info_types(
             "inspect_config": inspect_config
         })
 
-    print("Table after de-identification: {}".format(response.item.table))
+    print(f"Table after de-identification: {response.item.table}")
 
     return response.item.table
 
@@ -1419,10 +1414,10 @@ def deidentify_table_condition_masking(
     # Construct the `table`. For more details on the table schema, please see
     # https://cloud.google.com/dlp/docs/reference/rest/v2/ContentItem#Table
     headers = [{"name": val} for val in table_data["header"]]
-    rows = []
-    for row in table_data["rows"]:
-        rows.append({"values": [{"string_value": cell_val} for cell_val in row]})
-
+    rows = [
+        {"values": [{"string_value": cell_val} for cell_val in row]}
+        for row in table_data["rows"]
+    ]
     table = {"headers": headers, "rows": rows}
 
     # Construct the `item`
@@ -1473,7 +1468,7 @@ def deidentify_table_condition_masking(
         })
 
     # Print the result
-    print("Table after de-identification: {}".format(response.item.table))
+    print(f"Table after de-identification: {response.item.table}")
 
     # Return the response
     return response.item.table
@@ -1529,10 +1524,10 @@ def deidentify_table_replace_with_info_types(
     # Construct the `table`. For more details on the table schema, please see
     # https://cloud.google.com/dlp/docs/reference/rest/v2/ContentItem#Table
     headers = [{"name": val} for val in table_data["header"]]
-    rows = []
-    for row in table_data["rows"]:
-        rows.append({"values": [{"string_value": cell_val} for cell_val in row]})
-
+    rows = [
+        {"values": [{"string_value": cell_val} for cell_val in row]}
+        for row in table_data["rows"]
+    ]
     table = {"headers": headers, "rows": rows}
 
     # Construct item

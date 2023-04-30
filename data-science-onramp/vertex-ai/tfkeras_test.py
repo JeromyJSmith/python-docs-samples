@@ -47,8 +47,7 @@ TERMINAL_STATES = [
 
 @pytest.fixture
 def shared_state() -> dict:
-    state = {}
-    yield state
+    yield {}
 
 
 @pytest.fixture(autouse=True)

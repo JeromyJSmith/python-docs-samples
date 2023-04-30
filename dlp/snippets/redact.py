@@ -67,9 +67,9 @@ def redact_image(
     image_redaction_configs = []
 
     if info_types is not None:
-        for info_type in info_types:
-            image_redaction_configs.append({"info_type": info_type})
-
+        image_redaction_configs.extend(
+            {"info_type": info_type} for info_type in info_types
+        )
     # Construct the configuration dictionary. Keys which are None may
     # optionally be omitted entirely.
     inspect_config = {
@@ -221,9 +221,9 @@ def redact_image_listed_info_types(
     # The color is omitted in this sample, so the default (black) will be used.
     image_redaction_configs = []
     if info_types is not None:
-        for info_type in info_types:
-            image_redaction_configs.append({"info_type": info_type})
-
+        image_redaction_configs.extend(
+            {"info_type": info_type} for info_type in info_types
+        )
     # Construct the configuration dictionary. Keys which are None may
     # optionally be omitted entirely.
     inspect_config = {

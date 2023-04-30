@@ -41,11 +41,6 @@ def trigger_dag(data, context=None):
     This function is currently only compatible with Composer v1 environments.
     """
 
-    # Fill in with your Composer info here
-    # Navigate to your webserver's login page and get this from the URL
-    # Or use the script found at
-    # https://github.com/GoogleCloudPlatform/python-docs-samples/blob/main/composer/rest/get_client_id.py
-    client_id = 'YOUR-CLIENT-ID'
     # This should be part of your webserver's URL:
     # {tenant-project-id}.appspot.com
     webserver_id = 'YOUR-TENANT-PROJECT'
@@ -58,12 +53,8 @@ def trigger_dag(data, context=None):
     else:
         endpoint = f'api/v1/dags/{dag_name}/dagRuns'
         json_data = {'conf': data}
-    webserver_url = (
-        'https://'
-        + webserver_id
-        + '.appspot.com/'
-        + endpoint
-    )
+    webserver_url = f'https://{webserver_id}.appspot.com/{endpoint}'
+    client_id = 'YOUR-CLIENT-ID'
     # Make a POST request to IAP which then Triggers the DAG
     make_iap_request(
         webserver_url, client_id, method='POST', json=json_data)
@@ -97,9 +88,11 @@ def make_iap_request(url, client_id, method='GET', **kwargs):
     # Authorization header containing "Bearer " followed by a
     # Google-issued OpenID Connect token for the service account.
     resp = requests.request(
-        method, url,
-        headers={'Authorization': 'Bearer {}'.format(
-            google_open_id_connect_token)}, **kwargs)
+        method,
+        url,
+        headers={'Authorization': f'Bearer {google_open_id_connect_token}'},
+        **kwargs,
+    )
     if resp.status_code == 403:
         raise Exception('Service account does not have permission to '
                         'access the IAP-protected application.')

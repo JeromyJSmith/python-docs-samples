@@ -24,7 +24,7 @@ PROJECT = google.auth.default()[1]
 
 
 def test_route_create_delete():
-    route_name = "test-route" + uuid.uuid4().hex[:10]
+    route_name = f"test-route{uuid.uuid4().hex[:10]}"
     route = create_route_to_windows_activation_host(PROJECT, "global/networks/default", route_name)
     try:
         assert route.name == route_name

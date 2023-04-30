@@ -33,64 +33,50 @@ def get_dataset(project_id, dataset_id):
     dataset = client.get_dataset(name=dataset_full_id)
 
     # Display the dataset information
-    print("Dataset name: {}".format(dataset.name))
-    print("Dataset id: {}".format(dataset.name.split("/")[-1]))
-    print("Dataset display name: {}".format(dataset.display_name))
-    print("Dataset create time: {}".format(dataset.create_time))
+    print(f"Dataset name: {dataset.name}")
+    print(f'Dataset id: {dataset.name.split("/")[-1]}')
+    print(f"Dataset display name: {dataset.display_name}")
+    print(f"Dataset create time: {dataset.create_time}")
     # [END automl_language_sentiment_analysis_get_dataset]
     # [END automl_language_text_classification_get_dataset]
     # [END automl_translate_get_dataset]
     # [END automl_vision_classification_get_dataset]
     # [END automl_vision_object_detection_get_dataset]
     print(
-        "Text extraction dataset metadata: {}".format(
-            dataset.text_extraction_dataset_metadata
-        )
+        f"Text extraction dataset metadata: {dataset.text_extraction_dataset_metadata}"
     )
     # [END automl_language_entity_extraction_get_dataset]
 
     # [START automl_language_sentiment_analysis_get_dataset]
     print(
-        "Text sentiment dataset metadata: {}".format(
-            dataset.text_sentiment_dataset_metadata
-        )
+        f"Text sentiment dataset metadata: {dataset.text_sentiment_dataset_metadata}"
     )
     # [END automl_language_sentiment_analysis_get_dataset]
 
     # [START automl_language_text_classification_get_dataset]
     print(
-        "Text classification dataset metadata: {}".format(
-            dataset.text_classification_dataset_metadata
-        )
+        f"Text classification dataset metadata: {dataset.text_classification_dataset_metadata}"
     )
     # [END automl_language_text_classification_get_dataset]
 
     # [START automl_translate_get_dataset]
     print("Translation dataset metadata:")
     print(
-        "\tsource_language_code: {}".format(
-            dataset.translation_dataset_metadata.source_language_code
-        )
+        f"\tsource_language_code: {dataset.translation_dataset_metadata.source_language_code}"
     )
     print(
-        "\ttarget_language_code: {}".format(
-            dataset.translation_dataset_metadata.target_language_code
-        )
+        f"\ttarget_language_code: {dataset.translation_dataset_metadata.target_language_code}"
     )
     # [END automl_translate_get_dataset]
 
     # [START automl_vision_classification_get_dataset]
     print(
-        "Image classification dataset metadata: {}".format(
-            dataset.image_classification_dataset_metadata
-        )
+        f"Image classification dataset metadata: {dataset.image_classification_dataset_metadata}"
     )
     # [END automl_vision_classification_get_dataset]
 
     # [START automl_vision_object_detection_get_dataset]
     print(
-        "Image object detection dataset metadata: {}".format(
-            dataset.image_object_detection_dataset_metadata
-        )
+        f"Image object detection dataset metadata: {dataset.image_object_detection_dataset_metadata}"
     )
     # [END automl_vision_object_detection_get_dataset]

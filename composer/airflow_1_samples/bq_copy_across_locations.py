@@ -98,7 +98,7 @@ def read_table_list(table_list_file):
     target tables.
     """
     table_list = []
-    logger.info("Reading table_list_file from : %s" % str(table_list_file))
+    logger.info(f"Reading table_list_file from : {str(table_list_file)}")
     try:
         with io.open(table_list_file, "rt", encoding="utf-8") as csv_file:
             csv_reader = csv.reader(csv_file)
@@ -109,7 +109,7 @@ def read_table_list(table_list_file):
                 table_list.append(table_tuple)
             return table_list
     except IOError as e:
-        logger.error("Error opening table_list_file %s: " % str(table_list_file), e)
+        logger.error(f"Error opening table_list_file {str(table_list_file)}: ", e)
 
 
 # --------------------------------------------------------------------------------
@@ -138,35 +138,31 @@ with models.DAG(
     # Loop over each record in the 'all_records' python list to build up
     # Airflow tasks
     for record in all_records:
-        logger.info("Generating tasks to transfer table: {}".format(record))
+        logger.info(f"Generating tasks to transfer table: {record}")
 
         table_source = record["table_source"]
         table_dest = record["table_dest"]
 
         BQ_to_GCS = bigquery_to_gcs.BigQueryToCloudStorageOperator(
-            # Replace ":" with valid character for Airflow task
-            task_id="{}_BQ_to_GCS".format(table_source.replace(":", "_")),
+            task_id=f'{table_source.replace(":", "_")}_BQ_to_GCS',
             source_project_dataset_table=table_source,
             destination_cloud_storage_uris=[
-                "{}-*.avro".format("gs://" + source_bucket + "/" + table_source)
+                f"gs://{source_bucket}/{table_source}-*.avro"
             ],
             export_format="AVRO",
         )
 
         GCS_to_GCS = gcs_to_gcs.GoogleCloudStorageToGoogleCloudStorageOperator(
-            # Replace ":" with valid character for Airflow task
-            task_id="{}_GCS_to_GCS".format(table_source.replace(":", "_")),
+            task_id=f'{table_source.replace(":", "_")}_GCS_to_GCS',
             source_bucket=source_bucket,
-            source_object="{}-*.avro".format(table_source),
+            source_object=f"{table_source}-*.avro",
             destination_bucket=dest_bucket,
-            # destination_object='{}-*.avro'.format(table_dest)
         )
 
         GCS_to_BQ = gcs_to_bq.GoogleCloudStorageToBigQueryOperator(
-            # Replace ":" with valid character for Airflow task
-            task_id="{}_GCS_to_BQ".format(table_dest.replace(":", "_")),
+            task_id=f'{table_dest.replace(":", "_")}_GCS_to_BQ',
             bucket=dest_bucket,
-            source_objects=["{}-*.avro".format(table_source)],
+            source_objects=[f"{table_source}-*.avro"],
             destination_project_dataset_table=table_dest,
             source_format="AVRO",
             write_disposition="WRITE_TRUNCATE",

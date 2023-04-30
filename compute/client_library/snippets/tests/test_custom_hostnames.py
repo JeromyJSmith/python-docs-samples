@@ -27,7 +27,7 @@ INSTANCE_ZONE = "europe-west1-c"
 
 @pytest.fixture
 def autodelete_instance_name():
-    instance_name = "test-host-instance-" + uuid.uuid4().hex[:10]
+    instance_name = f"test-host-instance-{uuid.uuid4().hex[:10]}"
 
     yield instance_name
 
@@ -36,7 +36,7 @@ def autodelete_instance_name():
 
 @pytest.fixture
 def random_hostname():
-    yield "instance.{}.hostname".format(random.randint(0, 2 ** 10))
+    yield f"instance.{random.randint(0, 2**10)}.hostname"
 
 
 def test_custom_hostname(autodelete_instance_name, random_hostname):

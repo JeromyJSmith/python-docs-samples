@@ -44,8 +44,8 @@ def project_id(default_credentials):
 @pytest.fixture
 def random_entry_id(client, project_id, random_entry_group_id):
     now = datetime.datetime.now()
-    random_entry_id = "example_entry_{}_{}".format(
-        now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8]
+    random_entry_id = (
+        f'example_entry_{now.strftime("%Y%m%d%H%M%S")}_{uuid.uuid4().hex[:8]}'
     )
     yield random_entry_id
     entry_name = datacatalog_v1beta1.DataCatalogClient.entry_path(
@@ -57,9 +57,7 @@ def random_entry_id(client, project_id, random_entry_group_id):
 @pytest.fixture
 def random_entry_group_id(client, project_id):
     now = datetime.datetime.now()
-    random_entry_group_id = "example_entry_group_{}_{}".format(
-        now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8]
-    )
+    random_entry_group_id = f'example_entry_group_{now.strftime("%Y%m%d%H%M%S")}_{uuid.uuid4().hex[:8]}'
     yield random_entry_group_id
     entry_group_name = datacatalog_v1beta1.DataCatalogClient.entry_group_path(
         project_id, "us-central1", random_entry_group_id
@@ -70,10 +68,10 @@ def random_entry_group_id(client, project_id):
 @pytest.fixture
 def random_entry_name(client, entry_group_name):
     now = datetime.datetime.now()
-    random_entry_id = "example_entry_{}_{}".format(
-        now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8]
+    random_entry_id = (
+        f'example_entry_{now.strftime("%Y%m%d%H%M%S")}_{uuid.uuid4().hex[:8]}'
     )
-    random_entry_name = "{}/entries/{}".format(entry_group_name, random_entry_id)
+    random_entry_name = f"{entry_group_name}/entries/{random_entry_id}"
     yield random_entry_name
     client.delete_entry(request={"name": random_entry_name})
 
@@ -81,8 +79,8 @@ def random_entry_name(client, entry_group_name):
 @pytest.fixture
 def entry(client, entry_group_name):
     now = datetime.datetime.now()
-    random_entry_id = "example_entry_{}_{}".format(
-        now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8]
+    random_entry_id = (
+        f'example_entry_{now.strftime("%Y%m%d%H%M%S")}_{uuid.uuid4().hex[:8]}'
     )
 
     request = datacatalog_v1beta1.CreateEntryRequest(
@@ -104,9 +102,7 @@ def entry(client, entry_group_name):
 @pytest.fixture
 def entry_group_name(client, project_id):
     now = datetime.datetime.now()
-    entry_group_id = "python_entry_group_sample_{}_{}".format(
-        now.strftime("%Y%m%d%H%M%S"), uuid.uuid4().hex[:8]
-    )
+    entry_group_id = f'python_entry_group_sample_{now.strftime("%Y%m%d%H%M%S")}_{uuid.uuid4().hex[:8]}'
     entry_group = client.create_entry_group(
         request={
             "parent": f"projects/{project_id}/locations/us-central1",

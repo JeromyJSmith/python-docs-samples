@@ -20,5 +20,4 @@ def get_project_number(project_id: str) -> str:
     client = resourcemanager.ProjectsClient()
     name = client.project_path(project=project_id)
     project = client.get_project(name=name)
-    project_number = client.parse_project_path(project.name)["project"]
-    return project_number
+    return client.parse_project_path(project.name)["project"]

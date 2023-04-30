@@ -137,18 +137,16 @@ class CustomMachineType:
                 f"Requested memory is too low. Minimal memory for {self.cpu_series.name} is {self.limits.min_mem_per_core} MB per core."
             )
 
-        # Check if the requested memory isn't too much
         if self.memory_mb > self.core_count * self.limits.max_mem_per_core:
-            if self.limits.allow_extra_memory:
-                if self.memory_mb > self.limits.extra_memory_limit:
-                    raise RuntimeError(
-                        f"Requested memory is too large.. Maximum memory allowed for {self.cpu_series.name} is {self.limits.extra_memory_limit} MB."
-                    )
-            else:
+            if not self.limits.allow_extra_memory:
                 raise RuntimeError(
                     f"Requested memory is too large.. Maximum memory allowed for {self.cpu_series.name} is {self.limits.max_mem_per_core} MB per core."
                 )
 
+            if self.memory_mb > self.limits.extra_memory_limit:
+                raise RuntimeError(
+                    f"Requested memory is too large.. Maximum memory allowed for {self.cpu_series.name} is {self.limits.extra_memory_limit} MB."
+                )
         self._checked = True
 
     def __str__(self) -> str:
@@ -235,9 +233,7 @@ def get_image_from_family(project: str, family: str) -> compute_v1.Image:
         An Image object.
     """
     image_client = compute_v1.ImagesClient()
-    # List of public operating system (OS) images: https://cloud.google.com/compute/docs/images/os-details
-    newest_image = image_client.get_from_family(project=project, family=family)
-    return newest_image
+    return image_client.get_from_family(project=project, family=family)
 
 
 def disk_from_image(

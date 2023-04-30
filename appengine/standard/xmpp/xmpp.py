@@ -64,8 +64,7 @@ class ErrorHandler(webapp2.RequestHandler):
         # Log an error
         error_sender = self.request.get('from')
         error_stanza = self.request.get('stanza')
-        logging.error('XMPP error received from {} ({})'
-                      .format(error_sender, error_stanza))
+        logging.error(f'XMPP error received from {error_sender} ({error_stanza})')
         # [END error]
 
 
@@ -78,17 +77,12 @@ class SendChatHandler(webapp2.RequestHandler):
         status_code = xmpp.send_message(user_address, msg)
         chat_message_sent = (status_code == xmpp.NO_ERROR)
 
-        if not chat_message_sent:
-            # Send an email message instead...
-            # [END send-chat-to-user]
-            pass
-
 
 # [START chat]
 class XMPPHandler(webapp2.RequestHandler):
     def post(self):
         message = xmpp.Message(self.request.POST)
-        if message.body[0:5].lower() == 'hello':
+        if message.body[:5].lower() == 'hello':
             message.reply("Greetings!")
 # [END chat]
 

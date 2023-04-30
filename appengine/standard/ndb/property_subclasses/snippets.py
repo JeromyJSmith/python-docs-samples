@@ -21,8 +21,7 @@ def create_entity():
     # Create an entity and write it to the Datastore.
     entity = my_models.MyModel(name='booh', xyz=[10**100, 6**666])
     assert entity.abc == 0
-    key = entity.put()
-    return key
+    return entity.put()
 
 
 def read_and_update_entity(key):
@@ -34,11 +33,7 @@ def read_and_update_entity(key):
 
 
 def query_entity():
-    # Query for a MyModel entity whose xyz contains 6**666.
-    # (NOTE: using ordering operations don't work, but == does.)
-    results = my_models.MyModel.query(
-        my_models.MyModel.xyz == 6**666).fetch(10)
-    return results
+    return my_models.MyModel.query(my_models.MyModel.xyz == 6**666).fetch(10)
 
 
 def create_and_query_columbus():
@@ -51,7 +46,6 @@ def create_and_query_columbus():
         event_names=['Discovery of America'])
     columbus.put()
 
-    # Query for historic people born no later than 1451.
-    results = my_models.HistoricPerson.query(
-        my_models.HistoricPerson.birth.last <= date(1451, 12, 31)).fetch()
-    return results
+    return my_models.HistoricPerson.query(
+        my_models.HistoricPerson.birth.last <= date(1451, 12, 31)
+    ).fetch()

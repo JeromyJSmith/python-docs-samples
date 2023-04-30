@@ -30,13 +30,12 @@ PRIVATE_KEY_FILE = Path(__file__).parent / "test_fixtures" / "test_key.pem"
 
 @fixture(scope="module")
 def api_service():
-    service = discovery.build("compute", "v1")
-    yield service
+    yield discovery.build("compute", "v1")
 
 
 @fixture
 def autodelete_certificate_name(api_service):
-    cert_name = "test-certificate-" + uuid.uuid4().hex[:10]
+    cert_name = f"test-certificate-{uuid.uuid4().hex[:10]}"
 
     yield cert_name
 
@@ -47,7 +46,7 @@ def autodelete_certificate_name(api_service):
 
 @fixture
 def autodelete_regional_certificate_name(api_service):
-    cert_name = "test-certificate-" + uuid.uuid4().hex[:10]
+    cert_name = f"test-certificate-{uuid.uuid4().hex[:10]}"
 
     yield cert_name, "europe-west2"
 

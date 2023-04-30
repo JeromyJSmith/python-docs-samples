@@ -37,8 +37,7 @@ class UrlFetchRpcHandler(webapp2.RequestHandler):
                 self.response.write(text)
             else:
                 self.response.status_int = result.status_code
-                self.response.write('URL returned status code {}'.format(
-                    result.status_code))
+                self.response.write(f'URL returned status code {result.status_code}')
         except urlfetch.DownloadError:
             self.response.status_int = 500
             self.response.write('Error fetching URL')

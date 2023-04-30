@@ -49,7 +49,7 @@ class MessageReceiver:
     def pubsub_callback(self, message):
         # every time a pubsub message comes in, print it and count it
         self.msg_count += 1
-        print('Message {}: {}'.format(self.msg_count, message.data))
+        print(f'Message {self.msg_count}: {message.data}')
         message.ack()
         if (self.msg_count == self.expected_msg_nums):
             self.done_event.set()
@@ -58,13 +58,13 @@ class MessageReceiver:
 class TestContainerAnalysisSamples:
 
     def setup_method(self, test_method):
-        print('SETUP {}'.format(test_method.__name__))
-        self.note_id = 'note-{}'.format(uuid.uuid4())
-        self.image_url = '{}.{}'.format(uuid.uuid4(), test_method.__name__)
+        print(f'SETUP {test_method.__name__}')
+        self.note_id = f'note-{uuid.uuid4()}'
+        self.image_url = f'{uuid.uuid4()}.{test_method.__name__}'
         self.note_obj = samples.create_note(self.note_id, PROJECT_ID)
 
     def teardown_method(self, test_method):
-        print('TEAR DOWN {}'.format(test_method.__name__))
+        print(f'TEAR DOWN {test_method.__name__}')
         try:
             samples.delete_note(self.note_id, PROJECT_ID)
         except NotFound:
@@ -158,7 +158,7 @@ class TestContainerAnalysisSamples:
         except AlreadyExists:
             pass
 
-        subscription_id = 'container-analysis-test-{}'.format(uuid.uuid4())
+        subscription_id = f'container-analysis-test-{uuid.uuid4()}'
         subscription_name = client.subscription_path(PROJECT_ID,
                                                      subscription_id)
         samples.create_occurrence_subscription(subscription_id, PROJECT_ID)
@@ -171,7 +171,7 @@ class TestContainerAnalysisSamples:
             receiver = MessageReceiver(message_count, job_done)
             client.subscribe(subscription_name, receiver.pubsub_callback)
 
-            for i in range(message_count):
+            for _ in range(message_count):
                 occ = samples.create_occurrence(
                     self.image_url, self.note_id, PROJECT_ID, PROJECT_ID)
                 time.sleep(SLEEP_TIME)
@@ -181,7 +181,7 @@ class TestContainerAnalysisSamples:
             # to 180 seconds.
             # See also: python-docs-samples/issues/2894
             job_done.wait(timeout=180)
-            print('done. msg_count = {}'.format(receiver.msg_count))
+            print(f'done. msg_count = {receiver.msg_count}')
             assert message_count <= receiver.msg_count
         finally:
             # clean up
@@ -200,7 +200,7 @@ class TestContainerAnalysisSamples:
     @pytest.mark.flaky(max_runs=3, min_passes=1)
     def test_poll_discovery_occurrence(self):
         # create discovery occurrence
-        note_id = 'discovery-note-{}'.format(uuid.uuid4())
+        note_id = f'discovery-note-{uuid.uuid4()}'
         client = containeranalysis_v1.ContainerAnalysisClient()
         grafeas_client = client.get_grafeas_client()
         note = {
@@ -209,7 +209,7 @@ class TestContainerAnalysisSamples:
             }
         }
         grafeas_client.\
-            create_note(parent=f"projects/{PROJECT_ID}", note_id=note_id, note=note)
+                create_note(parent=f"projects/{PROJECT_ID}", note_id=note_id, note=note)
         occurrence = {
             'note_name': f"projects/{PROJECT_ID}/notes/{note_id}",
             'resource_uri': self.image_url,
@@ -219,7 +219,7 @@ class TestContainerAnalysisSamples:
             }
         }
         created = grafeas_client.\
-            create_occurrence(parent=f"projects/{PROJECT_ID}",
+                create_occurrence(parent=f"projects/{PROJECT_ID}",
                               occurrence=occurrence)
 
         disc = samples.poll_discovery_finished(self.image_url, 10, PROJECT_ID)
@@ -258,7 +258,7 @@ class TestContainerAnalysisSamples:
         assert len(occ_list) == 0
 
         # create new high severity vulnerability
-        note_id = 'discovery-note-{}'.format(uuid.uuid4())
+        note_id = f'discovery-note-{uuid.uuid4()}'
         client = containeranalysis_v1.ContainerAnalysisClient()
         grafeas_client = client.get_grafeas_client()
         note = {
@@ -279,7 +279,7 @@ class TestContainerAnalysisSamples:
             }
         }
         grafeas_client.\
-            create_note(parent=f"projects/{PROJECT_ID}", note_id=note_id, note=note)
+                create_note(parent=f"projects/{PROJECT_ID}", note_id=note_id, note=note)
         occurrence = {
             'note_name': f"projects/{PROJECT_ID}/notes/{note_id}",
             'resource_uri': self.image_url,
@@ -300,7 +300,7 @@ class TestContainerAnalysisSamples:
             }
         }
         created = grafeas_client.\
-            create_occurrence(parent=f"projects/{PROJECT_ID}",
+                create_occurrence(parent=f"projects/{PROJECT_ID}",
                               occurrence=occurrence)
         # query again
         tries = 0

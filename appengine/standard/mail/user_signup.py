@@ -34,9 +34,7 @@ class UserSignupHandler(webapp2.RequestHandler):
             self.get()  # Show the form again.
         else:
             confirmation_url = create_new_user_confirmation(user_address)
-            sender_address = (
-                'Example.com Support <example@{}.appspotmail.com>'.format(
-                    app_identity.get_application_id()))
+            sender_address = f'Example.com Support <example@{app_identity.get_application_id()}.appspotmail.com>'
             subject = 'Confirm your registration'
             body = """Thank you for creating an account!
 Please confirm your email address by clicking on the link below:
@@ -46,8 +44,7 @@ Please confirm your email address by clicking on the link below:
             mail.send_mail(sender_address, user_address, subject, body)
 # [END send-confirm-email]
             self.response.content_type = 'text/plain'
-            self.response.write('An email has been sent to {}.'.format(
-                user_address))
+            self.response.write(f'An email has been sent to {user_address}.')
 
     def get(self):
         self.response.content_type = 'text/html'
@@ -73,20 +70,18 @@ def create_new_user_confirmation(user_address):
     Returns: The url to click to confirm the email address."""
     id_chars = string.ascii_letters + string.digits
     rand = random.SystemRandom()
-    random_id = ''.join([rand.choice(id_chars) for i in range(42)])
+    random_id = ''.join([rand.choice(id_chars) for _ in range(42)])
     record = UserConfirmationRecord(user_address=user_address,
                                     id=random_id)
     record.put()
-    return 'https://{}/user/confirm?code={}'.format(
-        socket.getfqdn(socket.gethostname()), random_id)
+    return f'https://{socket.getfqdn(socket.gethostname())}/user/confirm?code={random_id}'
 
 
 class ConfirmUserSignupHandler(webapp2.RequestHandler):
     """Invoked when the user clicks on the confirmation link in the email."""
 
     def get(self):
-        code = self.request.get('code')
-        if code:
+        if code := self.request.get('code'):
             record = ndb.Key(UserConfirmationRecord, code).get()
             # 2-hour time limit on confirming.
             if record and (datetime.datetime.now(tz=datetime.timezone.utc) - record.timestamp <
@@ -94,8 +89,7 @@ class ConfirmUserSignupHandler(webapp2.RequestHandler):
                 record.confirmed = True
                 record.put()
                 self.response.content_type = 'text/plain'
-                self.response.write('Confirmed {}.'
-                                    .format(record.user_address))
+                self.response.write(f'Confirmed {record.user_address}.')
                 return
         self.response.status_int = 404
 

@@ -31,7 +31,7 @@ METADATA_HEADERS = {'Metadata-Flavor': 'Google'}
 
 
 def wait_for_maintenance(callback):
-    url = METADATA_URL + 'instance/maintenance-event'
+    url = f'{METADATA_URL}instance/maintenance-event'
     last_maintenance_event = None
     # [START hanging_get]
     last_etag = '0'
@@ -52,19 +52,15 @@ def wait_for_maintenance(callback):
         last_etag = r.headers['etag']
         # [END hanging_get]
 
-        if r.text == 'NONE':
-            maintenance_event = None
-        else:
-            maintenance_event = r.text
-
+        maintenance_event = None if r.text == 'NONE' else r.text
         if maintenance_event != last_maintenance_event:
             last_maintenance_event = maintenance_event
-            callback(maintenance_event)
+            callback(last_maintenance_event)
 
 
 def maintenance_callback(event):
     if event:
-        print('Undergoing host maintenance: {}'.format(event))
+        print(f'Undergoing host maintenance: {event}')
     else:
         print('Finished host maintenance')
 

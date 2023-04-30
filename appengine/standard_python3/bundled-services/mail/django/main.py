@@ -28,8 +28,9 @@ def home_page(request):
     and process the form and send the mail when the form is POSTed.
     """
 
-    if request.method == "GET":
-        html = """
+    if request.method != "GET":
+        return send_mail(request.POST.get("email"), request.POST.get("body"))
+    html = """
 <!DOCTYPE html5>
 <html>
 <head><title>App Engine Legacy Mail</title></head>
@@ -47,9 +48,7 @@ def home_page(request):
     </form>
 </body>
 """
-        return HttpResponse(html)
-    else:
-        return send_mail(request.POST.get("email"), request.POST.get("body"))
+    return HttpResponse(html)
 
 
 def send_mail(address, body):

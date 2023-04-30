@@ -41,9 +41,7 @@ def get_image_from_family(project: str, family: str) -> compute_v1.Image:
         An Image object.
     """
     image_client = compute_v1.ImagesClient()
-    # List of public operating system (OS) images: https://cloud.google.com/compute/docs/images/os-details
-    newest_image = image_client.get_from_family(project=project, family=family)
-    return newest_image
+    return image_client.get_from_family(project=project, family=family)
 
 
 def disk_from_image(
@@ -315,8 +313,7 @@ def create_with_additional_disk(
         disk_from_image(disk_type, 20, True, newest_debian.self_link),
         empty_disk(disk_type, 25),
     ]
-    instance = create_instance(project_id, zone, instance_name, disks)
-    return instance
+    return create_instance(project_id, zone, instance_name, disks)
 
 
 # [END compute_instances_create_from_image_plus_empty_disk]

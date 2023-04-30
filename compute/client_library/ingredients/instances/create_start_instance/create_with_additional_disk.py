@@ -41,6 +41,5 @@ def create_with_additional_disk(project_id: str, zone: str, instance_name: str) 
         disk_from_image(disk_type, 20, True, newest_debian.self_link),
         empty_disk(disk_type, 25),
     ]
-    instance = create_instance(project_id, zone, instance_name, disks)
-    return instance
+    return create_instance(project_id, zone, instance_name, disks)
 # </INGREDIENT>

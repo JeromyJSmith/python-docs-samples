@@ -33,22 +33,19 @@ class MainPage(webapp2.RequestHandler):
         auth_token, _ = app_identity.get_access_token(
             'https://www.googleapis.com/auth/cloud-platform')
         logging.info(
-            'Using token {} to represent identity {}'.format(
-                auth_token, app_identity.get_service_account_name()))
+            f'Using token {auth_token} to represent identity {app_identity.get_service_account_name()}'
+        )
 
         response = urlfetch.fetch(
-            'https://www.googleapis.com/storage/v1/b?project={}'.format(
-                app_identity.get_application_id()),
+            f'https://www.googleapis.com/storage/v1/b?project={app_identity.get_application_id()}',
             method=urlfetch.GET,
-            headers={
-                'Authorization': 'Bearer {}'.format(auth_token)
-            }
+            headers={'Authorization': f'Bearer {auth_token}'},
         )
 
         if response.status_code != 200:
             raise Exception(
-                'Call failed. Status code {}. Body {}'.format(
-                    response.status_code, response.content))
+                f'Call failed. Status code {response.status_code}. Body {response.content}'
+            )
 
         result = json.loads(response.content)
         self.response.headers['Content-Type'] = 'application/json'

@@ -34,10 +34,7 @@ _FIREBASE_SCOPES = [
 def _get_session():
     """Provides an authed requests session object."""
     creds, _ = google.auth.default(scopes=[_FIREBASE_SCOPES])
-    # Use application default credentials to make the Firebase calls
-    # https://firebase.google.com/docs/reference/rest/database/user-auth
-    authed_session = AuthorizedSession(creds)
-    return authed_session
+    return AuthorizedSession(creds)
 
 
 def firebase_put(path, value=None):

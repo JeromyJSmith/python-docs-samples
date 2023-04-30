@@ -47,8 +47,7 @@ def gcloud_cli(command):
         check=True,
     )
     try:
-        entries = json.loads(output.stdout)
-        return entries
+        return json.loads(output.stdout)
     except Exception:
         print("Failed to read log")
         print(f"gcloud stderr was {output.stderr}")
@@ -91,7 +90,7 @@ def test_upload_and_view(version):
 
     matches = re.search(r'action="(.*?)"', response.text)
     assert matches is not None
-    upload_url = matches.group(1)
+    upload_url = matches[1]
 
     with open("./main.py", "rb") as f:
         response = requests.post(upload_url, files={"file": f})

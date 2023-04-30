@@ -50,13 +50,10 @@ def get_app_id(request):
         info = id_token.verify_oauth2_token(token, requests.Request())
         service_account_email = info['email']
         incoming_app_id, domain = service_account_email.split('@')
-        if domain != 'appspot.gserviceaccount.com':  # Not App Engine svc acct
-            return None
-        else:
-            return incoming_app_id
+        return None if domain != 'appspot.gserviceaccount.com' else incoming_app_id
     except Exception as e:
         # report or log if desired, as here:
-        logging.warning('Request has bad OAuth2 id token: {}'.format(e))
+        logging.warning(f'Request has bad OAuth2 id token: {e}')
         return None
 
 

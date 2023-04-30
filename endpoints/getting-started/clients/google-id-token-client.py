@@ -34,11 +34,7 @@ def get_id_token(client_secrets_file, extra_args):
     # Run the OAuth 2.0 flow to obtain credentials from the user.
     flow.run_local_server()
 
-    # The credentials have both an access token and an ID token. Cloud
-    # Endpoints uses the ID Token.
-    id_token = flow.oauth2session.token['id_token']
-
-    return id_token
+    return flow.oauth2session.token['id_token']
 
 
 def make_request(host, api_key, id_token):
@@ -47,9 +43,7 @@ def make_request(host, api_key, id_token):
     params = {
         'key': api_key
     }
-    headers = {
-        'Authorization': 'Bearer {}'.format(id_token)
-    }
+    headers = {'Authorization': f'Bearer {id_token}'}
 
     response = requests.get(url, params=params, headers=headers)
 

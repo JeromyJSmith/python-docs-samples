@@ -25,8 +25,7 @@ app = flask.Flask(__name__)
 
 @app.route('/')
 def index():
-    user = users.get_current_user()
-    if user:
+    if user := users.get_current_user():
         logged_in = True
         nickname = user.nickname()
         logout_url = users.create_logout_url('/')

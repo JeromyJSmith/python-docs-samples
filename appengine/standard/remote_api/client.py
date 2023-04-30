@@ -32,8 +32,8 @@ from google.appengine.ext.remote_api import remote_api_stub
 
 def main(project_id):
     remote_api_stub.ConfigureRemoteApiForOAuth(
-        '{}.appspot.com'.format(project_id),
-        '/_ah/remote_api')
+        f'{project_id}.appspot.com', '/_ah/remote_api'
+    )
 
     # List the first 10 keys in the datastore.
     keys = ndb.Query().fetch(10, keys_only=True)

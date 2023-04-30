@@ -23,10 +23,10 @@ def items(testbed):
     account = shopping_cart.Account(id='123')
     account.put()
 
-    items = [shopping_cart.InventoryItem(name='Item {}'.format(i))
-             for i in range(6)]
-    special_items = [shopping_cart.InventoryItem(name='Special {}'.format(i))
-                     for i in range(6)]
+    items = [shopping_cart.InventoryItem(name=f'Item {i}') for i in range(6)]
+    special_items = [
+        shopping_cart.InventoryItem(name=f'Special {i}') for i in range(6)
+    ]
     for i in items + special_items:
         i.put()
 

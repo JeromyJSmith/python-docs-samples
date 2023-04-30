@@ -155,9 +155,9 @@ def is_in_table(value, out):
 
 
 def get_blob_from_path(path):
-    bucket_name = re.search("dataproc.+?/", path).group(0)[0:-1]
+    bucket_name = re.search("dataproc.+?/", path)[0][:-1]
     bucket = storage.Client().get_bucket(bucket_name)
-    output_location = re.search("google-cloud-dataproc.+", path).group(0)
+    output_location = re.search("google-cloud-dataproc.+", path)[0]
     return bucket.blob(output_location)
 
 

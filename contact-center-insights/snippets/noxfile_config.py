@@ -31,12 +31,13 @@ import nox
 BLACK_VERSION = "black==22.3.0"
 ISORT_VERSION = "isort==5.10.1"
 
-# Copy `noxfile_config.py` to your directory and modify it instead.
-
-# `TEST_CONFIG` dict is a configuration hook that allows users to
-# modify the test configurations. The values here should be in sync
-# with `noxfile_config.py`. Users will copy `noxfile_config.py` into
-# their directory and modify it.
+try:
+    # Ensure we can import noxfile_config in the project's directory.
+    sys.path.append(".")
+    from noxfile_config import TEST_CONFIG_OVERRIDE
+except ImportError as e:
+    print(f"No user noxfile_config found: detail: {e}")
+    TEST_CONFIG_OVERRIDE = {}
 
 TEST_CONFIG = {
     # You can opt out from the test for specific Python versions.
@@ -57,32 +58,15 @@ TEST_CONFIG = {
     # A dictionary you want to inject into your test. Don't put any
     # secrets here. These values will override predefined values.
     "envs": {},
-}
-
-
-try:
-    # Ensure we can import noxfile_config in the project's directory.
-    sys.path.append(".")
-    from noxfile_config import TEST_CONFIG_OVERRIDE
-except ImportError as e:
-    print("No user noxfile_config found: detail: {}".format(e))
-    TEST_CONFIG_OVERRIDE = {}
-
-# Update the TEST_CONFIG with the user supplied values.
-TEST_CONFIG.update(TEST_CONFIG_OVERRIDE)
+} | TEST_CONFIG_OVERRIDE
 
 
 def get_pytest_env_vars() -> Dict[str, str]:
     """Returns a dict for pytest invocation."""
-    ret = {}
-
-    # Override the GCLOUD_PROJECT and the alias.
-    env_key = TEST_CONFIG["gcloud_project_env"]
-    # This should error out if not set.
-    ret["GOOGLE_CLOUD_PROJECT"] = os.environ[env_key]
+    ret = {"GOOGLE_CLOUD_PROJECT": os.environ[TEST_CONFIG["gcloud_project_env"]]}
 
     # Apply user supplied envs.
-    ret.update(TEST_CONFIG["envs"])
+    ret |= TEST_CONFIG["envs"]
     return ret
 
 
@@ -206,9 +190,7 @@ def _session_tests(
             session.install("-r", "requirements.txt", "-c", "constraints.txt")
         else:
             session.install("-r", "requirements.txt")
-        with open("requirements.txt") as rfile:
-            packages = rfile.read()
-
+        packages = Path("requirements.txt").read_text()
     if os.path.exists("requirements-test.txt"):
         if os.path.exists("constraints-test.txt"):
             session.install("-r", "requirements-test.txt", "-c", "constraints-test.txt")
@@ -245,9 +227,7 @@ def py(session: nox.sessions.Session) -> None:
     if session.python in TESTED_VERSIONS:
         _session_tests(session)
     else:
-        session.skip(
-            "SKIPPED: {} tests are disabled for this sample.".format(session.python)
-        )
+        session.skip(f"SKIPPED: {session.python} tests are disabled for this sample.")
 
 
 #
@@ -259,7 +239,7 @@ def _get_repo_root() -> Optional[str]:
     """Returns the root folder of the project."""
     # Get root of this repository. Assume we don't have directories nested deeper than 10 items.
     p = Path(os.getcwd())
-    for i in range(10):
+    for _ in range(10):
         if p is None:
             break
         if Path(p / ".git").exists():
@@ -273,7 +253,7 @@ def _get_repo_root() -> Optional[str]:
     raise Exception("Unable to detect repository root.")
 
 
-GENERATED_READMES = sorted([x for x in Path(".").rglob("*.rst.in")])
+GENERATED_READMES = sorted(list(Path(".").rglob("*.rst.in")))
 
 
 @nox.session
@@ -288,5 +268,7 @@ def readmegen(session: nox.sessions.Session, path: str) -> None:
 
     in_file = os.path.join(dir_, "README.rst.in")
     session.run(
-        "python", _get_repo_root() + "/scripts/readme-gen/readme_gen.py", in_file
+        "python",
+        f"{_get_repo_root()}/scripts/readme-gen/readme_gen.py",
+        in_file,
     )

@@ -28,11 +28,8 @@ import webapp2
 
 class Thumbnailer(webapp2.RequestHandler):
     def get(self):
-        blob_key = self.request.get("blob_key")
-        if blob_key:
-            blob_info = blobstore.get(blob_key)
-
-            if blob_info:
+        if blob_key := self.request.get("blob_key"):
+            if blob_info := blobstore.get(blob_key):
                 img = images.Image(blob_key=blob_key)
                 img.resize(width=80, height=100)
                 img.im_feeling_lucky()
@@ -50,12 +47,8 @@ class Thumbnailer(webapp2.RequestHandler):
 
 class ServingUrlRedirect(webapp2.RequestHandler):
     def get(self):
-        blob_key = self.request.get("blob_key")
-
-        if blob_key:
-            blob_info = blobstore.get(blob_key)
-
-            if blob_info:
+        if blob_key := self.request.get("blob_key"):
+            if blob_info := blobstore.get(blob_key):
                 # [START get_serving_url]
                 url = images.get_serving_url(
                     blob_key, size=150, crop=True, secure_url=True)

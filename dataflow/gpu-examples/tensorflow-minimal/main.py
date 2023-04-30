@@ -23,8 +23,7 @@ import tensorflow as tf
 
 def check_gpus(_: None, gpus_optional: bool = False) -> None:
     """Validates that we are detecting GPUs, otherwise raise a RuntimeError."""
-    gpu_devices = tf.config.list_physical_devices("GPU")
-    if gpu_devices:
+    if gpu_devices := tf.config.list_physical_devices("GPU"):
         logging.info(f"Using GPU: {gpu_devices}")
     elif gpus_optional:
         logging.warning("No GPUs found, defaulting to CPU.")

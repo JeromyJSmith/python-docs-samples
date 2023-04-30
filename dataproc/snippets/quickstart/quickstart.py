@@ -36,7 +36,9 @@ from google.cloud import storage
 def quickstart(project_id, region, cluster_name, job_file_path):
     # Create the cluster client.
     cluster_client = dataproc.ClusterControllerClient(
-        client_options={"api_endpoint": "{}-dataproc.googleapis.com:443".format(region)}
+        client_options={
+            "api_endpoint": f"{region}-dataproc.googleapis.com:443"
+        }
     )
 
     # Create the cluster config.
@@ -55,11 +57,13 @@ def quickstart(project_id, region, cluster_name, job_file_path):
     )
     result = operation.result()
 
-    print("Cluster created successfully: {}".format(result.cluster_name))
+    print(f"Cluster created successfully: {result.cluster_name}")
 
     # Create the job client.
     job_client = dataproc.JobControllerClient(
-        client_options={"api_endpoint": "{}-dataproc.googleapis.com:443".format(region)}
+        client_options={
+            "api_endpoint": f"{region}-dataproc.googleapis.com:443"
+        }
     )
 
     # Create the job config.
@@ -79,8 +83,8 @@ def quickstart(project_id, region, cluster_name, job_file_path):
 
     output = (
         storage.Client()
-        .get_bucket(matches.group(1))
-        .blob(f"{matches.group(2)}.000000000")
+        .get_bucket(matches[1])
+        .blob(f"{matches[2]}.000000000")
         .download_as_string()
     )
 
@@ -96,7 +100,7 @@ def quickstart(project_id, region, cluster_name, job_file_path):
     )
     operation.result()
 
-    print("Cluster {} successfully deleted.".format(cluster_name))
+    print(f"Cluster {cluster_name} successfully deleted.")
 
 
 if __name__ == "__main__":

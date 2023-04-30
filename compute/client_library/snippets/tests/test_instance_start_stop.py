@@ -66,7 +66,7 @@ def _make_request(disk: compute_v1.AttachedDisk):
 
     # Collect information into the Instance object.
     instance = compute_v1.Instance()
-    instance.name = "i" + uuid.uuid4().hex[:10]
+    instance.name = f"i{uuid.uuid4().hex[:10]}"
     instance.disks = [disk]
     full_machine_type_name = f"zones/{INSTANCE_ZONE}/machineTypes/e2-micro"
     instance.machine_type = full_machine_type_name
@@ -141,7 +141,7 @@ def compute_encrypted_instance():
 
 @pytest.fixture
 def autodelete_disk_name():
-    name = "d" + uuid.uuid4().hex[:10]
+    name = f"d{uuid.uuid4().hex[:10]}"
     yield name
     delete_disk(PROJECT, INSTANCE_ZONE, name)
 

@@ -45,7 +45,7 @@ def index():
         user_ip = '.'.join(user_ip.split('.')[:2])
 
     with open('/tmp/seen.txt', 'a') as f:
-        f.write('{}\n'.format(user_ip))
+        f.write(f'{user_ip}\n')
 
     with open('/tmp/seen.txt', 'r') as f:
         seen = f.read()

@@ -47,8 +47,7 @@ def gcloud_cli(command):
         check=True,
     )
     try:
-        entries = json.loads(output.stdout)
-        return entries
+        return json.loads(output.stdout)
     except Exception:
         print("Failed to read log")
         print(f"gcloud stderr was {output.stderr}")
@@ -102,7 +101,7 @@ def test_send_receive(version):
     assert response.status_code == 201
 
     # External mail delivery and receipt can take varying lengths of time
-    for check in range(3):
+    for _ in range(3):
         # Give the mail some time to be delivered and logs to post
         time.sleep(60)
 

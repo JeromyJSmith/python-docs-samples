@@ -38,6 +38,7 @@ def create_preemptible_instance(project_id: str, zone: str, instance_name: str) 
     )
     disk_type = f"zones/{zone}/diskTypes/pd-standard"
     disks = [disk_from_image(disk_type, 10, True, newest_debian.self_link)]
-    instance = create_instance(project_id, zone, instance_name, disks, preemptible=True)
-    return instance
+    return create_instance(
+        project_id, zone, instance_name, disks, preemptible=True
+    )
 # </INGREDIENT>

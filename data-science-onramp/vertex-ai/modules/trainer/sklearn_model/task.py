@@ -89,8 +89,8 @@ def fit_model(
     # Save model to GCS
     print("Saving model")
     matches = re.match("gs://(.*?)/(.*)", model_dir)
-    bucket = matches.group(1)
-    blob = matches.group(2)
+    bucket = matches[1]
+    blob = matches[2]
 
     model_dump = "model.joblib"
     joblib.dump(polynomial_model, model_dump)

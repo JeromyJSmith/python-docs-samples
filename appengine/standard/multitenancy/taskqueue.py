@@ -45,9 +45,7 @@ def update_counter(name):
 
 def get_count(name):
     counter = Counter.get_by_id(name)
-    if not counter:
-        return 0
-    return counter.count
+    return counter.count if counter else 0
 
 
 class DeferredCounterHandler(webapp2.RequestHandler):
@@ -79,9 +77,8 @@ class TaskQueueCounterHandler(webapp2.RequestHandler):
             namespace_manager.set_namespace(previous_namespace)
 
         self.response.write(
-            'Counters will be updated asyncronously.'
-            'Current values: Global: {}, Namespace {}: {}'.format(
-                current_global_count, namespace, current_namespace_count))
+            f'Counters will be updated asyncronously.Current values: Global: {current_global_count}, Namespace {namespace}: {current_namespace_count}'
+        )
 
 
 app = webapp2.WSGIApplication([

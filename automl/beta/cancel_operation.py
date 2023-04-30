@@ -35,13 +35,11 @@ def sample_cancel_operation(project, operation_id):
 
     # project = '[Google Cloud Project ID]'
     # operation_id = '[Operation ID]'
-    name = "projects/{}/locations/us-central1/operations/{}".format(
-        project, operation_id
-    )
+    name = f"projects/{project}/locations/us-central1/operations/{operation_id}"
 
     operations_client.cancel_operation(name)
 
-    print(u"Cancelled operation: {}".format(name))
+    print(f"Cancelled operation: {name}")
 
 
 # [END automl_cancel_operation]

@@ -61,9 +61,7 @@ def lookup_public_kg_sample(
         print(f"- Description: {result.get('description')}")
         print(f"- Types: {result.get('@type')}\n")
 
-        detailed_description = result.get("detailedDescription")
-
-        if detailed_description:
+        if detailed_description := result.get("detailedDescription"):
             print("- Detailed Description:")
             print(f"\t- Article Body: {detailed_description.get('articleBody')}")
             print(f"\t- URL: {detailed_description.get('url')}")

@@ -25,7 +25,7 @@ def write_ssh_key_files(security_keys, directory):
     """Store the SSH key files."""
     key_files = []
     for index, key in enumerate(security_keys):
-        key_file = os.path.join(directory, "google_sk_%s" % index)
+        key_file = os.path.join(directory, f"google_sk_{index}")
         with open(key_file, "w") as f:
             f.write(key.get("privateKey"))
             os.chmod(key_file, 0o600)
@@ -52,7 +52,7 @@ def main(user_key, ip_address, dryrun, directory=None):
     # Retrieve security keys and OS Login username from a user's Google account.
     profile = (
         oslogin.users()
-        .getLoginProfile(name="users/{}".format(user_key), view="SECURITY_KEY")
+        .getLoginProfile(name=f"users/{user_key}", view="SECURITY_KEY")
         .execute()
     )
 

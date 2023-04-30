@@ -101,7 +101,7 @@ def create_task(project, location, queue):
 
     response = client.create_task(parent=parent, task=task)
     eta = response.schedule_time.strftime("%m/%d/%Y, %H:%M:%S")
-    print('Task {} enqueued, ETA {}.'.format(response.name, eta))
+    print(f'Task {response.name} enqueued, ETA {eta}.')
     # [END cloud_tasks_taskqueues_new_task]
     return response
 
@@ -185,9 +185,7 @@ def delete_task(project, location, queue):
     # queue = 'queue1'
 
     task_path = client.task_path(project, location, queue, 'foo')
-    response = client.delete_task(name=task_path)
-    # [END cloud_tasks_taskqueues_deleting_tasks]
-    return response
+    return client.delete_task(name=task_path)
 
 
 def purge_queue(project, location, queue):
@@ -200,9 +198,7 @@ def purge_queue(project, location, queue):
     # queue = 'queue1'
 
     queue_path = client.queue_path(project, location, queue)
-    response = client.purge_queue(name=queue_path)
-    # [END cloud_tasks_taskqueues_purging_tasks]
-    return response
+    return client.purge_queue(name=queue_path)
 
 
 def pause_queue(project, location, queue):
@@ -215,9 +211,7 @@ def pause_queue(project, location, queue):
     # queue = 'queue1'
 
     queue_path = client.queue_path(project, location, queue)
-    response = client.pause_queue(name=queue_path)
-    # [END cloud_tasks_taskqueues_pause_queue]
-    return response
+    return client.pause_queue(name=queue_path)
 
 
 def delete_queue(project, location, queue):
@@ -230,9 +224,7 @@ def delete_queue(project, location, queue):
     # queue = 'queue1'
 
     queue_path = client.queue_path(project, location, queue)
-    response = client.delete_queue(name=queue_path)
-    # [END cloud_tasks_taskqueues_deleting_queues]
-    return response
+    return client.delete_queue(name=queue_path)
 
 
 def retry_task(project, location, fooqueue, barqueue, bazqueue):

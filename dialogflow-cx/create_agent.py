@@ -22,7 +22,7 @@ from google.cloud.dialogflowcx_v3.types.agent import Agent
 
 def create_agent(project_id, display_name):
 
-    parent = "projects/" + project_id + "/locations/global"
+    parent = f"projects/{project_id}/locations/global"
 
     agents_client = AgentsClient()
 
@@ -32,9 +32,7 @@ def create_agent(project_id, display_name):
         time_zone="America/Los_Angeles",
     )
 
-    response = agents_client.create_agent(request={"agent": agent, "parent": parent})
-
-    return response
+    return agents_client.create_agent(request={"agent": agent, "parent": parent})
 
 
 ## [END dialogflow_cx_create_agent_sample]

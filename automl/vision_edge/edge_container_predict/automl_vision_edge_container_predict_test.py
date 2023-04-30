@@ -28,6 +28,7 @@ Examples:
 sudo python -m pytest automl_vision_edge_container_predict_test.py
 """
 
+
 import os
 import subprocess
 import tempfile
@@ -40,11 +41,13 @@ import automl_vision_edge_container_predict as predict  # noqa
 
 IMAGE_FILE_PATH = os.path.join(os.path.dirname(__file__), 'test.jpg')
 # The cpu docker gcs path is from 'Edge container tutorial'.
-CPU_DOCKER_GCS_PATH = '{}'.format(
-  'gcr.io/cloud-devrel-public-resources/gcloud-container-1.14.0:latest')
+CPU_DOCKER_GCS_PATH = (
+    'gcr.io/cloud-devrel-public-resources/gcloud-container-1.14.0:latest'
+)
 # The path of a sample saved model.
-SAMPLE_SAVED_MODEL = '{}'.format(
-    'gs://cloud-samples-data/vision/edge_container_predict/saved_model.pb')
+SAMPLE_SAVED_MODEL = (
+    'gs://cloud-samples-data/vision/edge_container_predict/saved_model.pb'
+)
 # Container Name.
 NAME = 'AutomlVisionEdgeContainerPredictTest'
 # Port Number.
@@ -65,17 +68,28 @@ def edge_container_predict_server_port():
     else:
         # Use project directory with Trampoline V1.
         model_path = tempfile.TemporaryDirectory(dir=os.path.dirname(__file__))
-    print("Using model_path: {}".format(model_path))
+    print(f"Using model_path: {model_path}")
     # Get the sample saved model.
     subprocess.check_output(
         ['gsutil', '-m', 'cp', SAMPLE_SAVED_MODEL, model_path.name])
 
     # Start the CPU docker.
-    subprocess.Popen(['docker', 'run', '--rm', '--name', NAME, '-v',
-                      model_path.name + ':/tmp/mounted_model/0001', '-p',
-                      str(PORT_NUMBER) + ':8501', '-t',
-                      CPU_DOCKER_GCS_PATH],
-                     env={'DOCKER_API_VERSION': '1.38'})
+    subprocess.Popen(
+        [
+            'docker',
+            'run',
+            '--rm',
+            '--name',
+            NAME,
+            '-v',
+            f'{model_path.name}:/tmp/mounted_model/0001',
+            '-p',
+            f'{str(PORT_NUMBER)}:8501',
+            '-t',
+            CPU_DOCKER_GCS_PATH,
+        ],
+        env={'DOCKER_API_VERSION': '1.38'},
+    )
     # Sleep a few seconds to wait for the container running.
     time.sleep(10)
 

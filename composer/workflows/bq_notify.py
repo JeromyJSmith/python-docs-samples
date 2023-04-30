@@ -28,6 +28,7 @@ https://airflow.apache.org/docs/apache-airflow/stable/concepts/variables.html
 * email - The email used to receive DAG updates.
 """
 
+
 import datetime
 
 # [START composer_notify_failure]
@@ -84,7 +85,8 @@ MOST_POPULAR_QUERY = f"""
         """
 
 yesterday = datetime.datetime.combine(
-    datetime.datetime.today() - datetime.timedelta(1), datetime.datetime.min.time()
+    datetime.datetime.now() - datetime.timedelta(1),
+    datetime.datetime.min.time(),
 )
 
 # [START composer_notify_failure]
@@ -203,7 +205,7 @@ with models.DAG(
     # Delete the bq table
     delete_bq_dataset = bash.BashOperator(
         task_id="delete_bq_dataset",
-        bash_command="bq rm -r -f %s" % bq_dataset_name,
+        bash_command=f"bq rm -r -f {bq_dataset_name}",
         trigger_rule=trigger_rule.TriggerRule.ALL_DONE,
     )
 

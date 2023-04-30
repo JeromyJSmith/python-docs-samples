@@ -30,7 +30,7 @@ METADATA_HEADERS = {'Metadata-Flavor': 'Google'}
 
 # [START compute_wait_for_legacy_usage]
 def wait_for_legacy_usage(callback):
-    url = '{}/instance/legacy-endpoint-access'.format(METADATA_URL)
+    url = f'{METADATA_URL}/instance/legacy-endpoint-access'
     last_etag = '0'
     counts = None
     while True:
@@ -67,8 +67,8 @@ def wait_for_legacy_usage(callback):
 
 def legacy_callback(diff):
     print(
-        'Since last message, {} new requests to 0.1 endpoints and {} new '
-        'requests to v1beta1 endpoints.'.format(diff['0.1'], diff['v1beta1']))
+        f"Since last message, {diff['0.1']} new requests to 0.1 endpoints and {diff['v1beta1']} new requests to v1beta1 endpoints."
+    )
 
 
 def main():

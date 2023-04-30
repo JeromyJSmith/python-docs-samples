@@ -62,10 +62,10 @@ def execute(cmd, cwd=None, capture_output=False, env=None, raise_errors=True):
 # [START create_key]
 def create_ssh_key(oslogin, account, private_key_file=None, expire_time=300):
     """Generate an SSH key pair and apply it to the specified account."""
-    private_key_file = private_key_file or '/tmp/key-' + str(uuid.uuid4())
+    private_key_file = private_key_file or f'/tmp/key-{str(uuid.uuid4())}'
     execute(['ssh-keygen', '-t', 'rsa', '-N', '', '-f', private_key_file])
 
-    with open(private_key_file + '.pub', 'r') as original:
+    with open(f'{private_key_file}.pub', 'r') as original:
         public_key = original.read().strip()
 
     # Expiration time is in microseconds.
@@ -121,7 +121,7 @@ def main(cmd, project, instance=None, zone=None,
     account = account or requests.get(
         SERVICE_ACCOUNT_METADATA_URL, headers=HEADERS).text
     if not account.startswith('users/'):
-        account = 'users/' + account
+        account = f'users/{account}'
 
     # Create a new SSH key pair and associate it with the service account.
     private_key_file = create_ssh_key(oslogin, account)
@@ -156,7 +156,7 @@ def main(cmd, project, instance=None, zone=None,
     # Shred the private key and delete the pair.
     execute(['shred', private_key_file])
     execute(['rm', private_key_file])
-    execute(['rm', private_key_file + '.pub'])
+    execute(['rm', f'{private_key_file}.pub'])
 
 
 if __name__ == '__main__':

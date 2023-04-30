@@ -61,7 +61,7 @@ def create_bucket(bucket_name):
 
 @pytest.fixture(scope="module")
 def staging_bucket_name():
-    bucket_name = "py-dataproc-qs-bucket-{}".format(str(uuid.uuid4()))
+    bucket_name = f"py-dataproc-qs-bucket-{str(uuid.uuid4())}"
     bucket = create_bucket(bucket_name)
     blob = upload_blob(bucket, SORT_CODE)
     try:
@@ -76,7 +76,9 @@ def verify_cluster_teardown(cluster_name):
     # The quickstart sample deletes the cluster, but if the test fails
     # before cluster deletion occurs, it can be manually deleted here.
     cluster_client = dataproc.ClusterControllerClient(
-        client_options={"api_endpoint": "{}-dataproc.googleapis.com:443".format(REGION)}
+        client_options={
+            "api_endpoint": f"{REGION}-dataproc.googleapis.com:443"
+        }
     )
 
     clusters = cluster_client.list_clusters(
@@ -95,13 +97,13 @@ def verify_cluster_teardown(cluster_name):
 
 @backoff.on_exception(backoff.expo, InvalidArgument, max_tries=3)
 def test_quickstart(capsys, staging_bucket_name):
-    cluster_name = "py-qs-test-{}".format(str(uuid.uuid4()))
+    cluster_name = f"py-qs-test-{str(uuid.uuid4())}"
     try:
         quickstart.quickstart(
             PROJECT_ID,
             REGION,
             cluster_name,
-            "gs://{}/{}".format(staging_bucket_name, JOB_FILE_NAME)
+            f"gs://{staging_bucket_name}/{JOB_FILE_NAME}",
         )
         out, _ = capsys.readouterr()
 

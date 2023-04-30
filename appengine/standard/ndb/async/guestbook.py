@@ -56,8 +56,11 @@ class MainPage(webapp2.RequestHandler):
         recent_entries = qry.fetch(10)  # I/O action 2
 
         # ...render HTML based on this data...
-        self.response.out.write('<html><body>{}</body></html>'.format(''.join(
-            '<p>{}</p>'.format(entry.content) for entry in recent_entries)))
+        self.response.out.write(
+            '<html><body>{}</body></html>'.format(
+                ''.join(f'<p>{entry.content}</p>' for entry in recent_entries)
+            )
+        )
 
         return acct, qry
 
@@ -70,8 +73,11 @@ class MainPage(webapp2.RequestHandler):
         recent_entries = recent_entries_future.get_result()  # Complete #2
 
         # ...render HTML based on this data...
-        self.response.out.write('<html><body>{}</body></html>'.format(''.join(
-            '<p>{}</p>'.format(entry.content) for entry in recent_entries)))
+        self.response.out.write(
+            '<html><body>{}</body></html>'.format(
+                ''.join(f'<p>{entry.content}</p>' for entry in recent_entries)
+            )
+        )
 
         return acct, recent_entries
 
@@ -79,9 +85,8 @@ class MainPage(webapp2.RequestHandler):
         qry = Message.query().order(-Message.when)
         for msg in qry.fetch(20):
             acct = msg.author.get()
-            self.response.out.write(
-                '<p>On {}, {} wrote:'.format(msg.when, acct.nick()))
-            self.response.out.write('<p>{}'.format(msg.text))
+            self.response.out.write(f'<p>On {msg.when}, {acct.nick()} wrote:')
+            self.response.out.write(f'<p>{msg.text}')
 
     def get_messages_async(self):
         @ndb.tasklet

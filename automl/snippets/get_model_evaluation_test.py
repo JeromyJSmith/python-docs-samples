@@ -31,10 +31,7 @@ def model_evaluation_id():
     for e in client.list_model_evaluations(parent=model_full_id, filter=""):
         evaluation = e
         break
-    model_evaluation_id = evaluation.name.split(
-        "{}/modelEvaluations/".format(MODEL_ID)
-    )[1].split("\n")[0]
-    yield model_evaluation_id
+    yield evaluation.name.split(f"{MODEL_ID}/modelEvaluations/")[1].split("\n")[0]
 
 
 def test_get_model_evaluation(capsys, model_evaluation_id):

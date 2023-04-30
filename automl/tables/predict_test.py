@@ -30,11 +30,7 @@ STATIC_MODEL = model_test.STATIC_MODEL
 MAX_TIMEOUT = 200
 
 
-@backoff.on_exception(
-    wait_gen=lambda: (wait_time for wait_time in [50, 150, MAX_TIMEOUT]),
-    exception=Exception,
-    max_tries=3,
-)
+@backoff.on_exception(wait_gen=lambda: iter([50, 150, MAX_TIMEOUT]), exception=Exception, max_tries=3)
 def test_predict(capsys):
     inputs = {
         "Age": 31,

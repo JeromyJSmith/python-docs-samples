@@ -43,6 +43,5 @@ def create_with_snapshotted_data_disk(
         disk_from_image(disk_type, 10, True, newest_debian.self_link),
         disk_from_snapshot(disk_type, 11, False, snapshot_link),
     ]
-    instance = create_instance(project_id, zone, instance_name, disks)
-    return instance
+    return create_instance(project_id, zone, instance_name, disks)
 # </INGREDIENT>

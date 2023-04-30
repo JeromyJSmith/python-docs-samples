@@ -32,16 +32,14 @@ def create_fileset_entry(client, entry_group_name, entry_id):
     entry.type_ = datacatalog_v1beta1.EntryType.FILESET
 
     # Create the Schema, for example when you have a csv file.
-    columns = []
-    columns.append(
+    columns = [
         datacatalog_v1beta1.types.ColumnSchema(
             column="first_name",
             description="First name",
             mode="REQUIRED",
             type_="STRING",
         )
-    )
-
+    ]
     columns.append(
         datacatalog_v1beta1.types.ColumnSchema(
             column="last_name", description="Last name", mode="REQUIRED", type_="STRING"
@@ -49,13 +47,11 @@ def create_fileset_entry(client, entry_group_name, entry_id):
     )
 
     # Create sub columns for the addresses parent column
-    subcolumns = []
-    subcolumns.append(
+    subcolumns = [
         datacatalog_v1beta1.types.ColumnSchema(
             column="city", description="City", mode="NULLABLE", type_="STRING"
         )
-    )
-
+    ]
     subcolumns.append(
         datacatalog_v1beta1.types.ColumnSchema(
             column="state", description="State", mode="NULLABLE", type_="STRING"
@@ -80,5 +76,5 @@ def create_fileset_entry(client, entry_group_name, entry_id):
     entry = client.create_entry(
         request={"parent": entry_group_name, "entry_id": entry_id, "entry": entry}
     )
-    print("Created entry {}".format(entry.name))
+    print(f"Created entry {entry.name}")
     # [END data_catalog_create_fileset_v1beta1]

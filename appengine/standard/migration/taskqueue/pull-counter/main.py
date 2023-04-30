@@ -18,6 +18,7 @@
    runtimes.
 """
 
+
 import os
 import time
 
@@ -34,8 +35,8 @@ subscriber = pubsub.SubscriberClient()
 topic_name = os.environ.get('TOPIC', 'queue')
 sub_name = os.environ.get('SUBSCRIPTION', 'tasklist')
 project = os.environ['GOOGLE_CLOUD_PROJECT']
-topic = 'projects/{}/topics/{}'.format(project, topic_name)
-subscription = 'projects/{}/subscriptions/{}'.format(project, sub_name)
+topic = f'projects/{project}/topics/{topic_name}'
+subscription = f'projects/{project}/subscriptions/{sub_name}'
 
 entity_kind = os.environ.get('ENTITY_KIND', 'Task')
 

@@ -50,11 +50,7 @@ def get_token_from_broker(bucket_name, object_prefix):
     available_permissions = ["inRole:roles/storage.objectViewer"]
     # Only objects starting with the specified prefix string in the object name
     # will be allowed read access.
-    availability_expression = (
-        "resource.name.startsWith('projects/_/buckets/{}/objects/{}')".format(
-            bucket_name, object_prefix
-        )
-    )
+    availability_expression = f"resource.name.startsWith('projects/_/buckets/{bucket_name}/objects/{object_prefix}')"
     availability_condition = downscoped.AvailabilityCondition(availability_expression)
     # Define the single access boundary rule using the above properties.
     rule = downscoped.AccessBoundaryRule(
@@ -119,7 +115,7 @@ def token_consumer(bucket_name, object_name):
         # here. This field is not required if access to all bucket resources are
         # allowed. If access to limited resources in the bucket is needed, this
         # mechanism can be used.
-        return get_token_from_broker(bucket_name, object_prefix=object_name[0:3])
+        return get_token_from_broker(bucket_name, object_prefix=object_name[:3])
 
     creds = credentials.Credentials(
         None,

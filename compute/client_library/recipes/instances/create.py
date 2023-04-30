@@ -38,7 +38,7 @@ if __name__ == "__main__":
             "or set GOOGLE_APPLICATION_CREDENTIALS to use this script."
         )
     else:
-        instance_name = "quickstart-" + uuid.uuid4().hex[:10]
+        instance_name = f"quickstart-{uuid.uuid4().hex[:10]}"
         instance_zone = "europe-central2-b"
 
         newest_debian = get_image_from_family(

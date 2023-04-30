@@ -73,10 +73,8 @@ def upload_pyspark_file(project, bucket_name, filename, spark_file):
 
 def run_workflow(dataproc, project, region, zone, bucket_name, filename, cluster_name):
 
-    parent = "projects/{}/regions/{}".format(project, region)
-    zone_uri = "https://www.googleapis.com/compute/v1/projects/{}/zones/{}".format(
-        project, zone
-    )
+    parent = f"projects/{project}/regions/{region}"
+    zone_uri = f"https://www.googleapis.com/compute/v1/projects/{project}/zones/{zone}"
 
     workflow_data = {
         "placement": {
@@ -98,7 +96,7 @@ def run_workflow(dataproc, project, region, zone, bucket_name, filename, cluster
         "jobs": [
             {
                 "pyspark_job": {
-                    "main_python_file_uri": "gs://{}/{}".format(bucket_name, filename)
+                    "main_python_file_uri": f"gs://{bucket_name}/{filename}"
                 },
                 "step_id": "pyspark-job",
             }
@@ -154,7 +152,7 @@ def main(
         # Use a regional gRPC endpoint. See:
         # https://cloud.google.com/dataproc/docs/concepts/regional-endpoints
         client_transport = workflow_template_service_grpc_transport.WorkflowTemplateServiceGrpcTransport(
-            address="{}-dataproc.googleapis.com:443".format(region)
+            address=f"{region}-dataproc.googleapis.com:443"
         )
         dataproc_workflow_client = dataproc_v1.WorkflowTemplateServiceClient(
             client_transport

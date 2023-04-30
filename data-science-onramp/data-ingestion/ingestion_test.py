@@ -135,15 +135,15 @@ def setup_and_teardown_bq_dataset():
 
 
 def get_blob_from_path(path):
-    bucket_name = re.search("dataproc.+?/", path).group(0)[0:-1]
+    bucket_name = re.search("dataproc.+?/", path)[0][:-1]
     bucket = storage.Client().get_bucket(bucket_name)
-    output_location = re.search("google-cloud-dataproc.+", path).group(0)
+    output_location = re.search("google-cloud-dataproc.+", path)[0]
     return bucket.blob(output_location)
 
 
 def get_dataproc_job_output(result):
     """Get the dataproc job logs in plain text"""
-    output_location = result.driver_output_resource_uri + ".000000000"
+    output_location = f"{result.driver_output_resource_uri}.000000000"
     blob = get_blob_from_path(output_location)
     return blob.download_as_string().decode("utf-8")
 
@@ -228,16 +228,9 @@ def test_setup():
 
         result = query_job.result()
 
-        rows = []
-        for row in result:
-            rows.append(row[column_name])
-
+        rows = [row[column_name] for row in result]
         for regex in regexes:
-            found = False
-            for row in rows:
-                if row and re.match(f"\\A{regex}\\Z", row):
-                    found = True
-                    break
+            found = any(row and re.match(f"\\A{regex}\\Z", row) for row in rows)
             assert (
                 found
             ), f'No matches to regular expression "{regex}" found in column {column_name}'

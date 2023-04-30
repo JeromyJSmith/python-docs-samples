@@ -21,47 +21,47 @@ import main
 
 KEY_PREFIX = str(uuid.uuid4())  # Avoid interfering with other tests
 TEST_VALUES = {
-    KEY_PREFIX + "weather_USA_98105": "raining",
-    KEY_PREFIX + "weather_USA_98115": "cloudy",
-    KEY_PREFIX + "weather_USA_94105": "foggy",
-    KEY_PREFIX + "weather_USA_94043": "sunny",
+    f"{KEY_PREFIX}weather_USA_98105": "raining",
+    f"{KEY_PREFIX}weather_USA_98115": "cloudy",
+    f"{KEY_PREFIX}weather_USA_94105": "foggy",
+    f"{KEY_PREFIX}weather_USA_94043": "sunny",
 }
 
 
 @patch('main.query_for_data', return_value='data')
 def test_get_data_not_present(query_fn, testbed):
     try:
-        main.client.set(KEY_PREFIX + 'counter', '0', 9000)
+        main.client.set(f'{KEY_PREFIX}counter', '0', 9000)
     except redis.RedisError:
         pytest.skip('Redis is unavailable')
 
-    data = main.get_data(KEY_PREFIX + 'key')
+    data = main.get_data(f'{KEY_PREFIX}key')
     query_fn.assert_called_once_with()
     assert data == 'data'
-    assert 'data' == main.client.get(KEY_PREFIX + 'key')
-    main.client.delete(KEY_PREFIX + 'key')
+    assert 'data' == main.client.get(f'{KEY_PREFIX}key')
+    main.client.delete(f'{KEY_PREFIX}key')
 
 
 @patch('main.query_for_data', return_value='data')
 def test_get_data_present(query_fn, testbed):
     try:
-        main.client.set(KEY_PREFIX + 'key', 'data', 9000)
+        main.client.set(f'{KEY_PREFIX}key', 'data', 9000)
     except Exception:
         pytest.skip('Redis is unavailable')
 
     data = main.get_data()
     query_fn.assert_not_called()
     assert data == 'data'
-    main.client.delete(KEY_PREFIX + 'key')
+    main.client.delete(f'{KEY_PREFIX}key')
 
 
 def test_add_values(testbed):
     try:
-        main.client.set(KEY_PREFIX + 'counter', '0', 9000)
+        main.client.set(f'{KEY_PREFIX}counter', '0', 9000)
     except Exception:
         pytest.skip('Redis is unavailable')
 
     main.add_values(TEST_VALUES)
     for key, value in TEST_VALUES.iteritems():
         assert main.client.get(key) == value
-    assert main.client.get(KEY_PREFIX + 'counter') == 3
+    assert main.client.get(f'{KEY_PREFIX}counter') == 3

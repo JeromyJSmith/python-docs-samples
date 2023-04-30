@@ -35,7 +35,7 @@ def test_img(app):
         photo.full_size_image = b'123'
         photo.put()
 
-        response = app.get('/img?id=%s' % photo.key.id())
+        response = app.get(f'/img?id={photo.key.id()}')
 
         assert response.status_int == 200
 

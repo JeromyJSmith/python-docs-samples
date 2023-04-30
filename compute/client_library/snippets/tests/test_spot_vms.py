@@ -26,7 +26,7 @@ INSTANCE_ZONE = "europe-west2-c"
 
 @pytest.fixture
 def autodelete_instance_name():
-    instance_name = "i" + uuid.uuid4().hex[:10]
+    instance_name = f"i{uuid.uuid4().hex[:10]}"
 
     yield instance_name
 

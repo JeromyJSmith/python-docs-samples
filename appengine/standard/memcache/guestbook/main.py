@@ -52,9 +52,8 @@ class MainPage(webapp2.RequestHandler):
         greetings = self.get_greetings(guestbook_name)
         stats = memcache.get_stats()
 
-        self.response.write('<b>Cache Hits:{}</b><br>'.format(stats['hits']))
-        self.response.write('<b>Cache Misses:{}</b><br><br>'.format(
-                            stats['misses']))
+        self.response.write(f"<b>Cache Hits:{stats['hits']}</b><br>")
+        self.response.write(f"<b>Cache Misses:{stats['misses']}</b><br><br>")
         self.response.write(greetings)
 
         self.response.write("""
@@ -82,12 +81,11 @@ class MainPage(webapp2.RequestHandler):
         Returns:
           A string of HTML containing greetings.
         """
-        greetings = memcache.get('{}:greetings'.format(guestbook_name))
+        greetings = memcache.get(f'{guestbook_name}:greetings')
         if greetings is None:
             greetings = self.render_greetings(guestbook_name)
             try:
-                added = memcache.add(
-                    '{}:greetings'.format(guestbook_name), greetings, 10)
+                added = memcache.add(f'{guestbook_name}:greetings', greetings, 10)
                 if not added:
                     logging.error('Memcache set failed.')
             except ValueError:
@@ -116,11 +114,10 @@ class MainPage(webapp2.RequestHandler):
         output = cStringIO.StringIO()
         for greeting in greetings:
             if greeting.author:
-                output.write('<b>{}</b> wrote:'.format(greeting.author))
+                output.write(f'<b>{greeting.author}</b> wrote:')
             else:
                 output.write('An anonymous person wrote:')
-            output.write('<blockquote>{}</blockquote>'.format(
-                cgi.escape(greeting.content)))
+            output.write(f'<blockquote>{cgi.escape(greeting.content)}</blockquote>')
         return output.getvalue()
     # [END query_datastore]
 
@@ -139,7 +136,7 @@ class Guestbook(webapp2.RequestHandler):
 
         greeting.content = self.request.get('content')
         greeting.put()
-        memcache.delete('{}:greetings'.format(guestbook_name))
+        memcache.delete(f'{guestbook_name}:greetings')
         self.redirect('/?' +
                       urllib.urlencode({'guestbook_name': guestbook_name}))
 

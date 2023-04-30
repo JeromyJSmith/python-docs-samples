@@ -22,8 +22,8 @@ import pytest
 import enable_pubsub_notifications
 
 UUID = uuid.uuid4().hex[:8]
-CONVERSATION_TOPIC_ID = "create-conversation-" + UUID
-ANALYSIS_TOPIC_ID = "create-analysis-" + UUID
+CONVERSATION_TOPIC_ID = f"create-conversation-{UUID}"
+ANALYSIS_TOPIC_ID = f"create-analysis-{UUID}"
 
 
 @pytest.fixture

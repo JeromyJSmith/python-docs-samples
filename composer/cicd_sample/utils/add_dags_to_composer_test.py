@@ -37,8 +37,7 @@ def dags_directory() -> str:
 
 @pytest.fixture(scope="function")
 def empty_directory() -> str:
-    temp_dir = tempfile.mkdtemp()
-    yield temp_dir
+    yield tempfile.mkdtemp()
 
 
 # test bucket used in lieu of an actual Composer environment bucket
